@@ -91,4 +91,8 @@ class Budget
 
         return $this;
     }
+
+    public function __toString(){
+        return $this->minPrice . " - " . $this->maxPrice;
+    }
 }

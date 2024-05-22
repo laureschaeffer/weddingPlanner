@@ -63,4 +63,8 @@ class Testimony
 
         return $this;
     }
+
+    public function __toString(){
+        return $this->coupleName;
+    }
 }

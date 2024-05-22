@@ -167,4 +167,8 @@ class Reservation
 
         return $this;
     }
+
+    public function __toString(){
+        return $this->referenceOrder;
+    }
 }
