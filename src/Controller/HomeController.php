@@ -1,13 +1,18 @@
 <?php
-// --------------------controller qui gère les principales vues de la page : accueil, equipe, portefolio, prestations
+// --------------------controller qui gère les principales vues de l'application : accueil, equipe, portefolio, prestations
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\Creation;
+use App\Form\ProjectType;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkerRepository;
+use App\Repository\ProjectRepository;
 use App\Repository\CreationRepository;
-use App\Repository\PrestationRepository;
 use App\Repository\TestimonyRepository;
+use App\Repository\PrestationRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +32,32 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'avis' => $avis
+        ]);
+    }
+
+    //gère le formulaire de contact pour parler d'un projet
+    #[Route('/contact', name: 'app_contact')]
+    public function newProject(ProjectRepository $projectRepository, EntityManagerInterface $entityManager, Request $request)
+    {
+        $project = new Project();
+
+        //crée le formulaire
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request); 
+
+        if($form->isSubmitted() && $form->isValid()){
+            $project=$form->getData();
+
+            $entityManager->persist($project); //prepare
+            $entityManager->flush(); //execute
+
+            //msg flash
+            return $this->redirectToRoute('app_home');
+        }
+
+        //vue du formulaire
+        return $this->render('home/contact.html.twig', [
+            'form'=>$form
         ]);
     }
 
@@ -61,7 +92,7 @@ class HomeController extends AbstractController
 
     //detail d'une creation choisie
     #[Route('/creation/{id}', name: 'show_creation')]
-    public function showCreation(Creation $creation = null, CreationRepository $creationRepository): Response
+    public function showCreation(Creation $creation = null): Response
     {
 
         //si l'id passé dans l'url existe; possible comme je mets creation en null par defaut en argument, sinon erreur

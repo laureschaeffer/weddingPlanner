@@ -1,0 +1,23 @@
+{# liste des produits d'une collection sélectionnée  #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Commerce{% endblock %}
+
+{% block body %}
+
+<h1>Commerce</h1>
+
+<h2>{{batch}}</h2>
+<p>{{batch.description}}</p>
+
+{% for product in batch.products %}
+    <hr>
+    <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
+    <p><a href="{{path('show_product', {'id': product.id}) }}">{{product}}</a></p>    
+    <p>€ {{product.price|number_format(2, ',', ' ') }}</p>
+    <hr>
+    
+{% endfor %}
+
+{% endblock %}

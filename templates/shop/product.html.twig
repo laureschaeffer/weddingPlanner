@@ -1,0 +1,22 @@
+{# detail d'un produit sélectionné #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Commerce{% endblock %}
+
+{% block body %}
+
+<h1>Commerce</h1>
+
+<h2>Collection <a href="{{path('show_batch', {'id': product.batch.id}) }}">{{product.batch |lower}}</a> </h2>
+
+<figure><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></figure>
+<p>{{product.description}}</p>
+<p>€ {{product.price |number_format(2, ',', ' ') }}</p>
+<small>Taxes incluses.</small>
+<p>Quantité</p>
+<p></p>
+
+<h3>Vous pourriez aimer</h3>
+
+{% endblock %}

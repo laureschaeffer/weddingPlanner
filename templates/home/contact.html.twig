@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+
+<h1>Nous contacter</h1>
+
+<h2>Parlons de votre projet</h2>
+
+{# {{form(form)}} #}
+
+{{ form_start(form) }}
+
+<p>{{ form_row(form.firstname) }}</p>
+<p>{{ form_row(form.surname) }}</p>
+<p>{{ form_row(form.email) }}</p>
+<p>{{ form_row(form.telephone) }}</p>
+<p>{{ form_row(form.dateEvent) }}</p>
+<p>{{ form_row(form.nbGuest) }}</p>
+<p>{{ form_row(form.description) }}</p>
+<p>{{ form_row(form.Destination) }}</p>
+<p>{{ form_row(form.budget) }}</p>
+<p>{{ form_row(form.prestations) }}</p>
+
+
+
+{{ form_row(form.Envoyer) }}
+
+{{ form_end(form) }}
+
+{% endblock %}

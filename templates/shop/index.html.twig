@@ -7,8 +7,16 @@
 <h1>Commerce</h1>
 
 {% for collection in collections %}
-   {{ dump(collection) }}
+   
 <h2>{{collection}}</h2>
+
+{# l'objet collection possède un tableau d'objets Produit  #}
+{% for product in collection.products %}
+   
+<img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
+<p>{{product}}</p>
+<a href="{{path('show_batch', {'id': product.id}) }}">-></a>
+{% endfor %}
 
 
 {% endfor %}

@@ -4,10 +4,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Batch;
+use App\Entity\Product;
 use App\Repository\BatchRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
 {
@@ -20,5 +22,34 @@ class ShopController extends AbstractController
         return $this->render('shop/index.html.twig', [
             'collections' => $collections
         ]);
+    }
+
+    //detail d'une collection avec ses produits
+    #[Route('/shop/batch/{id}', name: 'show_batch')]
+    public function showCollection(Batch $batch=null): Response 
+    {
+        //si la collection existe
+        if($batch){
+            return $this->render('shop/batch.html.twig', [
+                'batch' => $batch
+            ]);
+
+        } else {
+            //msg d'erreur
+            return $this->redirectToRoute('app_shop');
+        }
+    }
+
+    //detail d'un produit
+    #[Route('/shop/product/{id}', name: 'show_product')]
+    public function showProduct(Product $product = null): Response 
+    {
+        //si le produit existe
+        if($product){
+            return $this->render('shop/product.html.twig', [
+                'product' => $product
+            ]);
+        }
+
     }
 }
