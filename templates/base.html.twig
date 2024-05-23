@@ -13,16 +13,24 @@
         {% endblock %}
     </head>
     <body>
-        <nav>
-            <ul>
-                <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                <li><a href="{{ path('app_worker') }}">Equipe</a></li>
-                <li><a href="{{ path('app_creation') }}">Nos créations</a></li>
-                <li><a href="{{ path('app_prestation') }}">Nos prestations</a></li>
-                <li><a href="{{ path('app_shop') }}">Commerce</a></li>
-                <li><a href="{{ path('app_contact') }}">Contact</a></li>
-            </ul>
-        </nav>
-        {% block body %}{% endblock %}
+        <div id="wrapper">
+            <header>
+                <nav>
+                    <div id="first-nav">
+                        <a href="{{ path('app_creation') }}">Portfolio</a>
+                        <a href="{{ path('app_prestation') }}">Nos prestations</a>
+                        <a href="{{ path('app_worker') }}">Equipe</a>
+                    </div>
+                    <div id="second-nav">
+                        <a href="{{ path('app_contact') }}">Contact</a>
+                        <a href="{{ path('app_shop') }}">Commerce</a>
+                        <a href="{{ path('app_home') }}">Accueil</a>
+                    </div>
+                </nav>
+
+            </header>
+
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>
