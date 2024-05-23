@@ -1,5 +1,5 @@
 <?php
-// --------------------controller qui gère à la fois l'equipe et le portfolio (créations)
+// --------------------controller qui gère les principales vues de la page : accueil, equipe, portefolio
 
 namespace App\Controller;
 
@@ -9,17 +9,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class WorkerCreationController extends AbstractController
+class HomeController extends AbstractController
 {
+
+    //-------------------------------------------------------------------------page d'accueil------------------------------------------------------------------------
+    #[Route('/home', name: 'app_home')]
+    public function index(): Response
+    {
+        return $this->render('home/index.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
     //-------------------------------------------------------------------------partie EQUIPE------------------------------------------------------------------------
 
     //liste de l'équipe
     #[Route('/worker', name: 'app_worker')]
-    public function index(WorkerRepository $workerRepository): Response
+    public function listEquipe(WorkerRepository $workerRepository): Response
     {
 
         $workers = $workerRepository->findBy([]);
-        return $this->render('worker_creation/index.html.twig', [
+        return $this->render('home/listeEquipe.html.twig', [
             'workers' => $workers
         ]);
     }
@@ -33,7 +43,7 @@ class WorkerCreationController extends AbstractController
     {
 
         $creations = $creationRepository->findBy([]);
-        return $this->render('worker_creation/listeCreations.html.twig', [
+        return $this->render('home/listeCreations.html.twig', [
             'creations' => $creations
         ]);
 

@@ -4,8 +4,11 @@
 
 {% block body %}
 
+<h1>L'équipe</h1>
+
 {% for worker in workers %}
-    {{worker}}
+    <p>{{worker}}</p>
+    <p>{{ worker.description }}</p>
 {% endfor %}
 
 {% endblock %}

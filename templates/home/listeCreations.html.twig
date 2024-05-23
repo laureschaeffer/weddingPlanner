@@ -4,8 +4,14 @@
 
 {% block body %}
 
+<h1>Nos créations</h1>
+
 {% for creation in creations %}
-    {{creation}}
+
+<p>{{creation.category}}</p>
+<p>{{creation}}</p>
+<p>{{creation.description}}</p>
+    <hr>
 {% endfor %}
 
 {% endblock %}
