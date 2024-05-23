@@ -15,8 +15,11 @@
     <body>
         <nav>
             <ul>
+                <li><a href="{{ path('app_home') }}">Accueil</a></li>
                 <li><a href="{{ path('app_worker') }}">Equipe</a></li>
                 <li><a href="{{ path('app_creation') }}">Nos créations</a></li>
+                <li><a href="{{ path('app_prestation') }}">Nos prestations</a></li>
+                <li><a href="{{ path('app_shop') }}">Commerce</a></li>
             </ul>
         </nav>
         {% block body %}{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commerce{% endblock %}
+
+{% block body %}
+
+<h1>Commerce</h1>
+
+{% for collection in collections %}
+   {{ dump(collection) }}
+<h2>{{collection}}</h2>
+
+
+{% endfor %}
+
+{% endblock %}

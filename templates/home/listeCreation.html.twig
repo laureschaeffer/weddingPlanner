@@ -8,9 +8,9 @@
 
 {% for creation in creations %}
 
-<p>{{creation.category}}</p>
-<p>{{creation}}</p>
-<p>{{creation.description}}</p>
+<h2>{{creation.category}}</h2>
+<p><a href="{{path('show_creation', {'id': creation.id}) }}"> {{creation}} </a></p>
+
     <hr>
 {% endfor %}
 

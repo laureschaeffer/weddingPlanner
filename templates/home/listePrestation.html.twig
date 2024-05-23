@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos prestations{% endblock %}
+
+{% block body %}
+
+<h1>Nos prestations</h1>
+<figure><img src="{{asset('img/prestation/pexels-pixabay-248077.jpg')}}" alt="photo accueil des prestations représentant des bagues en or"></figure>
+
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus.  Non, architecto a commodi in iste vel ullam odit possimus, ipsum inventore odio, quas distinctio molestiae dicta adipisci perferendis reiciendis suscipit consequatur dolorum nihil pariatur amet quisquam maiores nostrum! Sit! </p>
+
+{% for prestation in prestations %}
+
+<h2>{{prestation}}</h2>
+<figure><img src="{{ asset(prestation.urlPicture) }}" alt="{{prestation.altPicture}}"></figure>
+<p>{{prestation.description}}</p>
+{# number format avec le nombre de chiffre après la virgule, le séparateur après la virgule, et l'espace pour sortir "4 000" au lieu de "4000" #}
+<p>A partir de {{prestation.price |number_format(0, ',', ' ') }} €</p>
+
+
+{% endfor %}
+
+{% endblock %}

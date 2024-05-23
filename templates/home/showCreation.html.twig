@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail d'une création{% endblock %}
+
+{% block body %}
+
+<h1>Nos créations</h1>
+
+<h2>{{creation.category}}</h2>
+<p>{{creation.description}}</p>
+
+
+{# creation.picture est un tableau de tableau associatif avec l'url de l'image et son alt, il faut donc 2 boucles  #}
+{% for picture in creation.picture %}
+
+{% for p in picture %}
+
+    <img src="{{ asset(p.url) }}" alt="{{p.alt}}">
+    
+{% endfor %}
+
+{% endfor %}
+
+
+
+{% endblock %}

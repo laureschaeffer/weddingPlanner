@@ -16,6 +16,23 @@ class CreationRepository extends ServiceEntityRepository
         parent::__construct($registry, Creation::class);
     }
 
+    //renvoie les créations triés par categorie
+    //SELECT * FROM creation c ORDER BY category_id
+    public function findCreationByCategory(){
+        $em = $this->getEntityManager();
+
+        $sub = $em->createQueryBuilder();
+
+        $qb = $sub;
+
+        $qb->select('a')
+            ->from('App\Entity\Creation', 'a')
+            ->orderBy('a.category');
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Creation[] Returns an array of Creation objects
     //     */
