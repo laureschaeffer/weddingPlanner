@@ -5,13 +5,30 @@
 {% block body %}
 
 <h1>Nos créations</h1>
+{% for categorie in categories %}
+    <h2>{{categorie}}</h2>
 
-{% for creation in creations %}
+    {# chaque categorie contient une collection de creations #}
+    {% for crea in categorie.creations %}
+        <h3> <a href="{{path('show_creation', {'id': crea.id}) }}"> {{crea}} </a></h3>
+        <p></p>
+        {# {{ dump(crea.pictures) }} #}
+        {# tableau de photos #}
+        {# si pictures est un tableau de tableau associatif, il faut une boucle, sinon j'utilise l'index "alt" et "url" #}
+        {% if crea.pictures is iterable %}
+            {% for picture in crea.pictures %}
+                {% for p in picture %}
+                    <figure><img src="{{ asset(p.url) }}" alt="{{p.alt}}"></figure>
+            
+                {% endfor %}
 
-<h2>{{creation.category}}</h2>
-<p><a href="{{path('show_creation', {'id': creation.id}) }}"> {{creation}} </a></p>
+            {% endfor %}
 
-    <hr>
+        {% endif %}
+
+    {% endfor %}
+    
+
 {% endfor %}
 
 {% endblock %}

@@ -21,7 +21,7 @@ class Creation
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $picture = null;
+    private ?array $pictures = null;
 
     #[ORM\ManyToOne(inversedBy: 'creations')]
     #[ORM\JoinColumn(nullable: false)]
@@ -56,14 +56,14 @@ class Creation
         return $this;
     }
 
-    public function getPicture(): ?array
+    public function getPictures(): ?array
     {
-        return $this->picture;
+        return $this->pictures;
     }
 
-    public function setPicture(?array $picture): static
+    public function setPictures(?array $pictures): static
     {
-        $this->picture = $picture;
+        $this->pictures = $pictures;
 
         return $this;
     }

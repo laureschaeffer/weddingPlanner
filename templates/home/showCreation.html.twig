@@ -11,13 +11,12 @@
 
 
 {# creation.picture est un tableau de tableau associatif avec l'url de l'image et son alt, il faut donc 2 boucles  #}
-{% for picture in creation.picture %}
+{% for picture in creation.pictures %}
+    {% for p in picture %}
 
-{% for p in picture %}
-
-    <img src="{{ asset(p.url) }}" alt="{{p.alt}}">
-    
-{% endfor %}
+        <img src="{{ asset(p.url) }}" alt="{{p.alt}}">
+        
+    {% endfor %}
 
 {% endfor %}
 

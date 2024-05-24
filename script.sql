@@ -27,9 +27,12 @@ CREATE TABLE IF NOT EXISTS `batch` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.batch : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.batch : ~4 rows (environ)
 INSERT IGNORE INTO `batch` (`id`, `title`, `description`) VALUES
-	(1, 'Les indispensables', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus');
+	(1, 'Les indispensables', 'Découvrez notre collection "Les indispensables" dédiée à tous les essentiels pour un mariage parfait. Des invitations élégantes aux décorations raffinées, en passant par les accessoires de cérémonie, chaque produit a été soigneusement sélectionné pour ajouter une touche de magie à votre grand jour. Préparez-vous à vivre un moment inoubliable avec des articles qui répondent à tous vos besoins et bien plus encore.'),
+	(2, 'Cadeaux pour les mariés', 'Offrez un souvenir mémorable avec notre collection "Cadeaux pour les mariés". Cette sélection unique comprend des articles personnalisés, des souvenirs intemporels et des objets de luxe qui sauront toucher le cœur des nouveaux mariés. Que ce soit pour remercier vos hôtes ou célébrer votre amour, trouvez le cadeau parfait qui restera gravé dans les mémoires.'),
+	(3, 'Produits éco-responsable', 'Pour un mariage respectueux de l\'environnement, explorez notre collection "Produits éco-responsables". Chaque article est conçu avec des matériaux durables et des pratiques éthiques, sans compromettre le style ou l\'élégance. Des décorations biodégradables aux cadeaux écologiques, faites le choix d\'un mariage vert et élégant avec des produits qui protègent notre planète.'),
+	(4, 'Box-cadeau', 'Surprenez vos proches avec notre collection "Box-cadeau", des coffrets soigneusement préparés pour offrir des moments de bonheur et de découverte. Chaque box est remplie de produits sélectionnés avec soin, allant des douceurs gourmandes aux accessoires de bien-être, parfaits pour choyer les mariés ou remercier les invités. Faites plaisir à ceux que vous aimez avec une box-cadeau personnalisée et pleine de surprises.');
 
 -- Listage de la structure de table weddingplanner. booking
 CREATE TABLE IF NOT EXISTS `booking` (
@@ -79,14 +82,14 @@ CREATE TABLE IF NOT EXISTS `creation` (
   `category_id` int NOT NULL,
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `picture` json DEFAULT NULL,
+  `pictures` json DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_57EE857412469DE2` (`category_id`),
   CONSTRAINT `FK_57EE857412469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.creation : ~0 rows (environ)
-INSERT IGNORE INTO `creation` (`id`, `category_id`, `title`, `description`, `picture`) VALUES
+-- Listage des données de la table weddingplanner.creation : ~3 rows (environ)
+INSERT IGNORE INTO `creation` (`id`, `category_id`, `title`, `description`, `pictures`) VALUES
 	(1, 1, 'Mariage de luxe', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"pictures": [{"alt": "Mariage2", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}, {"alt": "Mariage de luxe", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}]}'),
 	(2, 2, 'Fleurs', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"alt": "Fleurs", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}'),
 	(3, 2, 'Objets', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"alt": "Objet de décoration", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}');
@@ -105,18 +108,6 @@ INSERT IGNORE INTO `destination` (`id`, `name`) VALUES
 	(3, 'Barcelone'),
 	(4, 'Autre');
 
--- Listage de la structure de table weddingplanner. doctrine_migration_versions
-CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
-  `version` varchar(191) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `executed_at` datetime DEFAULT NULL,
-  `execution_time` int DEFAULT NULL,
-  PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
--- Listage des données de la table weddingplanner.doctrine_migration_versions : ~0 rows (environ)
-INSERT IGNORE INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-	('DoctrineMigrations\\Version20240522131347', '2024-05-22 13:14:06', 842);
-
 -- Listage de la structure de table weddingplanner. job
 CREATE TABLE IF NOT EXISTS `job` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -124,9 +115,12 @@ CREATE TABLE IF NOT EXISTS `job` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.job : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.job : ~4 rows (environ)
 INSERT IGNORE INTO `job` (`id`, `title`) VALUES
-	(1, 'Organisatrice');
+	(1, 'Organisatrice'),
+	(2, 'Chargée de communication'),
+	(3, 'Wedding planner'),
+	(4, 'Conseiller clientèle');
 
 -- Listage de la structure de table weddingplanner. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
@@ -157,9 +151,11 @@ CREATE TABLE IF NOT EXISTS `prestation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.prestation : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.prestation : ~3 rows (environ)
 INSERT IGNORE INTO `prestation` (`id`, `title`, `subtitle`, `description`, `url_picture`, `alt_picture`, `price`) VALUES
-	(1, 'Emeraude expérience', 'sous-titre', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus. Non, architecto a commodi in iste vel ullam odit possimus, ipsum inventore odio, quas distinctio molestiae dicta adipisci perferendis reiciendis suscipit consequatur dolorum nihil pariatur amet quisquam maiores nostrum! Sit!', 'img/creation/mariage/pexels-punchbrandstock-1244627.jpg', 'formule emeraude expérience', 50000);
+	(1, 'Emeraude expérience', 'sous-titre', 'Laissez-nous prendre en charge chaque détail de votre mariage avec notre service d\'organisation complète. De la conception initiale à l\'exécution finale, nous nous occupons de tout : gestion du budget, sélection des fournisseurs, planification de la cérémonie et de la réception, coordination le jour J, et bien plus encore. Vous pourrez vous détendre et profiter de chaque instant, sachant que votre mariage est entre les mains d\'experts passionnés.', 'img/creation/mariage/pexels-punchbrandstock-1244627.jpg', 'formule emeraude expérience', 50000),
+	(2, 'Coordination du jour J', 'sous-titre', 'Pour les couples qui ont déjà tout planifié mais qui souhaitent une assistance professionnelle le jour de leur mariage, notre service de coordination du jour J est idéal. Nous nous assurerons que tout se déroule sans accroc, en gérant la logistique et en supervisant les fournisseurs. Vous pourrez vous concentrer sur vos moments de bonheur et laisser notre équipe s\'occuper du reste.', 'img/stocksnap_A7S8U2WAMN.jpg', 'formule coordination du jour J', 10000),
+	(3, 'Un mariage intime', 'sous-titre', 'Pour ceux qui souhaitent une célébration plus petite et intime, notre service d\'organisation de mariages intimes est parfait. Nous nous spécialisons dans la création de mariages chaleureux et personnels, en mettant l\'accent sur des expériences significatives pour vous et vos proches. Que ce soit une cérémonie en petit comité dans un jardin ou un dîner élégant dans un lieu exclusif, nous ferons en sorte que chaque détail soit parfait.', 'img/pexels-trungnguyenphotog-2959192.jpg', 'formule un mariage intime', 20000);
 
 -- Listage de la structure de table weddingplanner. product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -175,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `FK_D34A04ADF39EBE7A` FOREIGN KEY (`batch_id`) REFERENCES `batch` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.product : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.product : ~1 rows (environ)
 INSERT IGNORE INTO `product` (`id`, `batch_id`, `name`, `price`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Lettre pour carton d\'invitation', 20, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/invitation_card_with_a_ribbon.jpg', 'lettre pour carton d\'invitation');
 
@@ -191,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `date_event` datetime NOT NULL,
   `nb_guest` int NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_receipt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date_receipt` datetime DEFAULT NULL,
   `is_contacted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2FB3D0EE816C6140` (`destination_id`),
@@ -200,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~1 rows (environ)
 INSERT IGNORE INTO `project` (`id`, `destination_id`, `budget_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`) VALUES
 	(1, 1, 1, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 0);
 
@@ -215,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
   CONSTRAINT `FK_496EF49F9E45C554` FOREIGN KEY (`prestation_id`) REFERENCES `prestation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project_prestation : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.project_prestation : ~1 rows (environ)
 INSERT IGNORE INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1);
 
@@ -224,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `reference_order` int DEFAULT NULL,
-  `date_order` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date_order` datetime DEFAULT NULL,
   `total_price` double NOT NULL,
   `date_picking` date NOT NULL,
   `is_prepared` tinyint(1) DEFAULT NULL,
@@ -234,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~1 rows (environ)
 INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`) VALUES
 	(1, 1, 1234, '2024-05-22 16:20:36', 20.55, '2024-05-25', 0, 0);
 
@@ -247,9 +243,9 @@ CREATE TABLE IF NOT EXISTS `testimony` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.testimony : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.testimony : ~1 rows (environ)
 INSERT IGNORE INTO `testimony` (`id`, `couple_name`, `description`, `is_published`) VALUES
-	(1, 'Mr & Mme Nom', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', 1);
+	(1, 'Mr & Mme Nom', 'Nous ne pouvons que chanter les louanges de Cérémonie Couture pour avoir fait de notre mariage un jour absolument parfait. Dès notre première rencontre avec Clara, notre wedding planner, nous avons su que nous étions entre de bonnes mains. Son professionnalisme, sa créativité et son attention aux moindres détails nous ont tout de suite mis en confiance.\r\n\r\nClara a su écouter nos souhaits et nos préoccupations, tout en nous guidant avec des suggestions brillantes qui ont vraiment transformé notre vision en réalité. Chaque aspect du mariage, de la décoration florale aux choix musicaux, a été orchestré avec une telle précision que nous n\'avions rien à faire d\'autre que de profiter de notre journée spéciale.\r\n\r\nLe jour J, tout s\'est déroulé sans accroc. Clara et son équipe ont géré la logistique avec une telle fluidité que nous avons pu nous concentrer entièrement sur nos moments de bonheur, entourés de nos proches. Nous avons reçu d\'innombrables compliments de la part de nos invités sur la beauté et l\'organisation impeccable de notre mariage.\r\n\r\nNous sommes immensément reconnaissants à Clara et à toute l\'équipe de Cérémonie Couture pour avoir créé des souvenirs que nous chérirons pour toujours. Nous recommandons vivement leurs services à tous ceux qui souhaitent un mariage parfait et sans stress. Merci infiniment pour tout !', 1);
 
 -- Listage de la structure de table weddingplanner. user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -258,13 +254,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `roles` json NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_verified` tinyint(1) NOT NULL,
+  `pseudo` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.user : ~0 rows (environ)
-INSERT IGNORE INTO `user` (`id`, `email`, `roles`, `password`, `is_verified`) VALUES
-	(1, 'laure@exemple.fr', '[]', '.', 0);
+-- Listage des données de la table weddingplanner.user : ~1 rows (environ)
+INSERT IGNORE INTO `user` (`id`, `email`, `roles`, `password`, `is_verified`, `pseudo`) VALUES
+	(1, 'laure@exemple.fr', '[]', '.', 0, '');
 
 -- Listage de la structure de table weddingplanner. worker
 CREATE TABLE IF NOT EXISTS `worker` (
@@ -272,16 +269,19 @@ CREATE TABLE IF NOT EXISTS `worker` (
   `job_id` int NOT NULL,
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `alt_picture` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_9FB2BF62BE04EA9` (`job_id`),
   CONSTRAINT `FK_9FB2BF62BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.worker : ~1 rows (environ)
-INSERT IGNORE INTO `worker` (`id`, `job_id`, `name`, `description`, `picture`, `alt_picture`) VALUES
-	(1, 1, 'Jeanne', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/equipe/equipe1.jpg', 'photo de notre organisatrice');
+-- Listage des données de la table weddingplanner.worker : ~4 rows (environ)
+INSERT IGNORE INTO `worker` (`id`, `job_id`, `name`, `description`, `url_picture`, `alt_picture`) VALUES
+	(1, 1, 'Jeanne', 'Directrice de Création, passionnée par l\'univers du mariage et l\'esthétique. Avec plus de 10 ans d\'expérience dans le design et la planification d\'événements, elle apporte une touche unique et sophistiquée à chacune de nos collections. Jeanne est diplômée de l\'École des Beaux-Arts et a travaillé avec des marques prestigieuses avant de rejoindre notre équipe. Son talent et son souci du détail font d\'elle une force créative incontournable pour notre entreprise.', 'img/equipe/equipe1.jpg', 'photo de notre organisatrice'),
+	(2, 2, 'Sophie', 'Sophie est chargée de la gestion de notre présence en ligne et de l\'interaction avec notre communauté. Diplômée en communication digitale et avec 5 ans d\'expérience dans les réseaux sociaux, Sophie crée du contenu engageant et gère nos campagnes publicitaires avec brio. Elle est passionnée par les relations humaines et adore partager l\'enthousiasme de nos clients pour nos produits.', 'img/equipe/pexels-vinicius-wiesehofer-289347-1130626.jpg', 'photo de notre chargée de communication'),
+	(3, 3, 'Clara', 'Clara est dédiée à transformer les rêves de mariage en réalité. Avec plus de 12 ans d\'expérience dans l\'organisation de mariages, Clara a orchestré plus de 200 célébrations uniques, chacune imprégnée de sa passion pour le détail et de son amour pour l\'excellence.\r\nElle a obtenu son diplôme en gestion d\'événements à l\'Institut Supérieur de Gestion à Paris, où elle a développé ses compétences en planification et coordination. Dotée d\'un œil artistique et d\'une grande capacité d\'écoute, elle excelle à comprendre les désirs et les besoins de ses clients. Elle est experte en design de mariage, gestion de budget, coordination avec les fournisseurs, et gestion de la logistique, garantissant que chaque aspect du jour J se déroule sans accroc. Son réseau étendu de contacts dans l\'industrie lui permet de recommander les meilleurs prestataires, des photographes talentueux aux fleuristes créatifs, assurant ainsi une qualité supérieure pour chaque événement.', 'img/equipe/connor-wilkins-u68jZr7ky0I-unsplash.jpg', 'photo de notre wedding planner'),
+	(4, 4, 'Florian', 'Lucas est notre Conseiller Clientèle dévoué, toujours prêt à aider nos clients à trouver les articles parfaits pour leur mariage. Fort de 7 ans d\'expérience dans le service client, Lucas excelle dans l\'écoute et la résolution des problèmes. Il est diplômé en relations publiques et s\'assure que chaque client bénéficie d\'une expérience d\'achat exceptionnelle et personnalisée. Sa gentillesse et son professionnalisme sont grandement appréciés par tous ceux qui font appel à lui.', 'img/equipe/vince-fleming-j3lf-Jn6deo-unsplash.jpg', 'photo de notre conseiller clientèle');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

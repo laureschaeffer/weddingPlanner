@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Entity\Creation;
 use App\Form\ProjectType;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkerRepository;
 use App\Repository\ProjectRepository;
@@ -64,7 +65,7 @@ class HomeController extends AbstractController
     //-------------------------------------------------------------------------partie EQUIPE------------------------------------------------------------------------
 
     //liste de l'équipe
-    #[Route('/worker', name: 'app_worker')]
+    #[Route('/equipe', name: 'app_worker')]
     public function listEquipe(WorkerRepository $workerRepository): Response
     {
 
@@ -77,15 +78,14 @@ class HomeController extends AbstractController
 
     //-------------------------------------------------------------------------partie CREATION------------------------------------------------------------------------
 
-    //liste des créations
+    //liste des categories de creations, avec un aperçu 
     #[Route('/creation', name: 'app_creation')]
-    public function listCreation(CreationRepository $creationRepository): Response
+    public function listCategorieCreation(CategoryRepository $categoryRepository): Response
     {
 
-        // $creations = $creationRepository->findBy(['category'=> 1]);
-        $creations = $creationRepository->findCreationByCategory();
+        $categories = $categoryRepository->findBy([]);
         return $this->render('home/listeCreation.html.twig', [
-            'creations' => $creations
+            'categories' => $categories
         ]);
 
     }
@@ -107,7 +107,7 @@ class HomeController extends AbstractController
         }
     }
 
-    //-------------------------------------------------------------------------partie CREATION------------------------------------------------------------------------
+    //-------------------------------------------------------------------------partie PRESTATION------------------------------------------------------------------------
     
     //liste des prestations
     #[Route('/prestation', name: 'app_prestation')]

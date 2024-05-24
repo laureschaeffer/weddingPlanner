@@ -6,27 +6,30 @@
 
 <h1>Nous contacter</h1>
 
-<h2>Parlons de votre projet</h2>
+<div id="contact">
 
-{# {{form(form)}} #}
+    <h2>Parlons de votre projet</h2>
+    
+    {# {{form(form)}} #}
+    
+    {{ form_start(form) }}
+    
+    {{ form_row(form.firstname) }} {{ form_row(form.surname) }}
+    
+    {{ form_row(form.email, {'attr': {'class': 'test'}}) }}
+    {{ form_row(form.telephone) }}
+    {{ form_row(form.dateEvent) }}
+    {{ form_row(form.nbGuest) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.Destination) }}
+    {{ form_row(form.budget) }}
+    {{ form_row(form.prestations) }}
+    
+    
+    {{ form_row(form.Envoyer) }}
+    
+    {{ form_end(form) }}
 
-{{ form_start(form) }}
-
-<p>{{ form_row(form.firstname) }}</p>
-<p>{{ form_row(form.surname) }}</p>
-<p>{{ form_row(form.email) }}</p>
-<p>{{ form_row(form.telephone) }}</p>
-<p>{{ form_row(form.dateEvent) }}</p>
-<p>{{ form_row(form.nbGuest) }}</p>
-<p>{{ form_row(form.description) }}</p>
-<p>{{ form_row(form.Destination) }}</p>
-<p>{{ form_row(form.budget) }}</p>
-<p>{{ form_row(form.prestations) }}</p>
-
-
-
-{{ form_row(form.Envoyer) }}
-
-{{ form_end(form) }}
+</div>
 
 {% endblock %}

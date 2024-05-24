@@ -5,6 +5,7 @@ Application pour une entreprise qui organise des mariages
 ### Mise en place 
 
 **Avoir une version >= PHP 8.2**
+[Download PHP](https://windows.php.net/download#php-8.2)
 
 1. **composer** : [composer](https://getcomposer.org/download/) 
 
@@ -22,4 +23,10 @@ Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 
 ``` sh
 scoop install symfony-cli
+```
+
+Une fois le projet téléchargé, mettre cette ligne dans l'invité de commande pour avoir le bon dossier 'vendor'
+
+``` sh
+composer install
 ```

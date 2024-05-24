@@ -21,7 +21,7 @@ class Worker
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $picture = null;
+    private ?string $urlPicture = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $altPicture = null;
@@ -59,14 +59,14 @@ class Worker
         return $this;
     }
 
-    public function getPicture(): ?string
+    public function getUrlPicture(): ?string
     {
-        return $this->picture;
+        return $this->urlPicture;
     }
 
-    public function setPicture(?string $picture): static
+    public function setUrlPicture(?string $urlPicture): static
     {
-        $this->picture = $picture;
+        $this->urlPicture = $urlPicture;
 
         return $this;
     }

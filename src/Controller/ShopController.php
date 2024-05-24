@@ -25,7 +25,7 @@ class ShopController extends AbstractController
     }
 
     //detail d'une collection avec ses produits
-    #[Route('/shop/batch/{id}', name: 'show_batch')]
+    #[Route('/shop/collection/{id}', name: 'show_batch')]
     public function showCollection(Batch $batch=null): Response 
     {
         //si la collection existe
@@ -41,7 +41,7 @@ class ShopController extends AbstractController
     }
 
     //detail d'un produit
-    #[Route('/shop/product/{id}', name: 'show_product')]
+    #[Route('/shop/produit/{id}', name: 'show_product')]
     public function showProduct(Product $product = null): Response 
     {
         //si le produit existe

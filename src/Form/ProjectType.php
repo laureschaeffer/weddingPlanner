@@ -9,12 +9,13 @@ use App\Entity\Destination;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ProjectType extends AbstractType
 {
@@ -22,6 +23,9 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
+                'attr' => [
+                    'class' => '',
+                ],
                 'label' => 'Prénom'
             ])
             ->add('surname', TextType::class, [
@@ -30,7 +34,7 @@ class ProjectType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email'
             ])
-            ->add('telephone', TextType::class, [
+            ->add('telephone', TelType::class, [
                 'label' => 'Téléphone'
             ])
             ->add('dateEvent', DateTimeType::class, [

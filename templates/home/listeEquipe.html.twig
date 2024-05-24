@@ -7,8 +7,12 @@
 <h1>L'équipe</h1>
 
 {% for worker in workers %}
-    <p>{{worker}}</p>
+<figure><img src="{{ asset(worker.urlPicture) }}" alt="{{worker.altPicture}}"></figure>
+    <h2>{{worker}}</h2>
+    <p> {{worker.job}} </p>
     <p>{{ worker.description }}</p>
+
+    <hr>
 {% endfor %}
 
 {% endblock %}
