@@ -21,14 +21,14 @@
                         <a href="{{ path('app_creation') }}">Portfolio</a>
                         <a href="{{ path('app_prestation') }}">Nos prestations</a>
                         <a href="{{ path('app_worker') }}">Equipe</a>
+                        <a href="{{ path('app_shop') }}">Commerce</a>
                     </div>
                         <a href="{{ path('app_home') }}">Accueil</a>
                     
                     <div id="second-nav">
                         <a href="{{ path('app_contact') }}">Contact</a>
-                        <a href="{{ path('app_shop') }}">Commerce</a>
                         {% if app.user %}
-                            <a href="#">{{app.user}}</a>
+                            <a href="#"><i class="fa-solid fa-user"></i>{{app.user}}</a>
                             <a href="{{path('app_logout')}}">Se déconnecter</a>
                             {% else %}
                             <a href="{{path('app_register')}}">S'inscrire</a><a href="{{path('app_login')}}">Se connecter</a>
@@ -54,13 +54,16 @@
             {% block body %}{% endblock %}
             <footer>
                 <p>COPYRIGHT &#169; Cérémonie Couture</p>
-                <p>Contact</p>
-                <p>Mentions légales</p>
-                {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
-                {% if app.user and "ROLE_ADMIN" in app.user.roles %}
-                    
-                    <p>Office</p>
-                {% endif %}
+                <div class="footer-align">
+                    <p>Contact</p>
+                    <p>Mentions légales</p>
+                    {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
+                    {% if app.user and "ROLE_ADMIN" in app.user.roles %}
+                        
+                        <p>Office</p>
+                    {% endif %}
+
+                </div>
             </footer>
         </div>
     </body>

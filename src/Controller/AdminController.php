@@ -45,8 +45,8 @@ class AdminController extends AbstractController
             ]);
 
         } else {
-            //msg d'erreur
-            return $this->redirectToRoute('app_creation');
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
         }
     }
 
@@ -88,13 +88,23 @@ class AdminController extends AbstractController
 
     //change l'avis en publié ou non publié
     #[Route('/coiffe/changeAvis/{id}', name: 'change_avis')]
-    public function changeTestimonyState(EntityManagerInterface $entityManager, Testimony $testimony = null){
+    public function changeTestimonyState(EntityManagerInterface $entityManager, Testimony $testimony = null, TestimonyRepository $testimonyRepository){
 
-        //si isPublished est vraie, on le passe en faux
+        //trouve le nb de témoignages publiés
+        $nbAvisPublies = count($testimonyRepository->findBy(['isPublished' => 1]));
+
+        //si isPublished est vrai, on le passe en faux
         if($testimony->isPublished()){
             $testimony->setPublished(false);
         } else {
-            $testimony->setPublished(true);
+            //verifie que le nb de témoignage publié ne depasse pas 5
+            if($nbAvisPublies <= 5){
+                
+                $testimony->setPublished(true);
+            } else {
+                $this->addFlash('error', 'Le nombre limite autorisé de témoignages publiés est dépassé');
+                return $this->redirectToRoute('app_avis');
+            }
         }
 
         $entityManager->persist($testimony);
@@ -103,5 +113,24 @@ class AdminController extends AbstractController
         $this->addFlash('success', 'Statut de l\'avis du couple ' . $testimony->getCoupleName() . ' modifié');
         return $this->redirectToRoute('app_avis');
 
+    }
+
+    //supprimer un avis de la bdd (non publiés)
+    #[Route('/coiffe/supprAvis/{id}', name: 'remove_avis')] 
+    public function deleteProgramme(Testimony $testimony = null, EntityManagerInterface $entityManager){
+        
+        //si le temoignage existe et qu'il n'est pas publié
+        if($testimony && $testimony->isPublished() == false){
+            $entityManager->remove($testimony); //prepare
+            $entityManager->flush(); //execute
+            
+            // notif et redirection
+            $this->addFlash('success', 'Avis supprimé');
+            return $this->redirectToRoute('app_avis');
+
+        } else {
+            $this->addFlash('error', 'Ce témoignage n\'existe pas, ou doit d\'abord être dépublié');
+            return $this->redirectToRoute('app_avis');
+        }
     }
 }

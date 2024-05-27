@@ -21,6 +21,7 @@
 {% for anp in avisNonPublies %}
     <p>{{anp}}  <a href="{{path('change_avis', {'id': anp.id})}}"><i class="fa-solid fa-plus"></i></a> </p>
     <p>{{anp.description}}</p>
+    <p><a href="{{path('remove_avis', {'id': anp.id})}}">Supprimer définitivement</a></p>
 {% endfor %}
 
 {% endblock %}
