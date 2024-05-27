@@ -1,0 +1,45 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Demandes de contact{% endblock %}
+
+{% block body %}
+
+<h1>Demandes de contact</h1>
+
+<h2>Demandes non traitées</h2>
+
+{% if projetNonTraites is empty %}
+    <p>Aucune demande à traiter</p>
+    
+    {% else %}
+
+        {% for pnt in projetNonTraites %}
+            
+            <p>{{pnt}} {{pnt.surname}}, évènement le {{pnt.dateEvent | date("d.m.Y")}}, reçu le {{pnt.dateReceipt | date("d.m.Y")}} </p>
+        
+            <p> {{pnt.description}} </p>
+            <p><a href="{{path('show_projet', {'id': pnt.id})}}">Voir plus</a></p>
+        {% endfor %}
+
+{% endif %}
+
+
+<h2>Demandes traitées</h2>
+
+{% if projetTraites is empty %}
+        <p>Aucune demande déjà traitée</p>
+
+    {% else %}
+
+        {% for projet in projetTraites %}
+            
+            <p>{{projet}} {{projet.surname}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
+        
+            <p> {{projet.description}} </p>
+            <p><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
+        {% endfor %}
+
+{% endif %}
+
+
+{% endblock %}

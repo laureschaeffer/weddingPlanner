@@ -1,0 +1,45 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Demande de contact{% endblock %}
+
+{% block body %}
+
+<h1>Détail d'une demande de contact</h1>
+
+{# en fonction de si la personne a été contactée  #}
+{% if project.isContacted %}
+    <p><i class="fa-solid fa-circle-check"></i></p>
+    {% else %}
+    <p><i class="fa-solid fa-hourglass-start"></i></p>
+{% endif %}
+
+<p> {{project.firstName}} {{project.surname}}, reçu le {{project.dateReceipt | date("d.m.Y")}} </p>
+<p>Evenement le {{project.dateEvent | date("d.m.Y")}}</p>
+
+<hr>
+<h5>Contact</h5>
+<p> {{project.telephone}} </p>
+<p> {{project.email}} </p>
+
+<hr>
+<h5>Prestation(s) envisagée(s):</h5>
+
+{% for presta in project.prestations %}
+    <p>{{presta}}</p>
+{% endfor %}
+
+<h5>Budget</h5>
+<p> {{project.budget}} </p>
+
+<p> {{project.description}} </p>
+
+{# en fonction de si la personne a été contactée, bouton pour changer le statut de la demande  #}
+{% if project.isContacted %}
+        <p><a href=" {{path('change_projet', {'id': project.id})}} ">Demande non traitée</a></p>
+
+    {% else %}
+
+        <p><a href=" {{path('change_projet', {'id': project.id})}} ">Demande traitée</a></p>
+{% endif %}
+
+{% endblock %}
