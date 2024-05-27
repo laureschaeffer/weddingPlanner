@@ -1,0 +1,16 @@
+{# panier #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+{% block body %}
+<h1>Votre panier</h1>
+
+
+{{ dump(app.session.get('panier')) }}
+
+{# {% for panier in app.session.get('panier') %}
+    {{ dump(panier) }}
+{% endfor %} #}
+
+{% endblock %}

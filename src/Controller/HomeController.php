@@ -5,7 +5,9 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Entity\Creation;
+use App\Entity\Testimony;
 use App\Form\ProjectType;
+use App\Form\TestimonyType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkerRepository;
@@ -28,8 +30,8 @@ class HomeController extends AbstractController
     public function index(TestimonyRepository $testimonyRepository): Response
     {
 
-        //liste des avis
-        $avis = $testimonyRepository->findBy([]);
+        //liste des avis, seulement ceux qui ont été choisis par les admin
+        $avis = $testimonyRepository->findBy(['isPublished' => 1]);
 
         return $this->render('home/index.html.twig', [
             'avis' => $avis
@@ -60,6 +62,34 @@ class HomeController extends AbstractController
         return $this->render('home/contact.html.twig', [
             'form'=>$form
         ]);
+    }
+
+    //gère le formulaire d'un utilisateur qui donne son avis
+    #[Route('/temoignage', name: 'app_temoignage')]
+    public function newTestimony(TestimonyRepository $testimonyRepository, EntityManagerInterface $entityManager, Request $request){
+
+        $testimony = new Testimony();
+
+        //crée le formulaire
+        $form = $this->createForm(TestimonyType::class, $testimony);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $testimony = $form->getData();
+
+            $entityManager->persist($testimony); //prepare
+            $entityManager->flush(); //execute
+
+            //msg flash
+            return $this->redirectToRoute('app_home');
+
+        }
+
+        //vue du formulaire
+        return $this->render('home/temoignage.html.twig', [
+            'form' => $form
+        ]);
+
     }
 
     //-------------------------------------------------------------------------partie EQUIPE------------------------------------------------------------------------

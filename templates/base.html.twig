@@ -22,16 +22,29 @@
                         <a href="{{ path('app_prestation') }}">Nos prestations</a>
                         <a href="{{ path('app_worker') }}">Equipe</a>
                     </div>
+                        <a href="{{ path('app_home') }}">Accueil</a>
+                    
                     <div id="second-nav">
                         <a href="{{ path('app_contact') }}">Contact</a>
                         <a href="{{ path('app_shop') }}">Commerce</a>
-                        <a href="{{ path('app_home') }}">Accueil</a>
+                        {% if app.user %}
+                            <a href="#">{{app.user}}</a>
+                            <a href="{{path('app_logout')}}">Se déconnecter</a>
+                            {% else %}
+                            <a href="{{path('app_register')}}">S'inscrire</a><a href="{{path('app_login')}}">Se connecter</a>
+                        {% endif %}
                     </div>
                 </nav>
 
             </header>
 
             {% block body %}{% endblock %}
+            <footer>
+                <p>COPYRIGHT &#169; Cérémonie Couture</p>
+                <p>Contact</p>
+                <p>Mentions légales</p>
+                <p>Office</p>
+            </footer>
         </div>
     </body>
 </html>

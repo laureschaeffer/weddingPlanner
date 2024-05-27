@@ -7,8 +7,11 @@ namespace App\Controller;
 use App\Entity\Batch;
 use App\Entity\Product;
 use App\Repository\BatchRepository;
+use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
@@ -44,12 +47,55 @@ class ShopController extends AbstractController
     #[Route('/shop/produit/{id}', name: 'show_product')]
     public function showProduct(Product $product = null): Response 
     {
+
         //si le produit existe
         if($product){
             return $this->render('shop/product.html.twig', [
                 'product' => $product
             ]);
         }
+    }
 
+    //-------------------------------------------------------------------------interraction avec le panier-------------------------------------------------------
+
+    //ajoute un produit au panier, à la session
+    #[Route('/shop/ajoutePanier/{id}', name: 'add_basket')]
+    public function addProduct(Product $product = null, SessionInterface $session)
+    
+    {
+
+
+
+        // $newBasket = ['produit' =>$product,
+        // 'qtt' => 1];
+
+        // array_push($panier, $newBasket);
+
+        // //met à jour les données dans la session
+        // $session->set('panier', $panier);
+        // $session->set('panier', [
+        //     ['produit'=> $product,
+        //     'qtt' =>1],
+        //     ['produit' => $product,
+        //     'qtt' => 2]
+        // ]);
+        
+        // $qtt = $session->get("panier")["qtt"];
+        
+        // // //si dans la session qtt est different de 0, le mettre à jour
+        
+
+        return $this->redirectToRoute('app_basket');
+        // the second argument is the value returned when the attribute doesn't exist
+        // $filters = $session->get('filters', []);
+        
+    }
+
+    //montre le panier
+    #[Route('/shop/panier', name: 'app_basket')]
+    public function showBasket(): Response 
+    {
+
+        return $this->render('shop/panier.html.twig', []);
     }
 }

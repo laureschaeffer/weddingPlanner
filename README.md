@@ -30,3 +30,9 @@ Une fois le projet téléchargé, mettre cette ligne dans l'invité de commande 
 ``` sh
 composer install
 ```
+
+
+##### Composants
+``` sh
+composer require symfony/http-foundation
+```

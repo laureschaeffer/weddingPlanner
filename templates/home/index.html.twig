@@ -7,9 +7,13 @@
 <h1>Organisation de mariages d'exception</h1>
 
 <h2>Leurs avis</h2>
-
 {% for a in avis %}
     <p>{{a}}</p>
     <p>{{a.description}}</p>
+    <br>
+    <br>
 {% endfor %}
+
+<p><a href="{{ path('app_temoignage') }}">Donner son avis</a></p>
+
 {% endblock %}

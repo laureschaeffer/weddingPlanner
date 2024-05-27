@@ -2,10 +2,11 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Commerce{% endblock %}
+{% block title %}Detail d'un produit{% endblock %}
 
 {% block body %}
 
+{# {{ dump(app.session.get('clé')) }} #}
 <h1>Commerce</h1>
 
 <h2>Collection <a href="{{path('show_batch', {'id': product.batch.id}) }}">{{product.batch |lower}}</a> </h2>
@@ -15,7 +16,7 @@
 <p>€ {{product.price |number_format(2, ',', ' ') }}</p>
 <small>Taxes incluses.</small>
 <p>Quantité</p>
-<p></p>
+<p><a href="{{ path('add_basket', {'id': product.id}) }}">+</a></p>
 
 <h3>Vous pourriez aimer</h3>
 
