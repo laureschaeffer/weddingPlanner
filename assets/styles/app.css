@@ -51,20 +51,20 @@ img{
 
 /* header  */
 
-nav{
+#nav{
     display: flex;
     justify-content: space-around;
     background-color: var(--nav-color);
     padding: var(--main-padding) 0;
 }
 
-nav>div{
+#nav>div{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-nav a{
+#nav a{
     color: white;
     font-weight: var(--semi-bold);
     font-size: var(--nav-font-size);
@@ -78,4 +78,28 @@ header{
 
 .test{
     background-color: #0B3C49;
+}
+
+
+/* =================================================================================================================================================================
+======================================================================ADMIN======================================================================================
+================================================================================================================================================================= */
+
+/* template */
+
+#admin-nav{
+    background-color: var(--burgundy-color);
+    display: flex;
+    justify-content: space-around;
+    padding: var(--main-padding) 0;
+}
+
+#admin-nav>div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#admin-nav a{
+    color: white;
 }

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+    {# autre temporisation de sortie pour le pannel admin  #}
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Accueil{% endblock %}</title>
+        <title>{% block title %}Dashboard{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
@@ -16,26 +17,20 @@
     <body>
         <div id="wrapper">
             <header>
-                <nav id="nav">
-                    <div id="first-nav">
-                        <a href="{{ path('app_creation') }}">Portfolio</a>
-                        <a href="{{ path('app_prestation') }}">Nos prestations</a>
-                        <a href="{{ path('app_worker') }}">Equipe</a>
+                <nav id="admin-nav">
+                    <div id="admin-first-nav">
+                        <a href="#">Demandes de contact</a>
+                        <a href="{{path('app_avis')}}">Avis</a>
+                        <a href="#">Commandes</a>
                     </div>
-                        <a href="{{ path('app_home') }}">Accueil</a>
-                    
-                    <div id="second-nav">
-                        <a href="{{ path('app_contact') }}">Contact</a>
-                        <a href="{{ path('app_shop') }}">Commerce</a>
-                        {% if app.user %}
-                            <a href="#">{{app.user}}</a>
-                            <a href="{{path('app_logout')}}">Se déconnecter</a>
-                            {% else %}
-                            <a href="{{path('app_register')}}">S'inscrire</a><a href="{{path('app_login')}}">Se connecter</a>
-                        {% endif %}
+                    <div id="admin-second-nav">
+                        <a href="#">{{app.user}}</a>
+                        <a href="#">Se déconnecter</a>
+                        <a href="{{path('app_home')}}">Retour au site</a>
+                       
                     </div>
-                </nav>
 
+                </nav>
             </header>
 
             {# message de success #}
@@ -50,18 +45,9 @@
                     {{ msg }}
                 </div>
             {% endfor %}
-
             {% block body %}{% endblock %}
-            <footer>
-                <p>COPYRIGHT &#169; Cérémonie Couture</p>
-                <p>Contact</p>
-                <p>Mentions légales</p>
-                {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
-                {% if app.user and "ROLE_ADMIN" in app.user.roles %}
-                    
-                    <p>Office</p>
-                {% endif %}
-            </footer>
         </div>
+
     </body>
 </html>
+    
