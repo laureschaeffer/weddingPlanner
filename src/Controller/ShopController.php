@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Entity\Batch;
 use App\Entity\Product;
 use App\Repository\BatchRepository;
-use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,9 +20,11 @@ class ShopController extends AbstractController
     public function index(BatchRepository $batchRepository): Response
     {
         $collections = $batchRepository->findBy([]);
+        $troisProduits = $batchRepository->find3Product();
 
         return $this->render('shop/index.html.twig', [
-            'collections' => $collections
+            'collections' => $collections,
+            'troisProduits' => $troisProduits
         ]);
     }
 
@@ -63,31 +64,34 @@ class ShopController extends AbstractController
     public function addProduct(Product $product = null, SessionInterface $session)
     
     {
+        //parcourt le panier
+        // foreach($session->get('panier') as $p){
+            
+        //     var_dump($p->getId());
+        //     //verifie si le produit ajouté est déjà dans le panier; si oui on augmente la qtt, sinon on l'ajoute
+        //     // if($p['produit']->getId() == $product->getId()){
+        //     //     // $session->set('panier', )
+        //     //     // $session->set('panier', ['produit' => $product, 'qtt' => 2]);
+        //     //     // ($p['qtt']);
+        //     // }
 
+        // }
 
+        $panier= $session->get('panier');
 
-        // $newBasket = ['produit' =>$product,
-        // 'qtt' => 1];
-
-        // array_push($panier, $newBasket);
-
-        // //met à jour les données dans la session
-        // $session->set('panier', $panier);
-        // $session->set('panier', [
-        //     ['produit'=> $product,
-        //     'qtt' =>1],
-        //     ['produit' => $product,
-        //     'qtt' => 2]
-        // ]);
+        //si la session contient déjà un panier
+        if($session->get('panier')){
+            $newBasket = ['produit' =>$product,
+            'qtt' => 1];
+            array_push($panier, $newBasket);
+            $session->set('panier', $panier);
+        } else {
+            $session->set('panier', ['produit'=> $product,
+            'qtt' =>1]);   
+        }
         
-        // $qtt = $session->get("panier")["qtt"];
         
-        // // //si dans la session qtt est different de 0, le mettre à jour
-        
-
-        return $this->redirectToRoute('app_basket');
-        // the second argument is the value returned when the attribute doesn't exist
-        // $filters = $session->get('filters', []);
+        // return $this->redirectToRoute('app_basket');
         
     }
 

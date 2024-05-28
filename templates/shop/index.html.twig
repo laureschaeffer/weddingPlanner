@@ -3,21 +3,37 @@
 {% block title %}Commerce{% endblock %}
 
 {% block body %}
-
+{# {{ dump(troisProduits) }} #}
 <h1>Commerce</h1>
+
+<h2>Création de nos ateliers</h2>
+
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus</p>
+
+{# nav pour retrouver la collection cherchée  #}
+<div id="nav-batch">
+    {% for col in collections %}
+        <a href="#{{col.id}}">{{col}}</a>
+    {% endfor %}
+</div>
 
 {% for collection in collections %}
    
-<h2>{{collection}} <a href="{{path('show_batch', {'id': collection.id}) }}"><i class="fa-solid fa-arrow-right"></i></a></h2>
 
-{# l'objet collection possède un tableau d'objets Produit  #}
-{% for product in collection.products %}
-   
-    <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
-    <p>{{product}}</p>
+<div id="{{collection.id}}">
+    <h3>{{collection}} <a href="{{path('show_batch', {'id': collection.id}) }}"><i class="fa-solid fa-arrow-right"></i></a></h3>
+    <br><br>
+</div>
+    
 
-{% endfor %}
 
+    {# l'objet collection possède un tableau d'objets Produit  #}
+    {# {% for product in collection.products %}
+    
+        <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
+        <p>{{product}}</p>
+
+    {% endfor %} #}
 
 {% endfor %}
 

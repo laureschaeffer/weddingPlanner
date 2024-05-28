@@ -12,14 +12,16 @@
     --grey-green-color: #DAD7CD;
     --pastel-green-color: #B3CBB9;
     --burgundy-color: #5D2B42;
-    --pink-color: #C49799;
+    --pink-color: #c4979942;
+    /* --pink-color: #C49799; */
 
     /* polices d'ecriture  */
     --main-font: "Cormorant", serif;
     --title-font: "Cormorant SC", serif;
 
     /* tailles  */
-    --nav-font-size: 20px;
+    --nav-font-size: 1.2rem;
+    --subtitle-font-size: 1.5rem;
     --semi-bold: 400;
 
     /* padding  */
@@ -84,7 +86,7 @@ footer{
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 8rem; 
+    /* height: 8rem;  */
 }
 
 footer p, footer a{
@@ -98,6 +100,30 @@ footer p, footer a{
     justify-content: space-around;
 }
 
+
+/* ---------------------------------------------------------------landing page------------------------------------------------------- */
+
+#home-intro p{
+    background-color: var(--pink-color);
+}
+
+
+/* ---------------------------------------------------------------commerce------------------------------------------------------- */
+
+/* --------batch/collection */
+
+#nav-batch{
+    display: flex;
+    justify-content: space-around;
+    padding: var(--main-padding) 0;
+    background-color: var(--light-green);
+    margin: var(--main-padding) 0;
+}
+
+#nav-batch a{
+    font-size: var(--subtitle-font-size);
+    color: black;
+}
 /* =================================================================================================================================================================
 ======================================================================ADMIN======================================================================================
 ================================================================================================================================================================= */

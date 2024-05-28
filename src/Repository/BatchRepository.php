@@ -16,6 +16,24 @@ class BatchRepository extends ServiceEntityRepository
         parent::__construct($registry, Batch::class);
     }
 
+    //renvoie 3 premiers produits  d'une collection
+    //SELECT * FROM product p INNER JOIN batch b ON p.batch_id = b.id ORDER BY title LIMIT 3
+    public function find3Product(){
+        $em = $this->getEntityManager(); //em=EntityManager
+        $sub = $em->createQueryBuilder();
+
+        $qb = $sub;
+        $qb->select('p')
+            ->from('App\Entity\Product', 'p')
+            ->innerJoin('p.batch', 'b')
+            ->orderBy('b.title', 'ASC')
+            ->setMaxResults(3);
+
+        //renvoie le resultat
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Batch[] Returns an array of Batch objects
     //     */

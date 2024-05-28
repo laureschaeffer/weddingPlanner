@@ -15,8 +15,10 @@
 <p>{{product.description}}</p>
 <p>€ {{product.price |number_format(2, ',', ' ') }}</p>
 <small>Taxes incluses.</small>
+
+{# ajout au panier  #}
 <p>Quantité</p>
-<p><a href="{{ path('add_basket', {'id': product.id}) }}">+</a></p>
+<p><a href="{{ path('add_basket', {'id': product.id}) }}"><i class="fa-solid fa-plus"></i></a></p>
 
 <h3>Vous pourriez aimer</h3>
 

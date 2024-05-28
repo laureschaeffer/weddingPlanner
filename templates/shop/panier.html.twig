@@ -7,10 +7,14 @@
 <h1>Votre panier</h1>
 
 
-{{ dump(app.session.get('panier')) }}
 
 {# {% for panier in app.session.get('panier') %}
-    {{ dump(panier) }}
+    <p>{{panier.produit}} </p>
+    <p>Quantité: {{panier.qtt}} </p>
 {% endfor %} #}
+
+{% for panier in app.session.get('panier') %}
+    {{ dump(panier) }}
+{% endfor %}
 
 {% endblock %}
