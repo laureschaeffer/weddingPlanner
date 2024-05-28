@@ -2,11 +2,14 @@
 //------------------------------------------------------------------------pannel admin---------------------------------------------------------------------
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Testimony;
+use App\Repository\UserRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TestimonyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -132,5 +135,43 @@ class AdminController extends AbstractController
             $this->addFlash('error', 'Ce témoignage n\'existe pas, ou doit d\'abord être dépublié');
             return $this->redirectToRoute('app_avis');
         }
+    }
+
+    //----------------------------------------------partie utilisateurs--------------------------------
+    
+    //liste des utilisateurs sur le site
+    #[Route('/coiffe/utilisateur', name: 'app_utilisateur')]
+    public function listUser(UserRepository $userRepository): Response
+    {
+        $utilisateurs = $userRepository->findBy([]);
+
+        return $this->render('admin/listeUser.html.twig', [
+            'utilisateurs' => $utilisateurs
+        ]);
+    }
+
+    //change le role d'un utilisateur
+    #[Route('coiffe/upgrade/{id}', name: 'upgrade_role')]
+    public function upgradeUser(User $user, EntityManagerInterface $entityManager, Request $request)
+    {
+        
+        //utilise la methode post pour récupérer les elements cochés
+        $roleAdmin = $request->request->get('role_a');
+        
+        $resultArray = [];
+        //si role admin est coché
+        if($roleAdmin){
+            $resultArray[]= "ROLE_ADMIN";
+        }
+        
+        $user->setRoles($resultArray); //setter dans la classe User attend un tableau json format ["ROLE_USER", "ROLE_ADMIN"]
+
+        $entityManager->persist($user); //prepare
+        $entityManager->flush(); //execute
+        
+        
+        // redirection
+        $this->addFlash('success', 'Role changé');
+        return $this->redirectToRoute('app_utilisateur');
     }
 }

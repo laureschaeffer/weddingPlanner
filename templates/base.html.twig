@@ -60,7 +60,7 @@
                     {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
                     {% if app.user and "ROLE_ADMIN" in app.user.roles %}
                         
-                        <p>Office</p>
+                        <p><a href="{{path('app_admin')}}">Office</a></p>
                     {% endif %}
 
                 </div>

@@ -186,4 +186,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->pseudo;
     }
 
+    //donne le role d'un utilisateur sous la forme "user" ou "admin"
+    public function getRoleStr(){
+        //j'utilise le getter car il permet d'avoir au moins ROLE_USER
+        foreach($this->getRoles() as $role){
+            $roleArray []= explode("_", $role); //recupere un tableau avec index 0 "role" et index 1 admin/user/formateur
+        }
+        $result = "";
+        foreach($roleArray as $r){
+            $result .= $r[1] . " ";
+        }
+        return strtolower($result);
+    }
+
 }

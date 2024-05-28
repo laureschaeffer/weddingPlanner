@@ -1,0 +1,42 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Utilisateurs du site{% endblock %}
+
+{% block body %}
+
+<h1>Liste des utilisateurs du site</h1>
+
+{% for user in utilisateurs %}
+    {# affiche tous les utilisateurs de la bdd, sauf son profil  #}
+    {% if user != app.user %}
+        <p>{{user}}</p>
+        <p>{{user.email}}</p>
+        <p>Role: {{user.roleStr}}</p>
+
+        <b>Passer en admin</b>
+    {# comme il n'y a que ROLE_ADMIN et ROLE_USER (par defaut), je vérifie à la main  #}
+    {% if "ROLE_ADMIN" in user.roles %}
+        {% set checkAdm = 'checked' %}
+      {% else %}
+        {% set checkAdm = '' %}
+    {% endif %}
+
+
+    <form action="{{ path('upgrade_role', {'id': user.id})}}" method="post">
+        <p>
+            <input type="checkbox" id="admin{{user.id}}" name="role_a" value="ROLE_ADMIN" {{checkAdm}}/>
+            <label for="admin{{user.id}}">Admin</label>
+        </p>
+        <div class="btn-container">
+            <div class="add-btn">
+                <button type="submit" name="submit">Valider</button>
+            </div>
+        </div>
+    </form>
+
+        <hr>
+
+    {% endif %}
+{% endfor %}
+
+{% endblock %}
