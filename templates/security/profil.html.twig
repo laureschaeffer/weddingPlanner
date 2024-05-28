@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+
+<h1>Ton profil</h1>
+
+
+<p>Email : {{ app.user.email}} </p>
+<p>Pseudo : {{app.user }} </p>
+
+
+{# <a href="{{ path('delete_profil') }}">Supprimer son compte</a> #}
+
+
+{% endblock %}
