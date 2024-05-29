@@ -1,4 +1,5 @@
 <?php
+//---------------------------------------------------------------------gere les fonctionnalités liées au panier
 
 namespace App\Service;
 
@@ -24,10 +25,10 @@ class BasketService {
         return $this->requestStack->getSession();
     }
 
-    //ajoute un produit à la session, appelé dans le controller
+    //ajoute un produit à la session
     public function addToBasket(int $id): void
     {
-        $panier = $this->requestStack->getSession()->get('panier', []);
+        $panier = $this->getSession()->get('panier', []);
 
         
         //si dans le panier l'id est trouvé, augmente la quantité, sinon ajoute le
@@ -43,17 +44,78 @@ class BasketService {
         
     }
 
+    //-----------------------------------------------------------------------------------------quantités---------------------------------------------------------------
+
+    //augmente la quantité d'un produit
+    public function increaseProduct(int $id){
+
+        $panier = $this->getSession()->get('panier');
+        $text= "";
+        //s'il y a un panier et déjà ce produit dans le panier
+        if($panier && $panier[$id]){
+            $panier[$id]+=1;
+            $text= "Quantité augmentée";
+        } else {
+            $text = "Ce produit n'est pas dans le panier";
+        }
+
+        //met à jour le tableau
+        $this->getSession()->set('panier', $panier);
+        return $text;
+    }
+    
+    
+    //diminue la quantité d'un produit
+    public function decreaseProduct(int $id){
+
+        $panier = $this->getSession()->get('panier');
+        $text= "";
+
+        // vérifier que l'id existe dans $panier, l'index correspond à l'id du produit
+        if(array_key_exists($id, $panier)) {
+            
+            //pour ne pas avoir de panier négatif
+            if($panier[$id] <= 1){
+                unset($panier[$id]);
+                $text = "Produit supprimé"; //msg de notif
+            } else {
+                $panier[$id]--;
+                $text = "Produit diminué";
+            }
+
+        } else {
+            $text = "Ce produit n'est pas dans le panier";
+        }
+
+
+        //met à jour le tableau
+        $this->getSession()->set('panier', $panier);
+    }
+    
+
+    //-----------------------------------------------------------------------------------------suppression---------------------------------------------------------------
+
+    //supprime un produit du panier
+    public function removeProduct(int $id){
+        $panier = $this->getSession()->get('panier');
+        
+        //retire dans le panier la variable contenant cet id
+        unset($panier[$id]);
+        return $this->getSession()->set('panier', $panier);
+    }
+
     //supprime le panier
-    public function removeBasket(){
+    public function deleteBasket(){
         return $this->getSession()->remove('panier');
     }
+
+    //-----------------------------------------------------------------------------------------affiche---------------------------------------------------------------
 
     //recupère le panier
     public function getBasket(): array
     {
         $panier = $this->getSession()->get('panier');
         $panierData= [];
-        $total=0;
 
         //si tu trouves un panier
         if($panier){

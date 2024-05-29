@@ -57,7 +57,7 @@ class ShopController extends AbstractController
         }
     }
 
-    //-------------------------------------------------------------------------interraction avec le panier-------------------------------------------------------
+    //=========================================================================INTERRACTION AVEC LE PANIER=======================================================
 
     //ajoute un produit au panier, à la session
     // {id<\d+} est une expression régulière qui force à ce que le paramètre soit un id
@@ -71,22 +71,57 @@ class ShopController extends AbstractController
         if($product){
             $basketService->addToBasket($id);
           
-            return $this->redirectToRoute('app_basket');
+            $this->addFlash('success', 'Produit ajouté');
+            return $this->redirectToRoute('show_product', ['id' => $id]);
         } else {
             $this->addFlash('error', 'Ce produit n\'existe pas');
             return $this->redirectToRoute('app_shop');
         }
-        die;
     }
 
+    //-----------------------------------------------------------------------------------------quantités---------------------------------------------------------------
+
+
+    //augmente la quantité d'un produit
+    #[Route('/shop/increaseProduct/{id<\d+>}', name: 'increase_product')]
+    public function increaseProduct(BasketService $basketService, int $id){
+        $text = $basketService->increaseProduct($id);
+
+        $this->addFlash('success', $text);
+        return $this->redirectToRoute('app_basket');
+    }
+
+    //augmente la quantité d'un produit
+    #[Route('/shop/decreaseProduct/{id<\d+>}', name: 'decrease_product')]
+    public function decreaseProduct(BasketService $basketService, int $id){
+        $text = $basketService->decreaseProduct($id);
+
+        $this->addFlash('success', $text);
+        return $this->redirectToRoute('app_basket');
+    }
+
+    //-----------------------------------------------------------------------------------------suppression---------------------------------------------------------------
+
+    //retire un produit du panier
+    #[Route('/shop/retirePanier/{id<\d+>}', name: 'remove_product')]
+    public function removeProduct(BasketService $basketService, int $id){
+        $basketService->removeProduct($id);
+
+        $this->addFlash('success', 'Produit retiré');
+        return $this->redirectToRoute('app_basket');
+    }
+
+
     //supprime le panier
-    #[Route('/shop/supprimePanier', name: 'remove_basket')]
-    public function removeBasket(BasketService $basketService){
-        $basketService->removeBasket();
+    #[Route('/shop/supprimePanier', name: 'delete_basket')]
+    public function deleteBasket(BasketService $basketService){
+        $basketService->deleteBasket();
 
         $this->addFlash('succes', 'Panier supprimé');
         return $this->redirectToRoute('app_shop');
     }
+
+    //-----------------------------------------------------------------------------------------affiche---------------------------------------------------------------
 
     //montre le panier, appelle la methode dans BasketService
     #[Route('/shop/panier', name: 'app_basket')]
