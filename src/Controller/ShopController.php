@@ -5,12 +5,19 @@
 namespace App\Controller;
 
 use App\Entity\Batch;
+use App\Entity\Booking;
 use App\Entity\Product;
+use App\Entity\Reservation;
+use App\Form\ReservationType;
+use App\Service\BasketService;
 use App\Repository\BatchRepository;
 use App\Repository\ProductRepository;
-use App\Service\BasketService;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
@@ -105,9 +112,9 @@ class ShopController extends AbstractController
     //retire un produit du panier
     #[Route('/shop/retirePanier/{id<\d+>}', name: 'remove_product')]
     public function removeProduct(BasketService $basketService, int $id){
-        $basketService->removeProduct($id);
+        $text = $basketService->removeProduct($id);
 
-        $this->addFlash('success', 'Produit retiré');
+        $this->addFlash('success', $text);
         return $this->redirectToRoute('app_basket');
     }
 
@@ -132,5 +139,72 @@ class ShopController extends AbstractController
         return $this->render('shop/panier.html.twig', [
             'panier' => $panier
         ]);
+    }
+
+    //=========================================================================================RESERVATION=================================================================
+
+    //ajoute le panier en réservation
+    #[Route('/shop/reservation/{total}', name: 'make_reservation')]
+    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService, float $total): Response
+    {
+
+        //la personne doit être connectée pour que la réservation soit associée à une entité
+        if($user){
+            
+            //---------------------------------------------------entité reservation------------------------------
+            //crée la reservation
+            $reservation = new Reservation();
+    
+            //crée le form
+            $form = $this->createForm(ReservationType::class, $reservation);
+    
+            //prend en charge
+            $form->handleRequest($request);
+    
+            if($form->isSubmitted() && $form->isValid()){
+                //récupère les données du formulaire 
+                $reservation = $form->getData();
+
+                //crée un nombre unique aléatoire
+                $referenceOrder = uniqid();
+
+                //remplit à la main car pas demandé dans le formulaire
+                $reservation->setUser($user); //remplit par l'utilisateur connecté
+                $reservation->setReferenceOrder($referenceOrder);
+                $reservation->setPrepared(false);
+                $reservation->setPicked(false);
+                $reservation->setTotalPrice($total);
+                $ajd = new \DateTime();
+                $reservation->setDateOrder($ajd); //format DATETIME de MySQL
+                // $reservation->setDateOrder(date("Y-m-d H:i:s")); //format DATETIME de MySQL
+    
+                $entityManager->persist($reservation); //prepare
+                $entityManager->flush(); //execute
+
+                //---------------------------------------------------entité booking------------------------------
+
+                $panier = $basketService->getBasket();
+                //il faut créer autant d'entité booking que de produit dans le panier
+                foreach($panier as $p){
+                    $booking = new Booking();
+                    $booking->setProduct($p['produit']);
+                    $booking->setReservation($reservation);
+                    $booking->setQuantite($p['qtt']);
+
+                    $entityManager->persist($booking); //prepare
+                    $entityManager->flush(); //execute
+                    
+                }
+
+                $this->addFlash('succes', 'Réservation effectuée');
+                return $this->redirectToRoute('app_profil');
+            }
+
+        }
+
+        return $this->render('shop/reservation.html.twig', [
+            'form' => $form
+        ]);
+
     }
 }

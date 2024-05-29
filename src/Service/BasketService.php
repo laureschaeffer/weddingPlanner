@@ -51,10 +51,15 @@ class BasketService {
 
         $panier = $this->getSession()->get('panier');
         $text= "";
-        //s'il y a un panier et déjà ce produit dans le panier
-        if($panier && $panier[$id]){
-            $panier[$id]+=1;
-            $text= "Quantité augmentée";
+        // vérifier que l'id existe dans $panier, l'index correspond à l'id du produit
+        if(array_key_exists($id, $panier)) {
+            //maximum de 20 produits
+            if($panier[$id] < 20){
+                $panier[$id]+=1;
+                $text= "Quantité augmentée";
+            } else {
+                $text= "Quantité maximale atteinte";
+            }
         } else {
             $text = "Ce produit n'est pas dans le panier";
         }
@@ -80,7 +85,7 @@ class BasketService {
                 $text = "Produit supprimé"; //msg de notif
             } else {
                 $panier[$id]--;
-                $text = "Produit diminué";
+                $text = "Quantité diminuée";
             }
 
         } else {
@@ -90,6 +95,7 @@ class BasketService {
 
         //met à jour le tableau
         $this->getSession()->set('panier', $panier);
+        return $text;
     }
     
 
@@ -98,10 +104,18 @@ class BasketService {
     //supprime un produit du panier
     public function removeProduct(int $id){
         $panier = $this->getSession()->get('panier');
-        
-        //retire dans le panier la variable contenant cet id
-        unset($panier[$id]);
-        return $this->getSession()->set('panier', $panier);
+
+        // vérifier que l'id existe dans $panier, l'index correspond à l'id du produit
+        if(array_key_exists($id, $panier)) {
+
+            //retire dans le panier la variable contenant cet id
+            unset($panier[$id]);
+            $text= "Produit retiré";
+        } else {
+            $text = "Ce produit n'est pas dans le panier";
+        }
+        $this->getSession()->set('panier', $panier);
+        return $text;
     }
 
     //supprime le panier

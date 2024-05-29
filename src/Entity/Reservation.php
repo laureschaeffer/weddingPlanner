@@ -17,7 +17,7 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $referenceOrder = null;
+    private ?string $referenceOrder = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOrder = null;
@@ -54,12 +54,12 @@ class Reservation
         return $this->id;
     }
 
-    public function getReferenceOrder(): ?int
+    public function getReferenceOrder(): ?string
     {
         return $this->referenceOrder;
     }
 
-    public function setReferenceOrder(?int $referenceOrder): static
+    public function setReferenceOrder(?string $referenceOrder): static
     {
         $this->referenceOrder = $referenceOrder;
 

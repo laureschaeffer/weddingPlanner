@@ -32,6 +32,10 @@
     <p>Total {{total}} </p>
     <p><a href="{{path('delete_basket')}}">Supprimer tout le panier</a></p>
 
+    <hr>
+
+    <button><a href="{{path('make_reservation', {'total': total})}}">Réserver</a></button>
+
     {% else %}
     <p>Votre panier est vide</p>
 {% endif %}

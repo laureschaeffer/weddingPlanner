@@ -13,5 +13,14 @@
 
 {# <a href="{{ path('delete_profil') }}">Supprimer son compte</a> #}
 
+{# historique de réservation #}
+
+{% if app.user.reservations %}
+    {% for reservation in app.user.reservations %}
+    {{ dump(reservation) }}
+    {% endfor %}
+{% endif %}
+
+
 
 {% endblock %}
