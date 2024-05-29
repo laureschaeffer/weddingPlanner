@@ -7,10 +7,10 @@ namespace App\Controller;
 use App\Entity\Batch;
 use App\Entity\Product;
 use App\Repository\BatchRepository;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\ProductRepository;
+use App\Service\BasketService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
@@ -60,46 +60,42 @@ class ShopController extends AbstractController
     //-------------------------------------------------------------------------interraction avec le panier-------------------------------------------------------
 
     //ajoute un produit au panier, à la session
-    #[Route('/shop/ajoutePanier/{id}', name: 'add_basket')]
-    public function addProduct(Product $product = null, SessionInterface $session)
-    
+    // {id<\d+} est une expression régulière qui force à ce que le paramètre soit un id
+    // au lieu d'envoyer une erreur, il explique que cet url n'existe simplement pas
+    #[Route('/shop/ajoutePanier/{id<\d+>}', name: 'add_basket')]
+    public function addProduct(BasketService $basketService, int $id, ProductRepository $productRepository)
     {
-        //parcourt le panier
-        // foreach($session->get('panier') as $p){
-            
-        //     var_dump($p->getId());
-        //     //verifie si le produit ajouté est déjà dans le panier; si oui on augmente la qtt, sinon on l'ajoute
-        //     // if($p['produit']->getId() == $product->getId()){
-        //     //     // $session->set('panier', )
-        //     //     // $session->set('panier', ['produit' => $product, 'qtt' => 2]);
-        //     //     // ($p['qtt']);
-        //     // }
-
-        // }
-
-        $panier= $session->get('panier');
-
-        //si la session contient déjà un panier
-        if($session->get('panier')){
-            $newBasket = ['produit' =>$product,
-            'qtt' => 1];
-            array_push($panier, $newBasket);
-            $session->set('panier', $panier);
+        $product = $productRepository->findOneBy(['id' => $id]);
+        
+        //si le produit existe
+        if($product){
+            $basketService->addToBasket($id);
+          
+            return $this->redirectToRoute('app_basket');
         } else {
-            $session->set('panier', ['produit'=> $product,
-            'qtt' =>1]);   
+            $this->addFlash('error', 'Ce produit n\'existe pas');
+            return $this->redirectToRoute('app_shop');
         }
-        
-        
-        // return $this->redirectToRoute('app_basket');
-        
+        die;
     }
 
-    //montre le panier
-    #[Route('/shop/panier', name: 'app_basket')]
-    public function showBasket(): Response 
-    {
+    //supprime le panier
+    #[Route('/shop/supprimePanier', name: 'remove_basket')]
+    public function removeBasket(BasketService $basketService){
+        $basketService->removeBasket();
 
-        return $this->render('shop/panier.html.twig', []);
+        $this->addFlash('succes', 'Panier supprimé');
+        return $this->redirectToRoute('app_shop');
+    }
+
+    //montre le panier, appelle la methode dans BasketService
+    #[Route('/shop/panier', name: 'app_basket')]
+    public function showBasket(BasketService $basketService): Response 
+    {
+        $panier = $basketService->getBasket();
+
+        return $this->render('shop/panier.html.twig', [
+            'panier' => $panier
+        ]);
     }
 }

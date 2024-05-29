@@ -7,14 +7,25 @@
 <h1>Votre panier</h1>
 
 
+{% if panier %}
+    {% set total = 0 %}
+    
+    {% for p in panier %}
+        <p>{{p.produit}} </p>
+        <p>Quantité: {{p.qtt}} </p>
+        <p>Sous-total: {{p.sousTotal}}</p>
 
-{# {% for panier in app.session.get('panier') %}
-    <p>{{panier.produit}} </p>
-    <p>Quantité: {{panier.qtt}} </p>
-{% endfor %} #}
+        {# calcule le total de la commande  #}
+        {% set total = total + p.sousTotal %}
 
-{% for panier in app.session.get('panier') %}
-    {{ dump(panier) }}
-{% endfor %}
+        <hr>
+    {% endfor %}
+
+    <p>Total {{total}} </p>
+    <p><a href="{{path('remove_basket')}}">Supprimer tout le panier</a></p>
+
+    {% else %}
+    <p>Votre panier est vide</p>
+{% endif %}
 
 {% endblock %}

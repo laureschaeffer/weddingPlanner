@@ -15,43 +15,47 @@
     </head>
     <body>
         <div id="wrapper">
-            <header>
-                <nav id="nav">
-                    <div id="first-nav">
-                        <a href="{{ path('app_creation') }}">Portfolio</a>
-                        <a href="{{ path('app_prestation') }}">Nos prestations</a>
-                        <a href="{{ path('app_worker') }}">Equipe</a>
-                        <a href="{{ path('app_shop') }}">Commerce</a>
+            <div id="page-container">
+
+                <header>
+                    <nav id="nav">
+                        <div id="first-nav">
+                            <a href="{{ path('app_creation') }}">Portfolio</a>
+                            <a href="{{ path('app_prestation') }}">Nos prestations</a>
+                            <a href="{{ path('app_worker') }}">Equipe</a>
+                            <a href="{{ path('app_shop') }}">Commerce</a>
+                        </div>
+                            <a href="{{ path('app_home') }}">Accueil</a>
+                        
+                        <div id="second-nav">
+                            <a href="{{ path('app_contact') }}">Contact</a>
+                            {% if app.user %}
+                                <a href="{{path('app_profil')}}"><i class="fa-solid fa-user"></i>{{app.user}}</a>
+                                <a href="{{path('app_logout')}}">Se déconnecter</a>
+                                {% else %}
+                                <a href="{{path('app_register')}}">S'inscrire</a><a href="{{path('app_login')}}">Se connecter</a>
+                            {% endif %}
+                        </div>
+                    </nav>
+    
+                </header>
+    
+                {# message de success #}
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
                     </div>
-                        <a href="{{ path('app_home') }}">Accueil</a>
-                    
-                    <div id="second-nav">
-                        <a href="{{ path('app_contact') }}">Contact</a>
-                        {% if app.user %}
-                            <a href="{{path('app_profil')}}"><i class="fa-solid fa-user"></i>{{app.user}}</a>
-                            <a href="{{path('app_logout')}}">Se déconnecter</a>
-                            {% else %}
-                            <a href="{{path('app_register')}}">S'inscrire</a><a href="{{path('app_login')}}">Se connecter</a>
-                        {% endif %}
+                {% endfor %}
+                {# message d'erreur #}
+                {% for msg in app.flashes('error') %}
+                    <div class="alert alert-danger">
+                        {{ msg }}
                     </div>
-                </nav>
+                {% endfor %}
+    
+                {% block body %}{% endblock %}
 
-            </header>
-
-            {# message de success #}
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {# message d'erreur #}
-            {% for msg in app.flashes('error') %}
-                <div class="alert alert-danger">
-                    {{ msg }}
-                </div>
-            {% endfor %}
-
-            {% block body %}{% endblock %}
+            </div>
             <footer>
                 <p>COPYRIGHT &#169; Cérémonie Couture</p>
                 <div class="footer-align">
