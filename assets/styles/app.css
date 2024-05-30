@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;1,500&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Cormorant:ital,wght@0,500;1,500&display=swap');
 
 /* ------------------------------variables  */
@@ -16,19 +16,24 @@
     /* --pink-color: #C49799; */
 
     /* polices d'ecriture  */
-    --main-font: "Cormorant", serif;
+    --main-font: "Cormorant Garamond", serif;
     --title-font: "Cormorant SC", serif;
 
     /* tailles  */
     --p-font-size: 1.2rem;
     --nav-font-size: 1.4rem;
-    --subtitle-font-size: 1.5rem;
-    --semi-bold: 400;
+    --subtitle-font-size: 1.8rem;
+    --title-font-size: 2rem;
 
-    /* padding  */
+    --title-font-weight: 500;
+    --semi-bold: 600;
+
+    /* padding ou margin */
+    --escape-padding: 80px;
+    --big-padding: 50px;
     --main-padding: 20px;
     --small-padding: 5px;
-    --footer-padding: 100px;
+    --footer-padding: 130px;
 }
 
 
@@ -48,8 +53,25 @@
     position: relative;
 }
 
+h1{
+    font-family: var(--title-font);
+    font-size: var(--title-font-size);
+    font-weight: var(--title-font-weight);
+    text-align: center;
+    padding: var(--big-padding) 0;
+}
+
+h2{
+    font-weight: var(--title-font-weight);
+    font-size: var(--subtitle-font-size);
+}
+
 #page-container{
     padding-bottom: var(--footer-padding);
+}
+
+.logo{
+    width: 300px;
 }
 
 img{
@@ -75,6 +97,7 @@ p{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 #nav a{
@@ -83,10 +106,6 @@ p{
     font-size: var(--nav-font-size);
     text-decoration: none;
     padding: var(--small-padding) 0;
-}
-
-header{
-    margin-bottom: var(--main-padding);
 }
 
 
@@ -113,10 +132,56 @@ footer p, footer a{
 
 /* ---------------------------------------------------------------landing page------------------------------------------------------- */
 
-#home-intro p{
-    background-color: var(--pink-color);
+/* --------separation des sections  */
+#home-intro, #home-presentation, #home-avis{
+    margin-bottom: var(--escape-padding);
 }
 
+/* ---------padding sur le coté----- */
+#home-presentation, #home-avis{
+    padding: 0 var(--big-padding);
+}
+
+#home-intro p{
+    background-color: var(--pink-color);
+    padding: 30px 80px;
+}
+
+#home-presentation{
+    display: flex;
+}
+
+#home-presentation h2{
+    padding-bottom: var(--main-padding);
+}
+
+#home-presentation article{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 var(--main-padding);
+}
+
+#home-presentation p{
+    text-align: center;
+}
+
+/* -------avis------ */
+#home-avis h2{
+    text-align: center;
+}
+
+.avis-card-header p{
+    color: var(--burgundy-color);
+    font-family: var(--title-font);
+    font-weight: var(--semi-bold);
+    font-size: var(--nav-font-size);
+    padding-bottom: var(--main-padding);
+}
+
+.avis-card-content p{
+    text-align: justify;
+}
 
 /* ---------------------------------------------------------------commerce------------------------------------------------------- */
 

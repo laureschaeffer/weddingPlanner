@@ -7,21 +7,48 @@
 <h1>Organisation de mariages d'exception</h1>
 
 <div id="home-intro">
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus.
-        Non, architecto a commodi in iste vel ullam odit possimus, ipsum inventore odio, quas distinctio molestiae dicta adipisci perferendis reiciendis suscipit consequatur dolorum nihil pariatur amet quisquam maiores nostrum! Sit!
+    <p>Chez Cérémonie Couture, nous transformons vos rêves en réalité. Basés à Strasbourg, au cœur de l'Alsace, nous sommes spécialisés dans l'organisation de mariages sur mesure, où chaque détail est soigneusement orchestré pour refléter votre amour et votre personnalité unique.
     </p>
 </div>
 
+<section id="home-presentation">
+
+    <article>
+        <h2>Approche personnalisée</h2>
+        <p>Nous prenons compte que chaque mariage est unique. Nous travaillons en étroite collaboration avec vous pour comprendre vos souhaits et vos attentes. Que vous rêviez d'une cérémonie intime ou d'une grande réception somptueuse, nous concevons des événements sur mesure qui reflètent votre style et votre vision.</p>
+    </article>
+    <article>
+        <h2>Créativité et innovation</h2>
+        <p>Nous sommes constamment à la recherche des dernières tendances et innovations. Que ce soit pour un thème traditionnel ou une approche plus contemporaine pour une <strong>organisation de mariage original</strong>, nous apportons une touche de créativité qui rendra votre mariage unique et mémorable.</p>
+    </article>
+</section>
+
+
 
 {# -----------------------------------------------------avis----------------------------------------- #}
-<h2>Leurs avis</h2>
-{% for a in avis %}
-    <p>{{a}}</p>
-    <p>{{a.description}}</p>
-    <br>
-    <br>
-{% endfor %}
 
-<p><a href="{{ path('app_temoignage') }}">Donner son avis</a></p>
+<section id="home-avis">
+    <h2>Leurs avis</h2>
+    {% for a in avis %}
+        <div class="avis-card">
+            <div class="avis-card-header">
+                <p>{{a}}</p>
+            </div>
+            <div class="avis-card-content">
+                <p>{{a.description}}</p>
+            </div>
+        </div>
+        <br>
+        <br>
+    {% endfor %}
 
+    <p><a href="{{ path('app_temoignage') }}">Donner son avis</a></p>
+</section>
+
+{# ---------------------------------------------------contact--------------------------------------- #}
+
+<article>
+    <p>Prêts à commencer votre aventure avec nous ? Contactez Cérémonie Couture dès aujourd'hui pour discuter de vos idées et commencer à <strong>planifier le mariage</strong> de vos rêves. Ensemble, créons une cérémonie qui sera gravée dans votre mémoire pour toujours.
+    </p>
+</article>
 {% endblock %}

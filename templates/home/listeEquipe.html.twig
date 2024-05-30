@@ -7,10 +7,20 @@
 <h1>L'équipe</h1>
 
 {% for worker in workers %}
-<figure><img src="{{ asset(worker.urlPicture) }}" alt="{{worker.altPicture}}"></figure>
-    <h2>{{worker}}</h2>
-    <p> {{worker.job}} </p>
-    <p>{{ worker.description }}</p>
+
+    <div class="equipe-card">
+        <figure><img src="{{ asset(worker.urlPicture) }}" alt="{{worker.altPicture}}"></figure>
+        <div class="equipe-card-main">
+            <div class="equipe-card-title">
+                <p>{{worker}}</p>
+                <p> {{worker.job}} </p>
+            </div>
+            <div class="equipe-card-content">
+                <p>{{ worker.description }}</p>
+            </div>
+
+        </div>
+    </div>
 
     <hr>
 {% endfor %}
