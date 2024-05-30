@@ -4,25 +4,52 @@
 
 {% block body %}
 
-<h1>L'équipe</h1>
+<section id="equipe">
 
-{% for worker in workers %}
-
-    <div class="equipe-card">
-        <figure><img src="{{ asset(worker.urlPicture) }}" alt="{{worker.altPicture}}"></figure>
-        <div class="equipe-card-main">
-            <div class="equipe-card-title">
-                <p>{{worker}}</p>
-                <p> {{worker.job}} </p>
+    <h1>L'équipe</h1>
+    
+    {% set index = 0 %}
+    {% for worker in workers %}
+    
+    {# pour echanger de sens #}
+        {% if index is divisible by(2) %}
+            <div class="equipe-card" id="worker-{{worker.id}}">
+                <figure><img src="{{ asset(worker.urlPicture) }}" alt="{{worker.altPicture}}"></figure>
+                <div class="equipe-card-main">
+                    <div class="equipe-card-title">
+                        <p class="equipe-name">{{worker}}</p>
+                        <p class="equipe-job">{{worker.job}}</p>
+                    </div>
+                    <div class="equipe-card-content">
+                        <p>{{ worker.description }}</p>
+                    </div>
+    
+                </div>
             </div>
-            <div class="equipe-card-content">
-                <p>{{ worker.description }}</p>
+        
+            <hr>
+            {% else %}
+            <div class="equipe-card" id="worker-{{worker.id}}">
+                <div class="equipe-card-main">
+                    <div class="equipe-card-title">
+                        <p class="equipe-name">{{worker}}</p>
+                        <p class="equipe-job">{{worker.job}}</p>
+                    </div>
+                    <div class="equipe-card-content">
+                        <p>{{ worker.description }}</p>
+                    </div>    
+                </div>
+                <figure><img src="{{ asset(worker.urlPicture) }}" alt="{{worker.altPicture}}"></figure>
             </div>
+    
+        {% endif %}
+    
+    
+    
+    
+        {% set index = index + 1 %}
+    {% endfor %}
 
-        </div>
-    </div>
-
-    <hr>
-{% endfor %}
+</section>
 
 {% endblock %}

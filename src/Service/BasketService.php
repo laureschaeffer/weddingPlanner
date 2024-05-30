@@ -131,18 +131,21 @@ class BasketService {
         $panier = $this->getSession()->get('panier');
         $panierData= [];
 
+        $sousTotal=0;
+        $total=0;
         //si tu trouves un panier
         if($panier){
             //crée un tableau associatif plus propre et simple à manipuler
             foreach($panier as $id=> $qtt){
                 //recupère l'objet produit
                 $produit = $this->entityManager->getRepository(Product::class)->findOneBy(['id' => $id]);
-                
+                $sousTotal = $produit->getPrice() * $qtt;
                 $panierData[]= [
                     'produit' => $produit,
                     'qtt' => $qtt,
                     //renvoie le sous-total du produit
-                    'sousTotal' => $produit->getPrice() * $qtt
+                    'sousTotal' => $sousTotal,
+                    'total' => $total+= $sousTotal
                 ];
             }
         }

@@ -7,19 +7,33 @@
 {% block body %}
 
 {# {{ dump(app.session.get('clé')) }} #}
-<h1>Commerce</h1>
 
-<h2>Collection <a href="{{path('show_batch', {'id': product.batch.id}) }}">{{product.batch |lower}}</a> </h2>
+<section id="commerce-produit">
 
-<figure><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></figure>
-<p>{{product.description}}</p>
-<p>€ {{product.price |number_format(2, ',', ' ') }}</p>
-<small>Taxes incluses.</small>
+    <h1>Commerce</h1>
+    
+    <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p>
+    
+    <h2>Collection <a href="{{path('show_batch', {'id': product.batch.id}) }}">{{product.batch |lower}}</a> </h2>
+    
+    <div class="produit-card">
+        <figure><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></figure>
+        <div class="produit-card-main">
+            <h3>{{product.name }}</h3>
+            <p class="produit-description">{{product.description}}</p>
+            <p class="produit-prix">€ {{product.price |number_format(2, ',', ' ') }}</p>
+            <small>Taxes incluses.</small>
+            
+            {# ajout au panier  #}
+            <p>Quantité</p>
+            {# <p><a href="{{ path('add_basket', {'id': product.id}) }}"><i class="fa-solid fa-plus"></i></a></p> #}
+            <button><a href="{{ path('add_basket', {'id': product.id}) }}">Ajouter au panier</a></button>
 
-{# ajout au panier  #}
-<p>Quantité</p>
-<p><a href="{{ path('add_basket', {'id': product.id}) }}"><i class="fa-solid fa-plus"></i></a></p>
+        </div>
+    </div>
+    
+    <h3>Vous pourriez aimer</h3>
 
-<h3>Vous pourriez aimer</h3>
+</section>
 
 {% endblock %}

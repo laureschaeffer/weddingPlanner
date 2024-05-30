@@ -16,8 +16,21 @@
 {# historique de réservation #}
 
 {% if app.user.reservations %}
+    <h2>Historique de réservation</h2>
     {% for reservation in app.user.reservations %}
-    {{ dump(reservation) }}
+        <p>Commande n° {{reservation}}</p>
+        <p>Passée le {{reservation.dateOrder |date("d.m.Y")}} </p>
+        <p>A récupérer le {{reservation.datePicking |date("d.m.Y")}} </p>
+        <p>Pour un prix total de {{reservation.totalPrice}} €</p>
+        <p>Préparée: {{reservation.isPrepared}} </p>
+        <p>Récupérée: {{reservation.isPicked}} </p>
+        
+        {# cherche les produits liés à cette reservation  #}
+        {% for produit in reservation.bookings %}
+            <p><a href="{{path('show_product', {'id': produit.product.id}) }}">{{produit.product}}</a></p>
+            {{ dump(produit.product.name) }}
+        {% endfor %}
+        <hr>
     {% endfor %}
 {% endif %}
 

@@ -28,6 +28,10 @@
     --title-font-weight: 500;
     --semi-bold: 600;
 
+    /* img  */
+    --main-img-size: 200px;
+    --big-img-size: 400px;
+
     /* padding ou margin */
     --escape-padding: 80px;
     --big-padding: 50px;
@@ -70,13 +74,18 @@ h2{
     padding-bottom: var(--footer-padding);
 }
 
+/* ---------padding sur le coté----- */
+#home-presentation, #home-avis, #equipe{
+    padding: 0 var(--big-padding);
+}
+
 .logo{
     width: 300px;
 }
 
-img{
+/* img{
     width: 200px;
-}
+} */
 
 p{
     font-size: var(--p-font-size);
@@ -90,7 +99,6 @@ p{
     display: flex;
     justify-content: space-around;
     background-color: var(--nav-color);
-    padding: var(--main-padding) 0;
 }
 
 #nav>div{
@@ -137,10 +145,7 @@ footer p, footer a{
     margin-bottom: var(--escape-padding);
 }
 
-/* ---------padding sur le coté----- */
-#home-presentation, #home-avis{
-    padding: 0 var(--big-padding);
-}
+
 
 #home-intro p{
     background-color: var(--pink-color);
@@ -187,6 +192,11 @@ footer p, footer a{
 
 /* --------batch/collection */
 
+#commerce-batch img{
+    width: var(--main-img-size);
+}
+
+
 #nav-batch{
     display: flex;
     justify-content: space-around;
@@ -209,6 +219,43 @@ footer p, footer a{
 .basket-qtt-nb{
     font-size: 1.5rem;
     padding: 0 var(--small-padding);
+}
+
+
+/* --------detail produit */
+#commerce-produit img{
+    width: var(--big-img-size);
+}
+
+/* ---------------------------------------------------------------equipe------------------------------------------------------- */
+
+.equipe-card{
+    display: flex;
+    align-items: center;
+}
+
+.equipe-card img{
+    width: 300px;
+}
+
+.equipe-card-title{
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--main-padding);
+}
+
+.equipe-card-main{
+    padding: 0 var(--big-padding);
+}
+
+.equipe-job{
+    padding: 20px 0 0 20px;
+}
+
+/* -------------card differente pour chaque membre de l'equipe */
+
+#worker-1 img{
+    border-radius: 200px 200px 0 0;
 }
 
 /* =================================================================================================================================================================

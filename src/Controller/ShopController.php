@@ -144,12 +144,21 @@ class ShopController extends AbstractController
     //=========================================================================================RESERVATION=================================================================
 
     //ajoute le panier en réservation
-    #[Route('/shop/reservation/{total}', name: 'make_reservation')]
-    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService, float $total): Response
+    #[Route('/shop/reservation', name: 'make_reservation')]
+    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService): Response
     {
 
         //la personne doit être connectée pour que la réservation soit associée à une entité
         if($user){
+            
+            //recupere le tel dans le formulaire
+            $phone = $request->request->get('phone');
+
+            $roles = $user->getRoles();
+            array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
+            $user->setRoles($roles);
+            $user->setPhone($phone);
+
             
             //---------------------------------------------------entité reservation------------------------------
             //crée la reservation
@@ -173,10 +182,14 @@ class ShopController extends AbstractController
                 $reservation->setReferenceOrder($referenceOrder);
                 $reservation->setPrepared(false);
                 $reservation->setPicked(false);
+
+                
+                $panier = $basketService->getBasket(); //recupere le panier en session
+                $total = end($panier)["total"]; //recupere le total au dernier index du tableau
+
                 $reservation->setTotalPrice($total);
                 $ajd = new \DateTime();
-                $reservation->setDateOrder($ajd); //format DATETIME de MySQL
-                // $reservation->setDateOrder(date("Y-m-d H:i:s")); //format DATETIME de MySQL
+                $reservation->setDateOrder($ajd); 
     
                 $entityManager->persist($reservation); //prepare
                 $entityManager->flush(); //execute

@@ -6,18 +6,26 @@
 
 {% block body %}
 
-<h1>Commerce</h1>
+<section id="commerce-batch">
 
-<h2>{{batch}}</h2>
-<p>{{batch.description}}</p>
-
-{% for product in batch.products %}
-    <hr>
-    <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
-    <p><a href="{{path('show_product', {'id': product.id}) }}">{{product}}</a></p>    
-    <p>€ {{product.price|number_format(2, ',', ' ') }}</p>
-    <hr>
+    <h1>Commerce</h1>
     
-{% endfor %}
+    <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p>
+
+    <h2>{{batch}}</h2>
+    <p>{{batch.description}}</p>
+    
+    {% for product in batch.products %}
+        <hr>
+        <div class="collection-produit">
+            <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
+            <p><a href="{{path('show_product', {'id': product.id}) }}">{{product}}</a></p>    
+            <p>€ {{product.price|number_format(2, ',', ' ') }}</p>
+        </div>
+        <hr>
+        
+    {% endfor %}
+
+</section>
 
 {% endblock %}

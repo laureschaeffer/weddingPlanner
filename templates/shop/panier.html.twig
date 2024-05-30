@@ -11,6 +11,7 @@
     {% set total = 0 %}
     
     {% for p in panier %}
+    <figure><img src="{{asset(p.produit.urlPicture)}}" alt="{{p.produit.altPicture}}" width="200px"></figure>
         <p>{{p.produit}} </p>
         <p class="basket-qtt">
             {# diminue #}
@@ -34,7 +35,7 @@
 
     <hr>
 
-    <button><a href="{{path('make_reservation', {'total': total})}}">Réserver</a></button>
+    <button><a href="{{path('make_reservation')}}">Réserver</a></button>
 
     {% else %}
     <p>Votre panier est vide</p>
