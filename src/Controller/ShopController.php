@@ -98,7 +98,7 @@ class ShopController extends AbstractController
         return $this->redirectToRoute('app_basket');
     }
 
-    //augmente la quantité d'un produit
+    //diminue la quantité d'un produit
     #[Route('/shop/decreaseProduct/{id<\d+>}', name: 'decrease_product')]
     public function decreaseProduct(BasketService $basketService, int $id){
         $text = $basketService->decreaseProduct($id);

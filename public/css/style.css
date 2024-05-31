@@ -63,6 +63,7 @@ h1{
     font-weight: var(--title-font-weight);
     text-align: center;
     padding: var(--big-padding) 0;
+    letter-spacing: 1px;
 }
 
 h2{
@@ -75,7 +76,7 @@ h2{
 }
 
 /* ---------padding sur le coté----- */
-#home-presentation, #home-avis, #equipe{
+#home-presentation, #home-avis, #equipe, #prestation{
     padding: 0 var(--big-padding);
 }
 
@@ -83,9 +84,6 @@ h2{
     width: 300px;
 }
 
-/* img{
-    width: 200px;
-} */
 
 p{
     font-size: var(--p-font-size);
@@ -232,11 +230,20 @@ footer p, footer a{
 .equipe-card{
     display: flex;
     align-items: center;
+    margin: var(--escape-padding) 0;
 }
 
-.equipe-card img{
-    width: 300px;
+.equipe-card-main, .equipe-card figure{
+    flex: 1;
 }
+
+
+/* inverse le sens une fois sur deux  */
+#equipe .equipe-card:nth-child(odd){
+    flex-direction: row-reverse;
+}
+
+
 
 .equipe-card-title{
     display: flex;
@@ -254,9 +261,67 @@ footer p, footer a{
 
 /* -------------card differente pour chaque membre de l'equipe */
 
+
+.equipe-card img{
+    width: var(--main-img-size);
+}
+
+.equipe-card figure{
+    display: flex;
+    justify-content: center;
+}
+
 #worker-1 img{
     border-radius: 200px 200px 0 0;
 }
+
+
+
+#worker-2 figure{
+    background-image: url('../img/marble-4924052_1280.jpg');
+}
+
+#worker-3 img{
+    border: 20px solid var(--burgundy-color);
+    border-radius: 50%;
+}
+
+/* ---------------------------------------------------------------prestation------------------------------------------------------- */
+
+#prestation-intro img{
+    width: 80%;
+}
+
+#prestation-intro p{
+    padding: 0 var(--escape-padding);
+}
+
+.prestation-card img{
+    width: 300px;
+}
+
+#prestation figure{
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--big-padding);
+}
+
+
+.prestation-card{
+    display: flex;
+    align-items: center;
+    margin: var(--big-padding) 0;
+    /* padding: 0 var(--escape-padding); */
+}
+
+.prestation-card-main{
+    padding: 0 var(--big-padding);
+}
+
+.prestation-card-main p{
+    padding: var(--main-padding) 0;
+}
+
 
 /* =================================================================================================================================================================
 ======================================================================ADMIN======================================================================================
