@@ -1,6 +1,6 @@
 {% extends 'adminBase.html.twig' %}
 
-{% block title %}Demande de contact{% endblock %}
+{% block title %}Commande{% endblock %}
 
 {% block body %}
 
@@ -19,6 +19,7 @@
     <p><i class="fa-solid fa-hourglass-start"></i></p>
 {% endif %}
 
+<p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
 <p>Commande n° {{reservation}}, passée le  {{reservation.dateOrder |date("d/m/Y")}}</p>
 <p> {{reservation.user}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
 
@@ -50,20 +51,20 @@
 
 {# commande préparée #}
 {% if reservation.isPrepared %}
-<p><a href="#">Commande à préparer</a></p>
+<p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande à préparer</a></p>
 
 {% else %}
 
-<p><a href="#">Commande préparée</a></p>
+<p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande préparée</a></p>
 {% endif %}
 
 {# commande récupérée  #}
 {% if reservation.isPicked %}
-<p><a href="#">Commande à récupérer</a></p>
+<p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande à récupérer</a></p>
 
 {% else %}
 
-<p><a href="#">Commande récupérée</a></p>
+<p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande récupérée</a></p>
 {% endif %}
 
 

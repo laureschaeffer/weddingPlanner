@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la commande{% endblock %}
+
+{% block body %}
+
+<h1>Modifier la commande</h1>
+
+{# {{form(form)}} #}
+
+{{ form_start(form) }}
+    
+    {{ form_row(form.datePicking) }}
+
+{{ form_end(form) }}
+
+{% endblock %}
