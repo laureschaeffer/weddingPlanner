@@ -37,6 +37,15 @@ class Reservation
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+    
+    #[ORM\Column(length: 50)]
+    private ?string $firstname = null;
+    
+    #[ORM\Column(length: 100)]
+    private ?string $surname = null;
+    
+    #[ORM\Column(length: 50)]
+    private ?string $telephone = null;
 
     /**
      * @var Collection<int, Booking>
@@ -164,6 +173,43 @@ class Reservation
                 $booking->setReservation(null);
             }
         }
+
+        return $this;
+    }
+
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): static
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): static
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }

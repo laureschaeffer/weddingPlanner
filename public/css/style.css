@@ -349,3 +349,10 @@ footer p, footer a{
     color: white;
     font-size: var(--nav-font-size);
 }
+
+/* -------------------demandes de contact--------------------------- */
+
+.projet-card{
+    background-color: #D9D9D9;
+    padding: var(--main-padding);
+}

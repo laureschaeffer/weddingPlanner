@@ -6,17 +6,12 @@
 
 <h1>Réserver</h1>
 
-{# {{form(form)}} #}
+{{form(form)}}
 
-{{ form_start(form) }}
+{# {{ form_start(form) }}
 
 {{form_row(form.datePicking)}}
 
-<div>
-    <label for="phone">Numéro de téléphone</label>
-    <input type="tel" name="phone" id="phone" required>
-</div>
-
 {{form_row(form.Reserver)}}
-{{ form_end(form) }}
+{{ form_end(form) }} #}
 {% endblock %}

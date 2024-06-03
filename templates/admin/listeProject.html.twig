@@ -13,13 +13,16 @@
     
     {% else %}
 
-        {% for pnt in projetNonTraites %}
-            
+    {% for pnt in projetNonTraites %}
+
+        <div class="projet-card">
+
             <p>{{pnt}} {{pnt.surname}}, évènement le {{pnt.dateEvent | date("d.m.Y")}}, reçu le {{pnt.dateReceipt | date("d.m.Y")}} </p>
         
             <p> {{pnt.description}} </p>
             <p><a href="{{path('show_projet', {'id': pnt.id})}}">Voir plus</a></p>
-        {% endfor %}
+        </div>
+    {% endfor %}
 
 {% endif %}
 
@@ -31,13 +34,17 @@
 
     {% else %}
 
-        {% for projet in projetTraites %}
-            
+    {% for projet in projetTraites %}
+
+        <div class="projet-card">
+
             <p>{{projet}} {{projet.surname}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
         
             <p> {{projet.description}} </p>
             <p><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
-        {% endfor %}
+        </div>
+            
+    {% endfor %}
 
 {% endif %}
 

@@ -151,13 +151,9 @@ class ShopController extends AbstractController
         //la personne doit être connectée pour que la réservation soit associée à une entité
         if($user){
             
-            //recupere le tel dans le formulaire
-            $phone = $request->request->get('phone');
 
             $roles = $user->getRoles();
             array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
-            $user->setRoles($roles);
-            $user->setPhone($phone);
 
             
             //---------------------------------------------------entité reservation------------------------------
@@ -209,7 +205,7 @@ class ShopController extends AbstractController
                     
                 }
 
-                $this->addFlash('succes', 'Réservation effectuée');
+                $this->addFlash('success', 'Réservation effectuée');
                 return $this->redirectToRoute('app_profil');
             }
 
