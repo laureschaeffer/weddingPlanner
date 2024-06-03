@@ -29,7 +29,7 @@
 {% endfor %}
 
 <h5>Budget</h5>
-<p> {{project.budget}} </p>
+<p> {{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} € </p>
 
 <p> {{project.description}} </p>
 

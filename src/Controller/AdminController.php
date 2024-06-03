@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Project;
+use App\Entity\Reservation;
 use App\Entity\Testimony;
 use App\Repository\UserRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\ReservationRepository;
 use App\Repository\TestimonyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -173,5 +175,39 @@ class AdminController extends AbstractController
         // redirection
         $this->addFlash('success', 'Role changé');
         return $this->redirectToRoute('app_utilisateur');
+    }
+
+    //----------------------------------------------partie réservation de commandes--------------------------------
+
+    //liste des reservations de commandes
+    #[Route('coiffe/commande', name: 'app_commande')]
+    public function listCommande(ReservationRepository $reservationRepository): Response
+    {
+        
+        $reservationsAPreparer = $reservationRepository->findBy(['isPrepared' => 0], ['datePicking' => 'ASC']);
+        $reservationsPassees = $reservationRepository->findBy(['isPrepared' => 1], ['dateOrder' => 'ASC']);
+
+        return $this->render('admin/listeCommande.html.twig', [
+            'reservationsAPreparer' => $reservationsAPreparer,
+            'reservationsPassees' => $reservationsPassees
+        ]);
+        
+    }
+
+    //detail d'une reservation
+    #[Route('coiffe/commande/{id<\d+>}', name: 'show_commande')]
+    public function showCommande(Reservation $reservation = null): Response
+    {
+
+        //si l'id passé dans l'url existe
+        if($reservation){
+            return $this->render('admin/showReservation.html.twig', [
+                'reservation' => $reservation
+            ]);
+
+        } else {
+            $this->addFlash('error', 'Cette commande n\'existe pas');
+            return $this->redirectToRoute('app_commande');
+        }
     }
 }

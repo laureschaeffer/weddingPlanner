@@ -1,0 +1,70 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block body %}
+
+<style>
+    ul, li {padding: 10px;}
+</style>
+
+<h1>Liste des commandes</h1>
+
+<h2>Commandes à préparer</h2>
+
+{% for rap in reservationsAPreparer %}
+
+    <p> {{rap.user}} (retire le {{rap.datePicking |date("d/m/Y")}}) </p>
+    <p>A passé commande le {{rap.dateOrder |date("d/m/Y")}} </p>
+
+    {# contact  #}
+    <p>{{rap.user.phone}}</p>
+    <p> {{rap.user.email}} </p>
+
+    {# produits  #}
+    {% if rap.bookings |length >1  %}
+        <p>{{ rap.bookings |length }} produits</p>
+    {% else %}
+        <p>{{ rap.bookings |length }} produit</p>
+    {% endif %}
+    <ul>
+        {% for produit in rap.bookings %}
+            <li>{{produit.quantite}}x {{produit.product}}</li>
+        {% endfor %}
+
+    </ul>
+
+    <p><a href="{{path('show_commande', {'id': rap.id})}}">Voir plus</a></p>
+{% endfor %}
+
+
+<hr>
+<h2>Commandes passées</h2>
+
+{% for reservation in reservationsPassees %}
+
+    <p> {{reservation.user}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+    <p>A passé commande le {{reservation.dateOrder |date("d/m/Y")}} </p>
+
+    {# contact  #}
+    <p>{{reservation.user.phone}}</p>
+    <p> {{reservation.user.email}} </p>
+
+    {# produits  #}
+    {% if reservation.bookings |length >1  %}
+        <p>{{ reservation.bookings |length }} produits</p>
+    {% else %}
+        <p>{{ reservation.bookings |length }} produit</p>
+    {% endif %}
+    <ul>
+        {% for produit in reservation.bookings %}
+            <li>{{produit.quantite}}x {{produit.product}}</li>
+        {% endfor %}
+
+    </ul>
+
+    <p><a href="#">Voir plus</a></p>
+{% endfor %}
+
+{% endblock %}
+

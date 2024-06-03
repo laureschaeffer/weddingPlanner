@@ -344,4 +344,5 @@ footer p, footer a{
 
 #admin-nav a{
     color: white;
+    font-size: var(--nav-font-size);
 }

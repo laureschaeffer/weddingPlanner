@@ -54,7 +54,7 @@ class BasketService {
         // vérifier que l'id existe dans $panier, l'index correspond à l'id du produit
         if(array_key_exists($id, $panier)) {
             //maximum de 20 produits
-            if($panier[$id] < 20){
+            if($panier[$id] < 100){
                 $panier[$id]+=1;
                 $text= "Quantité augmentée";
             } else {

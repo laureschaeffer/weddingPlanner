@@ -1,0 +1,70 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Demande de contact{% endblock %}
+
+{% block body %}
+
+<style>
+    img{
+        width: 200px;
+    }
+</style>
+<h1>Détail de la commande</h1>
+
+
+{# en fonction de si la commande a été préparée  #}
+{% if reservation.isPrepared %}
+    <p><i class="fa-solid fa-circle-check"></i></p>
+    {% else %}
+    <p><i class="fa-solid fa-hourglass-start"></i></p>
+{% endif %}
+
+<p>Commande n° {{reservation}}, passée le  {{reservation.dateOrder |date("d/m/Y")}}</p>
+<p> {{reservation.user}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+
+
+    {# contact  #}
+    <p>{{reservation.user.phone}}</p>
+    <p> {{reservation.user.email}} </p>
+
+    {# produits  #}
+    {% if reservation.bookings |length >1  %}
+        <p>{{ reservation.bookings |length }} produits</p>
+    {% else %}
+        <p>{{ reservation.bookings |length }} produit</p>
+    {% endif %}
+    
+    {% for produit in reservation.bookings %}
+        <figure>
+            <img src="{{ asset(produit.product.urlPicture) }}" alt="{{produit.product.altPicture}}">
+            <legend>{{produit.quantite}}x {{produit.product}}</legend>
+        </figure>
+        
+        {# input pour proposer à l'utilisateur un checkbox  #}
+        {# <div>
+            <input type="checkbox" id="{{produit.product}}" />
+            <label for="{{produit.product}}">{{produit.quantite}}x {{produit.product}}</label>
+        </div> #}
+
+    {% endfor %}
+
+{# commande préparée #}
+{% if reservation.isPrepared %}
+<p><a href="#">Commande à préparer</a></p>
+
+{% else %}
+
+<p><a href="#">Commande préparée</a></p>
+{% endif %}
+
+{# commande récupérée  #}
+{% if reservation.isPicked %}
+<p><a href="#">Commande à récupérer</a></p>
+
+{% else %}
+
+<p><a href="#">Commande récupérée</a></p>
+{% endif %}
+
+
+{% endblock %}
