@@ -210,8 +210,8 @@ class AdminController extends AbstractController
             $entityManager->persist($reservation); //prepare
             $entityManager->flush(); //execute
 
-            //msg flash
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'Commande modifiée');
+            return $this->redirectToRoute('show_commande', ['id' => $reservation->getId()]);
         }
 
         //vue du formulaire

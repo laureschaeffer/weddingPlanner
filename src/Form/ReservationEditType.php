@@ -23,8 +23,7 @@ class ReservationEditType extends AbstractType
             ])
             ->add('bookings', CollectionType::class, [
                 'entry_type' => BookingType::class,
-                'label' => '',
-                'prototype' => true,
+                'label' => false,
                 'by_reference' => false //pour éviter un mapping false, obligatoire car Reservation n'a pas de SetBooking, mais Booking a setReservation
                 // Reservation est propriétaire de la relation
             ])

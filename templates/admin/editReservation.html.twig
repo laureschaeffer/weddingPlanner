@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'adminBase.html.twig' %}
 
 {% block title %}Modifier la commande{% endblock %}
 
@@ -6,11 +6,25 @@
 
 <h1>Modifier la commande</h1>
 
-{# {{form(form)}} #}
 
 {{ form_start(form) }}
     
     {{ form_row(form.datePicking) }}
+
+    {# {{ form_label(form.bookings) }} #}
+    {# {{ form_errors(form.bookings) }} #}
+
+
+    {# pour chaque entité Booking contenue dans la collection bookings dans l'entité Reservation #}
+    {% for booking in form.bookings %}
+    
+        {# {{ form_errors(booking) }} #}
+        {{ form_widget(booking) }}
+
+    {% endfor %}
+
+
+    {{ form_row(form.Envoyer) }}
 
 {{ form_end(form) }}
 
