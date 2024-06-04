@@ -62,11 +62,22 @@ class SuperAdminController extends AbstractController
         
         //utilise la methode post pour récupérer les elements cochés
         $roleAdmin = $request->request->get('role_a');
+        $roleSuperAdmin = $request->request->get('role_supera');
         
         $resultArray = [];
         //si role admin est coché
         if($roleAdmin){
             $resultArray[]= "ROLE_ADMIN";
+        }
+
+        //si role superadmin est coché
+        if($roleSuperAdmin){
+            $resultArray[]= "ROLE_SUPERADMIN";
+        }
+
+        //verifie si role acheteur est attribué à l'utilisateur ; comme ce n'est pas possible de le cocher il ne faut pas l'écraser
+        if(in_array("ROLE_ACHETEUR", $user->getRoles())){
+            $resultArray[]= "ROLE_ACHETEUR";
         }
         
         $user->setRoles($resultArray); //setter dans la classe User attend un tableau json format ["ROLE_USER", "ROLE_ADMIN"]
