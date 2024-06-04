@@ -13,15 +13,14 @@
     <li>Commande n° {{reservation}}</li>
     <li>Passée le {{reservation.dateOrder |format_datetime('short', 'short', locale='fr')}} </li>
 </ul>
-<h3>Produits: </h3>
+{# <h3>Produits: </h3>
 
 <ul>
     {% for produit in reservation.bookings %}
-            {# <figure><img src="{{asset(produit.product.urlPicture)}}" alt="{{produit.product.altPicture}}"></figure> #}
-            <li>{{produit.product}}</li>
+            <li>{{produit}}</li>
     {% endfor %}
 
-</ul>
+</ul> #}
 
 <p>
     Cordialement,

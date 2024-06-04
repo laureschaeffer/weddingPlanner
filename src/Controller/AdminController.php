@@ -2,23 +2,27 @@
 //------------------------------------------------------------------------pannel admin---------------------------------------------------------------------
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\User;
+use App\Entity\Comment;
 use App\Entity\Project;
-use App\Entity\Reservation;
 use App\Entity\Testimony;
 use App\Form\CommentType;
+use App\Entity\Reservation;
 use App\Form\ReservationEditType;
+use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
+use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
-use App\Repository\ReservationRepository;
 use App\Repository\TestimonyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ReservationRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
@@ -211,7 +215,7 @@ class AdminController extends AbstractController
 
     //passer une commande en préparée ou non préparée
     #[Route('coiffe/changeCommandePrepared/{id<\d+>}', name: 'change_commande_prepared')]
-    public function changeCommandePrepared(Reservation $reservation =null, EntityManagerInterface $entityManager){
+    public function changeCommandePrepared(Reservation $reservation =null, EntityManagerInterface $entityManager, MailerInterface $mailer){
 
         //si la commande existe
         if($reservation){
@@ -221,6 +225,20 @@ class AdminController extends AbstractController
                 $reservation->setPrepared(false);
             } else {
                 $reservation->setPrepared(true);
+
+                //envoie d'un mail
+                $email = (new TemplatedEmail())
+                ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                ->to($reservation->getUser()->getEmail())
+                ->subject('Votre commande est prête')
+                // pass variables (name => value) to the template
+                ->context([
+                    'reservation' => $reservation
+                ])
+                ->htmlTemplate('email/commandePrete.html.twig')
+                ;
+
+                $mailer->send($email);
             }
 
             $entityManager->persist($reservation);

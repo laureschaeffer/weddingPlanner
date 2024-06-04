@@ -216,9 +216,9 @@ class ShopController extends AbstractController
                 // ->text('Sending emails is fun again!')
                 // pass variables (name => value) to the template
                 ->context([
-                    'pseudo' => $user->getPseudo(),
                     'reservation' => $reservation
                 ])
+                // ->addPart((new DataPart(new File('/path/to/images/signature.gif'), 'image-produit', 'image'))->asInline())
                 ->htmlTemplate('email/confirmationCommande.html.twig')
                 ;
 

@@ -29,7 +29,7 @@ class SecurityController extends AbstractController
 
     //profil utilisateur
     #[Route('/profil', name: 'app_profil')]
-    public function profil(UserInterface $user) : Response
+    public function profil() : Response
     {
 
         return $this->render('security/profil.html.twig');
