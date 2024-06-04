@@ -4,6 +4,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Batch;
 use App\Entity\Booking;
 use App\Entity\Product;
@@ -11,10 +12,12 @@ use App\Entity\Reservation;
 use App\Form\ReservationType;
 use App\Service\BasketService;
 use App\Repository\BatchRepository;
+use Symfony\Component\Mime\Address;
 use App\Repository\ProductRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -145,7 +148,7 @@ class ShopController extends AbstractController
 
     //ajoute le panier en réservation
     #[Route('/shop/reservation', name: 'make_reservation')]
-    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService): Response
+    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService, MailerInterface $mailer): Response
     {
 
         //la personne doit être connectée pour que la réservation soit associée à une entité
@@ -204,6 +207,22 @@ class ShopController extends AbstractController
                     $entityManager->flush(); //execute
                     
                 }
+                
+                //-----------------------------------------envoie d'un email de confirmation
+                $email = (new TemplatedEmail())
+                ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                ->to($user->getEmail())
+                ->subject('Confirmation de commande')
+                // ->text('Sending emails is fun again!')
+                // pass variables (name => value) to the template
+                ->context([
+                    'pseudo' => $user->getPseudo(),
+                    'reservation' => $reservation
+                ])
+                ->htmlTemplate('email/confirmationCommande.html.twig')
+                ;
+
+            $mailer->send($email);
 
                 $this->addFlash('success', 'Réservation effectuée');
                 return $this->redirectToRoute('app_profil');

@@ -32,3 +32,6 @@ Une fois le projet téléchargé, mettre cette ligne dans l'invité de commande 
 ``` sh
 composer install
 ```
+
+**[mailhog](https://github.com/mailhog/MailHog/releases)**  
+**[localhost email](http://localhost:8025/)**  
