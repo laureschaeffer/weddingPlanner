@@ -12,6 +12,7 @@
     --grey-green-color: #DAD7CD;
     --pastel-green-color: #B3CBB9;
     --burgundy-color: #5D2B42;
+    --grey-color: #D9D9D9;
     --pink-color: #c4979942;
     /* --pink-color: #C49799; */
 
@@ -22,11 +23,14 @@
     /* tailles  */
     --p-font-size: 1.2rem;
     --nav-font-size: 1.4rem;
+    --medium-font-size: 1.7rem;
     --subtitle-font-size: 1.8rem;
     --title-font-size: 2rem;
 
     --title-font-weight: 500;
     --semi-bold: 600;
+
+    --border-radius: 15px;
 
     /* img  */
     --main-img-size: 200px;
@@ -74,6 +78,10 @@ h2{
     font-size: var(--subtitle-font-size);
 }
 
+h3{
+    font-size: var(--medium-font-size);
+}
+
 #page-container{
     padding-bottom: var(--footer-padding);
 }
@@ -90,6 +98,24 @@ h2{
 
 p{
     font-size: var(--p-font-size);
+}
+
+textarea{
+    width: 100%;
+    min-height: 200px;
+    font-size: var(--p-font-size);
+    font-family: var(--main-font);
+}
+
+/* -----------bouton de formulaire */
+.add-btn{
+    background-color: var(--grey-green-color);
+    color: black;
+    padding: var(--small-padding) var(--main-padding);
+    border: none;
+    margin: var(--main-padding) 0;
+    border-radius: var(--border-radius);
+    cursor: pointer;
 }
 
 /* -------------------------------------------------------templates------------------------------------------------------- */
@@ -350,9 +376,45 @@ footer p, footer a{
     font-size: var(--nav-font-size);
 }
 
-/* -------------------demandes de contact--------------------------- */
+/* ----------------------------------------------------------------------------demandes de contact------------------------------------ */
 
 .projet-card{
     background-color: #D9D9D9;
     padding: var(--main-padding);
+}
+
+
+/* --------------------detail d'une demande de contact -------------------- */
+
+#detail-projet{
+    padding: 0 var(--escape-padding);
+}
+
+#detail-projet h2{
+    text-align: center;
+}
+
+.projet{
+    background-color: var(--grey-color);
+    padding: var(--main-padding);
+    margin-bottom: var(--big-padding);
+}
+
+.projet-state{
+    text-align: end;
+}
+
+.projet-entete{
+    display: flex;
+    justify-content: space-between;
+    padding: var(--main-padding) 0;
+}
+
+.projet-suivi{
+    border: var(--grey-color) solid 3px;
+    margin: var(--main-padding) 0;
+}
+
+.projet-suivi p{
+    padding: var(--small-padding);
 }

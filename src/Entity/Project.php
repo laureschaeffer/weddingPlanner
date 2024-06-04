@@ -229,9 +229,6 @@ class Project
         return $this;
     }
 
-    public function __toString(){
-        return $this->firstname;
-    }
 
     /**
      * @return Collection<int, Comment>
@@ -261,5 +258,9 @@ class Project
         }
 
         return $this;
+    }
+
+    public function __toString(){
+        return $this->firstname . " " . $this->surname;
     }
 }
