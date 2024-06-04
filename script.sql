@@ -80,6 +80,22 @@ INSERT IGNORE INTO `category` (`id`, `title`) VALUES
 	(1, 'Mariage'),
 	(2, 'Décoration');
 
+-- Listage de la structure de table weddingplanner. comment
+CREATE TABLE IF NOT EXISTS `comment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_post` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_9474526C166D1F9C` (`project_id`),
+  KEY `IDX_9474526CA76ED395` (`user_id`),
+  CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
+  CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table weddingplanner.comment : ~0 rows (environ)
+
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
   `id` int NOT NULL AUTO_INCREMENT,
