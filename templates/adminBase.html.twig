@@ -24,7 +24,11 @@
                         <a href="{{path('app_projet')}}">Demandes de contact</a>
                         <a href="{{path('app_avis')}}">Avis</a>
                         <a href="{{path('app_commande')}}">Commandes</a>
-                        <a href="{{path('app_utilisateur')}}">Utilisateurs</a>
+                        {# seulement accessible au super admin  #}
+                        {% if app.user and "ROLE_SUPERADMIN" in app.user.roles %}
+                            <a href="{{path('app_utilisateur')}}">Utilisateurs</a>
+                            
+                        {% endif %}
                     </div>
                     <a href="{{path('app_admin')}}">Accueil</a>
                     <div id="admin-second-nav">

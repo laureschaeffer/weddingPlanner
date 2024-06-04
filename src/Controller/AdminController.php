@@ -2,10 +2,12 @@
 //------------------------------------------------------------------------pannel admin---------------------------------------------------------------------
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\User;
 use App\Entity\Project;
 use App\Entity\Reservation;
 use App\Entity\Testimony;
+use App\Form\CommentType;
 use App\Form\ReservationEditType;
 use App\Repository\UserRepository;
 use App\Repository\ProjectRepository;
@@ -16,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdminController extends AbstractController
 {
@@ -42,37 +45,42 @@ class AdminController extends AbstractController
 
     //detail d'une demande
     #[Route('/coiffe/projet/{id}', name: 'show_projet')]
-    public function showProject(Project $project = null): Response
+    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
     {
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
-         if($project){
+        if($project){
+
+            //formulaire ajout d'un commentaire au suivi du projet
+
+            $comment = new Comment();
+
+            $form = $this->createForm(CommentType::class, $comment);
+            $form->handleRequest($request); 
+    
+            if($form->isSubmitted() && $form->isValid()){
+                $comment=$form->getData();
+
+                $comment->setProject($project); //remplit par le projet où se trouve l'utilisateur
+                $comment->setUser($user); //remplit par l'utilisateur connecté
+                $ajd = new \DateTime();
+                $comment->setDatePost($ajd); 
+    
+                $entityManager->persist($comment); //prepare
+                $entityManager->flush(); //execute
+
+                $this->addFlash('success', 'Commentaire ajouté');
+                return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+            }
+            
             return $this->render('admin/showProject.html.twig', [
-                'project' => $project
+                'project' => $project,
+                'form' => $form
             ]);
 
         } else {
             $this->addFlash('error', 'Ce projet n\'existe pas');
             return $this->redirectToRoute('app_projet');
         }
-    }
-
-    //change la demande de contact en traitée ou repasse en à traiter
-    #[Route('/coiffe/changeProjet/{id}', name: 'change_projet')]
-    public function changeProjectState(EntityManagerInterface $entityManager, Project $project = null){
-
-        //si isContacted est vraie, on le passe en faux
-        if($project->isContacted()){
-            $project->setContacted(false);
-        } else {
-            $project->setContacted(true);
-        }
-
-        $entityManager->persist($project);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Statut de la demande changé');
-        return $this->redirectToRoute('show_projet', ['id'=>$project->getId()]);
-
     }
 
 
@@ -123,7 +131,7 @@ class AdminController extends AbstractController
 
     //supprimer un avis de la bdd (non publiés)
     #[Route('/coiffe/supprAvis/{id}', name: 'remove_avis')] 
-    public function deleteProgramme(Testimony $testimony = null, EntityManagerInterface $entityManager){
+    public function deleteTestimony(Testimony $testimony = null, EntityManagerInterface $entityManager){
         
         //si le temoignage existe et qu'il n'est pas publié
         if($testimony && $testimony->isPublished() == false){
@@ -140,43 +148,7 @@ class AdminController extends AbstractController
         }
     }
 
-    //----------------------------------------------partie utilisateurs--------------------------------
-    
-    //liste des utilisateurs sur le site
-    #[Route('/coiffe/utilisateur', name: 'app_utilisateur')]
-    public function listUser(UserRepository $userRepository): Response
-    {
-        $utilisateurs = $userRepository->findBy([]);
 
-        return $this->render('admin/listeUser.html.twig', [
-            'utilisateurs' => $utilisateurs
-        ]);
-    }
-
-    //change le role d'un utilisateur
-    #[Route('coiffe/upgrade/{id}', name: 'upgrade_role')]
-    public function upgradeUser(User $user, EntityManagerInterface $entityManager, Request $request)
-    {
-        
-        //utilise la methode post pour récupérer les elements cochés
-        $roleAdmin = $request->request->get('role_a');
-        
-        $resultArray = [];
-        //si role admin est coché
-        if($roleAdmin){
-            $resultArray[]= "ROLE_ADMIN";
-        }
-        
-        $user->setRoles($resultArray); //setter dans la classe User attend un tableau json format ["ROLE_USER", "ROLE_ADMIN"]
-
-        $entityManager->persist($user); //prepare
-        $entityManager->flush(); //execute
-        
-        
-        // redirection
-        $this->addFlash('success', 'Role changé');
-        return $this->redirectToRoute('app_utilisateur');
-    }
 
     //----------------------------------------------partie réservation de commandes--------------------------------
 

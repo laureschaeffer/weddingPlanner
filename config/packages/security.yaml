@@ -32,7 +32,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
     # /coiffe est le pannel administrateur 
+    # /super-coiffe est visible pour le superadmin
         - { path: ^/coiffe, roles: ROLE_ADMIN } 
+        - { path: ^/super-coiffe, roles: ROLE_SUPERADMIN } 
         - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
