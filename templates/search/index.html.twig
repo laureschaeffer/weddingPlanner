@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche{% endblock %}
+
+{% block body %}
+
+<h1>Résultat de votre recherche "{{word}}"" </h1>
+
+{% if batchs %}
+    <h2>Dans les collections</h2>
+    {% for b in batchs %}
+        <p><a href="{{path('show_batch', {'id': b.id}) }}">{{b}}</a></p>
+    {% endfor %}
+{% endif %}
+
+{% if creations %}
+    <h2>Dans les collections</h2>
+    {% for c in creations %}
+        {{ dump(c) }}
+    {% endfor %}
+{% endif %}
+
+{% if prestations %}
+    <h2>Dans les collections</h2>
+    {% for p in prestations %}
+        {{ dump(p) }}
+    {% endfor %}
+{% endif %}
+
+{% if products %}
+    <h2>Dans les collections</h2>
+    {% for product in products %}
+        {{ dump(product) }}
+    {% endfor %}
+{% endif %}
+
+{% if workers %}
+    <h2>Dans les collections</h2>
+    {% for w in workers %}
+        {{ dump(w) }}
+    {% endfor %}
+{% endif %}
+
+{% if batchs == null and creations == null and prestations == null and products == null and workers == null %}
+    <p>Aucun résultat</p>
+{% endif %}
+
+{% endblock %}

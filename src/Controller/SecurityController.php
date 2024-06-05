@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
 use App\Entity\User;
+use App\Service\PdfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,10 +31,12 @@ class SecurityController extends AbstractController
 
     //profil utilisateur
     #[Route('/profil', name: 'app_profil')]
-    public function profil() : Response
+    public function profil(PdfService $pdfService)
+    // public function profil() : Response
     {
 
-        return $this->render('security/profil.html.twig');
+        return $pdfService->showPdf();
+        // return $this->render('security/profil.html.twig');
     }
 
     #[Route(path: '/logout', name: 'app_logout')]

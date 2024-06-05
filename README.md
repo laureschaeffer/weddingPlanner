@@ -35,3 +35,7 @@ composer install
 
 **[mailhog](https://github.com/mailhog/MailHog/releases)**  
 **[localhost email](http://localhost:8025/)**  
+
+``` sh
+composer require dompdf/dompdf
+```

@@ -26,14 +26,17 @@
                             <a href="{{ path('app_creation') }}">Portfolio</a>
                             <a href="{{ path('app_prestation') }}">Nos prestations</a>
                             <a href="{{ path('app_worker') }}">Equipe</a>
-                            <a href="#">Organisation</a>
+                            <a href="{{ path('app_shop') }}">Commerce</a>
                         </div>
                         <a href="{{ path('app_home') }}"><img src="{{ asset('img/logo/logo3.png') }}" alt="logo cérémonie couture" class="logo"></a>
                         
                         
                         <div id="second-nav">
+                            <form action="{{ path('app_search')}}" method="GET" id="search-bar">
+                                <i class="fa-solid fa-magnifying-glass"></i> <input type="search" class="search" name="search" placeholder="Recherche">
+                                {# <button type="submit" name="submit">Valider</button> #}
+                            </form>
                             <a href="{{ path('app_contact') }}">Contact</a>
-                            <a href="{{ path('app_shop') }}">Commerce</a>
                             {% if app.user %}
                                 <a href="{{path('app_profil')}}"><i class="fa-solid fa-user"></i>{{app.user}}</a>
                                 <a href="{{path('app_logout')}}">Se déconnecter</a>

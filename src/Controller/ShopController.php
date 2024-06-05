@@ -222,7 +222,7 @@ class ShopController extends AbstractController
                 ->htmlTemplate('email/confirmationCommande.html.twig')
                 ;
 
-            $mailer->send($email);
+                $mailer->send($email);
 
                 $this->addFlash('success', 'Réservation effectuée');
                 return $this->redirectToRoute('app_profil');
