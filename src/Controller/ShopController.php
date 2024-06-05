@@ -223,9 +223,8 @@ class ShopController extends AbstractController
                 ->context([
                     'reservation' => $reservation
                 ])
-                // ->addPart((new DataPart(new File('/path/to/images/signature.gif'), 'image-produit', 'image'))->asInline())
                 ->htmlTemplate('email/confirmationCommande.html.twig')
-                ->addPart((new DataPart(new File('public/img/logo/logo-noncropped.png'), 'footer-signature', 'image/gif'))->asInline())
+                // ->addPart((new DataPart(new File('public/img/logo/logo-noncropped.png'), 'footer-signature', 'image/gif'))->asInline())
                 ;
 
                 $mailer->send($email);

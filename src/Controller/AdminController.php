@@ -11,8 +11,6 @@ use App\Form\CommentType;
 use App\Entity\Reservation;
 use App\Service\PdfService;
 use App\Form\ReservationEditType;
-use Symfony\Component\Mime\Email;
-use App\Repository\UserRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
 use App\Repository\TestimonyRepository;
@@ -90,11 +88,11 @@ class AdminController extends AbstractController
     }
 
     //crée un pdf devis
-    //route
-    public function createPdf(){
+    #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
+    public function createDevisPdf(Project $project){
 
           
-        $html =  $this->renderView('pdf/pdf.html.twig', ["titre" => "Mon titre"]);
+        $html =  $this->renderView('pdf/devis.html.twig', ["project" => $project]);
         $domPdf = new Dompdf();
         $domPdf->loadHtml($html);
         $domPdf->setPaper('A4', 'landscape');

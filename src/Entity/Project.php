@@ -60,7 +60,16 @@ class Project
      * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'project', orphanRemoval: true)]
+    #[ORM\OrderBy(["datePost" => "DESC"])] //rajout d'un order by à la collection
     private Collection $comments;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $finalPrice = null;
+
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\JoinColumn(nullable: true)]
+    // #[ORM\JoinColumn(nullable: false)]
+    private ?State $state = null;
 
     public function __construct()
     {
@@ -260,6 +269,31 @@ class Project
         return $this;
     }
 
+    public function getFinalPrice(): ?int
+    {
+        return $this->finalPrice;
+    }
+
+    public function setFinalPrice(?int $finalPrice): static
+    {
+        $this->finalPrice = $finalPrice;
+
+        return $this;
+    }
+    
+    
+    public function getState(): ?State
+    {
+        return $this->state;
+    }
+    
+    public function setState(?State $state): static
+    {
+        $this->state = $state;
+        
+        return $this;
+    }
+    
     public function __toString(){
         return $this->firstname . " " . $this->surname;
     }

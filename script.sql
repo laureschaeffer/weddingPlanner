@@ -45,13 +45,24 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `IDX_E00CEDDEB83297E7` (`reservation_id`),
   CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.booking : ~3 rows (environ)
 INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(3, 1, 6, 16),
 	(4, 1, 7, 2),
-	(5, 3, 7, 1);
+	(5, 3, 7, 1),
+	(6, 1, 8, 3),
+	(7, 1, 9, 3),
+	(8, 1, 10, 3),
+	(9, 3, 11, 2),
+	(10, 3, 12, 2),
+	(11, 3, 13, 2),
+	(12, 3, 14, 2),
+	(13, 3, 15, 2),
+	(14, 3, 16, 2),
+	(15, 3, 17, 2),
+	(16, 3, 18, 2);
 
 -- Listage de la structure de table weddingplanner. budget
 CREATE TABLE IF NOT EXISTS `budget` (
@@ -85,16 +96,19 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `project_id` int NOT NULL,
   `user_id` int NOT NULL,
-  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_post` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_9474526C166D1F9C` (`project_id`),
   KEY `IDX_9474526CA76ED395` (`user_id`),
   CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.comment : ~0 rows (environ)
+INSERT IGNORE INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
+	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
+	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum', '2024-06-05 12:17:03');
 
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
@@ -206,6 +220,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `id` int NOT NULL AUTO_INCREMENT,
   `destination_id` int DEFAULT NULL,
   `budget_id` int DEFAULT NULL,
+  `state_id` int NOT NULL DEFAULT '1',
   `firstname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `surname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -215,16 +230,19 @@ CREATE TABLE IF NOT EXISTS `project` (
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_receipt` datetime DEFAULT NULL,
   `is_contacted` tinyint(1) DEFAULT NULL,
+  `final_price` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2FB3D0EE816C6140` (`destination_id`),
   KEY `IDX_2FB3D0EE36ABA6B8` (`budget_id`),
+  KEY `IDX_2FB3D0EE5D83CC1` (`state_id`),
   CONSTRAINT `FK_2FB3D0EE36ABA6B8` FOREIGN KEY (`budget_id`) REFERENCES `budget` (`id`),
+  CONSTRAINT `FK_2FB3D0EE5D83CC1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.project : ~0 rows (environ)
-INSERT IGNORE INTO `project` (`id`, `destination_id`, `budget_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`) VALUES
-	(1, 1, 1, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 0);
+INSERT IGNORE INTO `project` (`id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
+	(1, 1, 1, 1, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 0, NULL);
 
 -- Listage de la structure de table weddingplanner. project_prestation
 CREATE TABLE IF NOT EXISTS `project_prestation` (
@@ -245,24 +263,48 @@ INSERT IGNORE INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 CREATE TABLE IF NOT EXISTS `reservation` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `reference_order` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reference_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_order` datetime DEFAULT NULL,
   `total_price` double NOT NULL,
   `date_picking` date NOT NULL,
   `is_prepared` tinyint(1) DEFAULT NULL,
   `is_picked` tinyint(1) DEFAULT NULL,
-  `firstname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `surname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telephone` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `telephone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_42C84955A76ED395` (`user_id`),
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.reservation : ~2 rows (environ)
 INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(6, 4, '665741a090ed6', '2024-05-29 14:54:24', 320, '2025-01-15', 0, 0, 'Person', 'Name', '0611223344'),
-	(7, 4, '66588c9902b5d', '2024-05-30 14:26:33', 55, '2024-05-31', 1, 0, 'Person', 'Name', '0611223344');
+	(7, 4, '66588c9902b5d', '2024-05-30 14:26:33', 55, '2024-05-31', 1, 0, 'Person', 'Name', '0611223344'),
+	(8, 4, '666030b5cf66f', '2024-06-05 09:32:37', 60, '2024-06-06', 0, 0, 'Laure', 'Test', '0611223344'),
+	(9, 4, '6660310fa5784', '2024-06-05 09:34:07', 60, '2024-06-06', 0, 0, 'Laure', 'Test', '0611223344'),
+	(10, 4, '666035b0ba4ae', '2024-06-05 09:53:52', 60, '2024-06-06', 0, 0, 'Laure', 'Test', '0611223344'),
+	(11, 4, '66604dbc9b09d', '2024-06-05 11:36:28', 30, '2024-06-10', 0, 0, 'Laure', 'Test', '0611223344'),
+	(12, 4, '66604ebe364b3', '2024-06-05 11:40:46', 30, '2024-06-10', 0, 0, 'Laure', 'Test', '0611223344'),
+	(13, 4, '66604ef8c61d9', '2024-06-05 11:41:44', 30, '2024-06-10', 0, 0, 'Laure', 'Test', '0611223344'),
+	(14, 4, '666050142356c', '2024-06-05 11:46:28', 30, '2024-06-10', 0, 0, 'Laure', 'Test', '0611223344'),
+	(15, 4, '666050429d21b', '2024-06-05 11:47:14', 30, '2024-06-10', 0, 0, 'Laure', 'Test', '0611223344'),
+	(16, 4, '6660547f18378', '2024-06-05 12:05:19', 30, '2024-06-06', 0, 0, 'Laure', 'Test3', '0611223344'),
+	(17, 4, '666054bc25692', '2024-06-05 12:06:20', 30, '2024-06-06', 0, 0, 'Laure', 'Test3', '0611223344'),
+	(18, 4, '6660561134070', '2024-06-05 12:12:01', 30, '2024-06-06', 0, 0, 'Laure', 'Test4', '0611223344');
+
+-- Listage de la structure de table weddingplanner. state
+CREATE TABLE IF NOT EXISTS `state` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table weddingplanner.state : ~0 rows (environ)
+INSERT IGNORE INTO `state` (`id`, `name`) VALUES
+	(1, 'En cours'),
+	(2, 'Accepté'),
+	(3, 'Refusé');
 
 -- Listage de la structure de table weddingplanner. testimony
 CREATE TABLE IF NOT EXISTS `testimony` (
@@ -290,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.user : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.user : ~0 rows (environ)
 INSERT IGNORE INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`) VALUES
 	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0),
 	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0),
@@ -310,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `worker` (
   CONSTRAINT `FK_9FB2BF62BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.worker : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.worker : ~0 rows (environ)
 INSERT IGNORE INTO `worker` (`id`, `job_id`, `name`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Jeanne', 'Directrice de Création, passionnée par l\'univers du mariage et l\'esthétique. Avec plus de 10 ans d\'expérience dans le design et la planification d\'événements, elle apporte une touche unique et sophistiquée à chacune de nos collections. Jeanne est diplômée de l\'École des Beaux-Arts et a travaillé avec des marques prestigieuses avant de rejoindre notre équipe. Son talent et son souci du détail font d\'elle une force créative incontournable pour notre entreprise.', 'img/equipe/equipe1.jpg', 'photo de notre organisatrice'),
 	(2, 2, 'Sophie', 'Sophie est chargée de la gestion de notre présence en ligne et de l\'interaction avec notre communauté. Diplômée en communication digitale et avec 5 ans d\'expérience dans les réseaux sociaux, Sophie crée du contenu engageant et gère nos campagnes publicitaires avec brio. Elle est passionnée par les relations humaines et adore partager l\'enthousiasme de nos clients pour nos produits.', 'img/equipe/pexels-vinicius-wiesehofer-289347-1130626.jpg', 'photo de notre chargée de communication'),

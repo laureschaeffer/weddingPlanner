@@ -2,7 +2,7 @@
 <h1>Bonjour {{ reservation.firstname }} {{ reservation.surname }}!</h1>
 
 <p>
-    Nous avons bien reçu votre commande, elle sera disponible à partir du <b>{{reservation.datePicking |date("d.m.Y") }}</b> (sauf changement de dernière minute)
+    Nous avons bien reçu votre commande, elle sera disponible à partir du <b>{{reservation.datePicking |date("d.m.Y") }}</b> (sauf changement de dernière minute).
 </p>
 <p>
     Vous receverez un autre email de confirmation lorsqu'elle sera préparée.
@@ -26,6 +26,5 @@
     Cordialement,
     <br>
     <small>L'équipe Cérémonie Couture</small>
-    <img src="cid:footer-signature" alt="logo cérémonie couture">
-{# <p><code>{{ email.to[0].address }}</code></p> #}
 </p>
+<img src="{{ email.image('@images/logo/cc.png') }}" width="150px" height="150px">

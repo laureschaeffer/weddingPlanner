@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+<body>
+    <h1>Devis pour projet de mariage</h1>
+    
+    <p>Cérémonie Couture</p>
+    <p>1 rue des dev</p>
+    <p>67100</p>
+    <p>Strasbourg</p>
+    <p>ceremonie-couture@exemple.fr</p>
+    <br><br>
+    <hr>
+    <p> {{project.firstname}} </p>
+    <p> {{project.surname}} </p>
+    <p> {{project.email}} </p>
+    <p> {{project.telephone}} </p>
+    <br><br>
+    <hr>
+
+    <p><b>Date de l'évènement: {{project.dateEvent | date("d.m.Y")}} </b></p>
+    <p>Nombre d'invités: {{project.nbGuest}} </p>
+
+</body>
+</html>
