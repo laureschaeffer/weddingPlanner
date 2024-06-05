@@ -387,7 +387,7 @@ footer p, footer a{
 /* --------------------detail d'une demande de contact -------------------- */
 
 #detail-projet{
-    padding: 0 var(--escape-padding);
+    padding: var(--escape-padding);
 }
 
 #detail-projet h2{

@@ -7,17 +7,24 @@
 
 <section id="detail-projet">
 
-    {{ dump(project) }}
 
     <h1>Détail d'une demande de contact</h1>
     
-    {# en fonction de si la personne a été contactée  #}
-    {% if project.isContacted %}
-        <p class="projet-state"><i class="fa-solid fa-circle-check"></i></p>
-        {% else %}
-        <p class="projet-state"><i class="fa-solid fa-hourglass-start"></i></p>
+    {# en fonction de l'état du projet  #}
+    <p class="projet-state">
+        {# en cours  #}
+        {% if project.state.id == 1 %}
+            <i class="fa-solid fa-hourglass-start"></i>
+        {# accepté  #}
+        {% elseif project.state.id == 2 %}
+        <i class="fa-solid fa-circle-check"></i>
+
+        {# refusé  #}
+        {% elseif project.state.id == 3 %}
+        <i class="fa-regular fa-circle-xmark"></i>
+        
     {% endif %}
-    
+    {{project.state}} </p>
     <div class="projet">
         <h2>{{project}}</h2>
         <div class="projet-entete">
@@ -41,6 +48,12 @@
         {# budget  #}
         <h4>Budget: </h4>
         <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
+
+        {# prix fixé  #}
+        {% if project.finalPrice %}
+            <h4>Prix fixé: </h4>
+            <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
+        {% endif %}
 
         {# description  #}
         <p> {{project.description}} </p>
@@ -73,18 +86,50 @@
 
 
     {{ form_end(form) }}
+
+    {# fixe le prix final  #}
+    {% if project.finalPrice %}
+        {% set price = project.finalPrice %}
+        {% else %}
+        {% set price = "" %}
+    {% endif %}
+    <form action="{{ path('fixe_prix', {'id': project.id})}}" method="post">
+        <p>
+            <label>Prix final</label> <br>
+            <input type="number" name="price" value="{{price}}"/>
+        </p>
+        <button type="submit" name="submit">Valider</button>
+    </form>
+    <br><br>
     
+    {# passe le projet en "la personne a été contacté" #}
+    {% if project.isContacted %}
+        <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a></button>
+        {% else %}
+        <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a></button>
+    {% endif %}
+    <br><br>
     
+    {# select pour que le superadmin puisse changer l'état du projet: en cours, accepté, refusé  #}
     {% if app.user and "ROLE_SUPERADMIN" in app.user.roles %}
-        
-    {# en fonction de si le projet est terminé, bouton pour changer le statut de la demande  #}
-        {% if project.isContacted %}
-                <p><a href=" {{path('change_projet', {'id': project.id})}} ">Projet non fini</a></p>
-        
-            {% else %}
-        
-                <p><a href=" {{path('change_projet', {'id': project.id})}} ">Projet fini</a></p>
-        {% endif %}
+            
+        <form action="{{ path('change_projet', {'id': project.id})}}" method="post">
+            <label for="state-select">Etat de la demande:</label><br>
+            <select name="state" id="state-select">
+                {% for state in states %}
+                {# met par defaut (selected) l'etat actuel #}
+                {% if project.state == state %}
+                    {% set selected = "selected" %}
+                    {% else %}
+                    {% set selected = "" %}
+                {% endif %}
+
+                    <option value="{{state.id}}" {{selected}}>{{state}}</option>
+                    
+                {% endfor %}
+            </select> <br>
+            <button type="submit" name="submit">Valider</button>
+        </form>
     {% endif %}
 
 </section>

@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.booking : ~3 rows (environ)
+-- Listage des données de la table weddingplanner.booking : ~14 rows (environ)
 INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(3, 1, 6, 16),
 	(4, 1, 7, 2),
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.comment : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.comment : ~2 rows (environ)
 INSERT IGNORE INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
 	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum', '2024-06-05 12:17:03');
@@ -240,9 +240,9 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~1 rows (environ)
 INSERT IGNORE INTO `project` (`id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
-	(1, 1, 1, 1, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 0, NULL);
+	(1, 1, 1, 2, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000);
 
 -- Listage de la structure de table weddingplanner. project_prestation
 CREATE TABLE IF NOT EXISTS `project_prestation` (
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
   CONSTRAINT `FK_496EF49F9E45C554` FOREIGN KEY (`prestation_id`) REFERENCES `prestation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project_prestation : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.project_prestation : ~1 rows (environ)
 INSERT IGNORE INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1);
 
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~2 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~13 rows (environ)
 INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(6, 4, '665741a090ed6', '2024-05-29 14:54:24', 320, '2025-01-15', 0, 0, 'Person', 'Name', '0611223344'),
 	(7, 4, '66588c9902b5d', '2024-05-30 14:26:33', 55, '2024-05-31', 1, 0, 'Person', 'Name', '0611223344'),
@@ -300,7 +300,7 @@ CREATE TABLE IF NOT EXISTS `state` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.state : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.state : ~3 rows (environ)
 INSERT IGNORE INTO `state` (`id`, `name`) VALUES
 	(1, 'En cours'),
 	(2, 'Accepté'),
@@ -315,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `testimony` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.testimony : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.testimony : ~2 rows (environ)
 INSERT IGNORE INTO `testimony` (`id`, `couple_name`, `description`, `is_published`) VALUES
 	(1, 'Mr & Mme Nom', 'Nous ne pouvons que chanter les louanges de Cérémonie Couture pour avoir fait de notre mariage un jour absolument parfait. Dès notre première rencontre avec Clara, notre wedding planner, nous avons su que nous étions entre de bonnes mains. Son professionnalisme, sa créativité et son attention aux moindres détails nous ont tout de suite mis en confiance. Clara a su écouter nos souhaits et nos préoccupations, tout en nous guidant avec des suggestions brillantes qui ont vraiment transformé notre vision en réalité. Chaque aspect du mariage, de la décoration florale aux choix musicaux, a été orchestré avec une telle précision que nous n\'avions rien à faire d\'autre que de profiter de notre journée spéciale. Le jour J, tout s\'est déroulé sans accroc. Clara et son équipe ont géré la logistique avec une telle fluidité que nous avons pu nous concentrer entièrement sur nos moments de bonheur, entourés de nos proches. Nous avons reçu d\'innombrables compliments de la part de nos invités sur la beauté et l\'organisation impeccable de notre mariage. Nous sommes immensément reconnaissants à Clara et à toute l\'équipe de Cérémonie Couture pour avoir créé des souvenirs que nous chérirons pour toujours. Nous recommandons vivement leurs services à tous ceux qui souhaitent un mariage parfait et sans stress. Merci infiniment pour tout !', 1),
 	(2, 'Mr & Mme Nomdefamille', 'lorem ipsum', 0);
@@ -332,11 +332,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.user : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.user : ~4 rows (environ)
 INSERT IGNORE INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`) VALUES
 	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0),
 	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0),
-	(3, 'test@exemple.fr', 'Test', '[]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0),
+	(3, 'test@exemple.fr', 'Test', '["ROLE_SUPERADMIN"]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0),
 	(4, 'person2@exemple.fr', 'Person2', '["ROLE_USER", "ROLE_ACHETEUR"]', '$2y$13$A16IcbMl8dQ5caZGlGfK1eiciuQlkPBfsI62PBmCJh4hbdTTSrPa.', 0);
 
 -- Listage de la structure de table weddingplanner. worker
@@ -352,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `worker` (
   CONSTRAINT `FK_9FB2BF62BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.worker : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.worker : ~4 rows (environ)
 INSERT IGNORE INTO `worker` (`id`, `job_id`, `name`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Jeanne', 'Directrice de Création, passionnée par l\'univers du mariage et l\'esthétique. Avec plus de 10 ans d\'expérience dans le design et la planification d\'événements, elle apporte une touche unique et sophistiquée à chacune de nos collections. Jeanne est diplômée de l\'École des Beaux-Arts et a travaillé avec des marques prestigieuses avant de rejoindre notre équipe. Son talent et son souci du détail font d\'elle une force créative incontournable pour notre entreprise.', 'img/equipe/equipe1.jpg', 'photo de notre organisatrice'),
 	(2, 2, 'Sophie', 'Sophie est chargée de la gestion de notre présence en ligne et de l\'interaction avec notre communauté. Diplômée en communication digitale et avec 5 ans d\'expérience dans les réseaux sociaux, Sophie crée du contenu engageant et gère nos campagnes publicitaires avec brio. Elle est passionnée par les relations humaines et adore partager l\'enthousiasme de nos clients pour nos produits.', 'img/equipe/pexels-vinicius-wiesehofer-289347-1130626.jpg', 'photo de notre chargée de communication'),

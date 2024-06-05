@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Project;
+use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,22 +24,29 @@ class SuperAdminController extends AbstractController
 
     //----------------------------------------------partie demandes de contact--------------------------------
 
-    //change la demande de contact en finie, ou non finie
+    //change l'etat de la demande de contact: en cours, refusé, accepté
     #[Route('/super-coiffe/changeProjet/{id}', name: 'change_projet')]
-    public function changeProjectState(EntityManagerInterface $entityManager, Project $project = null){
+    public function changeProjectState(EntityManagerInterface $entityManager, Project $project = null, StateRepository $stateRepository, Request $request){
 
-        //si isContacted est vraie, on le passe en faux
-        if($project->isContacted()){
-            $project->setContacted(false);
-        } else {
-            $project->setContacted(true);
-        }
+       if($project){
+        //recupere l'id de l'état dans le formulaire
+        $idState = $request->request->get('state');
+        $state = $stateRepository->findOneBy(['id' => $idState]);
+
+        //change l'etat de projet
+        $project->setState($state);
 
         $entityManager->persist($project);
         $entityManager->flush();
 
+
         $this->addFlash('success', 'Statut de la demande changé');
         return $this->redirectToRoute('show_projet', ['id'=>$project->getId()]);
+        
+       } else {
+        $this->addFlash('error', 'Ce projet n\'existe pas');
+        return $this->redirectToRoute('app_projet');
+       }
 
     }
 

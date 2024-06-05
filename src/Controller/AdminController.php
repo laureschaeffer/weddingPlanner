@@ -3,19 +3,19 @@
 namespace App\Controller;
 
 use Dompdf\Dompdf;
-use App\Entity\User;
 use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\Testimony;
 use App\Form\CommentType;
 use App\Entity\Reservation;
-use App\Service\PdfService;
+use App\Entity\State;
 use App\Form\ReservationEditType;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
 use App\Repository\TestimonyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use App\Repository\StateRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -49,7 +49,7 @@ class AdminController extends AbstractController
 
     //detail d'une demande
     #[Route('/coiffe/projet/{id}', name: 'show_projet')]
-    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
+    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user, StateRepository $stateRepository): Response
     {
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
         if($project){
@@ -78,6 +78,7 @@ class AdminController extends AbstractController
             
             return $this->render('admin/showProject.html.twig', [
                 'project' => $project,
+                'states' => $stateRepository->findBy([]),
                 'form' => $form
             ]);
 
@@ -87,24 +88,76 @@ class AdminController extends AbstractController
         }
     }
 
+    //passe le projet en "a été contacté"
+    #[Route('/coiffe/changeContactedProjet/{id}', name: 'change_contacted_projet')]
+    public function changeContactedProjet(EntityManagerInterface $entityManager, Project $project = null){
+
+        if($project){
+
+            //si isContacted est vraie, on le passe en faux
+            if($project->isContacted()){
+                $project->setContacted(false);
+            } else {
+                $project->setContacted(true);
+            }
+    
+            $entityManager->persist($project);
+            $entityManager->flush();
+    
+            $this->addFlash('success', 'Statut de la demande changé');
+            return $this->redirectToRoute('show_projet', ['id'=>$project->getId()]);
+        } else {
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+
+    }
+
+    //ajoute le prix final
+    #[Route('/coiffe/fixePrix/{id}', name: 'fixe_prix')]
+    public function setPrice(Project $project = null, EntityManagerInterface $entityManager, Request $request){
+
+        if($project){
+
+            //recupere le prix dans le formulaire
+            $price = $request->request->get('price');
+
+            $project->setFinalPrice($price);
+
+            $entityManager->persist($project); //prepare
+            $entityManager->flush(); //execute
+
+            $this->addFlash('success', 'Prix final fixé');
+            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        } else {
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+    }
+
     //crée un pdf devis
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevisPdf(Project $project){
+    public function createDevisPdf(Project $project = null){
 
-          
-        $html =  $this->renderView('pdf/devis.html.twig', ["project" => $project]);
-        $domPdf = new Dompdf();
-        $domPdf->loadHtml($html);
-        $domPdf->setPaper('A4', 'landscape');
-        // Rendre le document PDF
-        $domPdf->render();
-
-        
-        // return new Response (
-        $domPdf->stream("doc.pdf", array('Attachment' => 0));
-        return new Response('', 200, [
-                'Content-Type' => 'application/pdf',
-        ]);
+        if($project){
+            
+            $html =  $this->renderView('pdf/devis.html.twig', ["project" => $project]);
+            $domPdf = new Dompdf();
+            $domPdf->loadHtml($html);
+            $domPdf->setPaper('A4', 'landscape');
+            // Rendre le document PDF
+            $domPdf->render();
+    
+            
+            // return new Response (
+            $domPdf->stream("doc.pdf", array('Attachment' => 0));
+            return new Response('', 200, [
+                    'Content-Type' => 'application/pdf',
+            ]);
+        }  else {
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
     }
 
 
