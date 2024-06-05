@@ -31,12 +31,9 @@ class SecurityController extends AbstractController
 
     //profil utilisateur
     #[Route('/profil', name: 'app_profil')]
-    public function profil(PdfService $pdfService)
-    // public function profil() : Response
+    public function profil() : Response
     {
-
-        return $pdfService->showPdf();
-        // return $this->render('security/profil.html.twig');
+        return $this->render('security/profil.html.twig');
     }
 
     #[Route(path: '/logout', name: 'app_logout')]

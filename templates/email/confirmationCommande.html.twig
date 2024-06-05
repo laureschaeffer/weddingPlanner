@@ -2,7 +2,7 @@
 <h1>Bonjour {{ reservation.firstname }} {{ reservation.surname }}!</h1>
 
 <p>
-    Nous avons bien reçu votre commande, elle sera disponible à partir du {{reservation.datePicking |date("d.m.Y") }} (sauf changement de dernière minute)
+    Nous avons bien reçu votre commande, elle sera disponible à partir du <b>{{reservation.datePicking |date("d.m.Y") }}</b> (sauf changement de dernière minute)
 </p>
 <p>
     Vous receverez un autre email de confirmation lorsqu'elle sera préparée.
@@ -13,18 +13,19 @@
     <li>Commande n° {{reservation}}</li>
     <li>Passée le {{reservation.dateOrder |format_datetime('short', 'short', locale='fr')}} </li>
 </ul>
-{# <h3>Produits: </h3>
+<h3>Produits: </h3>
 
 <ul>
     {% for produit in reservation.bookings %}
-            <li>{{produit}}</li>
+            <li>{{produit.quantite}}  x {{produit.product.name}}</li>
     {% endfor %}
 
-</ul> #}
+</ul>
 
 <p>
     Cordialement,
     <br>
     <small>L'équipe Cérémonie Couture</small>
-</p>
+    <img src="cid:footer-signature" alt="logo cérémonie couture">
 {# <p><code>{{ email.to[0].address }}</code></p> #}
+</p>

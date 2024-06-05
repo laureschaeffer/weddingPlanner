@@ -2,12 +2,14 @@
 //------------------------------------------------------------------------pannel admin---------------------------------------------------------------------
 namespace App\Controller;
 
+use Dompdf\Dompdf;
 use App\Entity\User;
 use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\Testimony;
 use App\Form\CommentType;
 use App\Entity\Reservation;
+use App\Service\PdfService;
 use App\Form\ReservationEditType;
 use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
@@ -85,6 +87,26 @@ class AdminController extends AbstractController
             $this->addFlash('error', 'Ce projet n\'existe pas');
             return $this->redirectToRoute('app_projet');
         }
+    }
+
+    //crée un pdf devis
+    //route
+    public function createPdf(){
+
+          
+        $html =  $this->renderView('pdf/pdf.html.twig', ["titre" => "Mon titre"]);
+        $domPdf = new Dompdf();
+        $domPdf->loadHtml($html);
+        $domPdf->setPaper('A4', 'landscape');
+        // Rendre le document PDF
+        $domPdf->render();
+
+        
+        // return new Response (
+        $domPdf->stream("doc.pdf", array('Attachment' => 0));
+        return new Response('', 200, [
+                'Content-Type' => 'application/pdf',
+        ]);
     }
 
 

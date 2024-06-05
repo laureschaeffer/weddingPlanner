@@ -14,7 +14,9 @@ use App\Service\BasketService;
 use App\Repository\BatchRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProductRepository;
+use Symfony\Component\Mime\Part\File;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -203,6 +205,9 @@ class ShopController extends AbstractController
                     $booking->setReservation($reservation);
                     $booking->setQuantite($p['qtt']);
 
+                    //hydrate l'objet reservation pour pouvoir accèder plus tard aux réservations
+                    $reservation->addBooking($booking);
+
                     $entityManager->persist($booking); //prepare
                     $entityManager->flush(); //execute
                     
@@ -220,12 +225,14 @@ class ShopController extends AbstractController
                 ])
                 // ->addPart((new DataPart(new File('/path/to/images/signature.gif'), 'image-produit', 'image'))->asInline())
                 ->htmlTemplate('email/confirmationCommande.html.twig')
+                ->addPart((new DataPart(new File('public/img/logo/logo-noncropped.png'), 'footer-signature', 'image/gif'))->asInline())
                 ;
 
                 $mailer->send($email);
 
                 $this->addFlash('success', 'Réservation effectuée');
-                return $this->redirectToRoute('app_profil');
+                return $this->redirectToRoute('app_home');
+                // return $this->redirectToRoute('app_profil');
             }
 
         }

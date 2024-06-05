@@ -34,7 +34,6 @@
                         <div id="second-nav">
                             <form action="{{ path('app_search')}}" method="GET" id="search-bar">
                                 <i class="fa-solid fa-magnifying-glass"></i> <input type="search" class="search" name="search" placeholder="Recherche">
-                                {# <button type="submit" name="submit">Valider</button> #}
                             </form>
                             <a href="{{ path('app_contact') }}">Contact</a>
                             {% if app.user %}
