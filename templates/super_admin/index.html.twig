@@ -1,20 +1,55 @@
-{% extends 'base.html.twig' %}
+{% extends 'adminBase.html.twig' %}
 
-{% block title %}Hello SuperAdminController!{% endblock %}
+{% block title %}Utilisateurs du site{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<h1>Liste des utilisateurs du site</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>F:/laragon/laragon/www/laure_schaeffer/weddingPlanner/src/Controller/SuperAdminController.php</code></li>
-        <li>Your template at <code>F:/laragon/laragon/www/laure_schaeffer/weddingPlanner/templates/super_admin/index.html.twig</code></li>
-    </ul>
-</div>
+{% for user in utilisateurs %}
+    {# affiche tous les utilisateurs de la bdd, sauf son profil  #}
+    {% if user != app.user %}
+        <p>{{user}}</p>
+        <p>{{user.email}}</p>
+        <p>Role: {{user.roleStr}}</p>
+
+        <b>Passer en admin</b>
+    {# comme il n'y a que ROLE_ADMIN et ROLE_SUPERADMIN (et ROLE_USER par defaut), je vérifie à la main  #}
+    {# il y a également role_acheteur mais se crée seulement lorsque quelqu'un passe commande  #}
+    {% if "ROLE_ADMIN" in user.roles %}
+        {% set checkAdm = 'checked' %}
+      {% else %}
+        {% set checkAdm = '' %}
+    {% endif %}
+
+    {% if "ROLE_SUPERADMIN" in user.roles %}
+        {% set checkSuperAdm = 'checked' %}
+      {% else %}
+        {% set checkSuperAdm = '' %}
+    {% endif %}
+
+
+    <form action="{{ path('upgrade_role', {'id': user.id})}}" method="post">
+        <p>
+            <input type="checkbox" id="admin{{user.id}}" name="role_a" value="ROLE_ADMIN" {{checkAdm}}/>
+            <label for="admin{{user.id}}">Admin</label>
+        </p>
+        <p>
+            <input type="checkbox" id="superadmin{{user.id}}" name="role_supera" value="ROLE_SUPERADMIN" {{checkSuperAdm}}/>
+            <label for="superadmin{{user.id}}">Super admin</label>
+        </p>
+        {# honeypot #}
+		    <input name="firstname" type="text" id="firstname" class="hide-robot">
+        <div class="btn-container">
+            <div class="btn">
+                <button type="submit" name="submit">Valider</button>
+            </div>
+        </div>
+    </form>
+
+        <hr>
+
+    {% endif %}
+{% endfor %}
+
 {% endblock %}

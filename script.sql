@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `IDX_E00CEDDEB83297E7` (`reservation_id`),
   CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.booking : ~14 rows (environ)
 INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
@@ -62,7 +62,9 @@ INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) 
 	(13, 3, 15, 2),
 	(14, 3, 16, 2),
 	(15, 3, 17, 2),
-	(16, 3, 18, 2);
+	(16, 3, 18, 2),
+	(17, 2, 19, 1),
+	(18, 2, 20, 1);
 
 -- Listage de la structure de table weddingplanner. budget
 CREATE TABLE IF NOT EXISTS `budget` (
@@ -103,12 +105,13 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `IDX_9474526CA76ED395` (`user_id`),
   CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.comment : ~2 rows (environ)
 INSERT IGNORE INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
-	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum', '2024-06-05 12:17:03');
+	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum!', '2024-06-05 12:17:03'),
+	(4, 1, 3, 'test', '2024-06-06 12:46:21');
 
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
@@ -255,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
   CONSTRAINT `FK_496EF49F9E45C554` FOREIGN KEY (`prestation_id`) REFERENCES `prestation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project_prestation : ~1 rows (environ)
+-- Listage des données de la table weddingplanner.project_prestation : ~0 rows (environ)
 INSERT IGNORE INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1);
 
@@ -275,9 +278,9 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   PRIMARY KEY (`id`),
   KEY `IDX_42C84955A76ED395` (`user_id`),
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~13 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~15 rows (environ)
 INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(6, 4, '665741a090ed6', '2024-05-29 14:54:24', 320, '2025-01-15', 0, 0, 'Person', 'Name', '0611223344'),
 	(7, 4, '66588c9902b5d', '2024-05-30 14:26:33', 55, '2024-05-31', 1, 0, 'Person', 'Name', '0611223344'),
@@ -291,7 +294,9 @@ INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_orde
 	(15, 4, '666050429d21b', '2024-06-05 11:47:14', 30, '2024-06-10', 0, 0, 'Laure', 'Test', '0611223344'),
 	(16, 4, '6660547f18378', '2024-06-05 12:05:19', 30, '2024-06-06', 0, 0, 'Laure', 'Test3', '0611223344'),
 	(17, 4, '666054bc25692', '2024-06-05 12:06:20', 30, '2024-06-06', 0, 0, 'Laure', 'Test3', '0611223344'),
-	(18, 4, '6660561134070', '2024-06-05 12:12:01', 30, '2024-06-06', 0, 0, 'Laure', 'Test4', '0611223344');
+	(18, 4, '6660561134070', '2024-06-05 12:12:01', 30, '2024-06-06', 0, 0, 'Laure', 'Test4', '0611223344'),
+	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, '2024-06-07', 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
+	(20, 3, '6661689eec632', '2024-06-06 07:43:26', 50, '2024-06-07', 0, 0, 'Laure', 'Nomdefamille', '0611223344');
 
 -- Listage de la structure de table weddingplanner. state
 CREATE TABLE IF NOT EXISTS `state` (
@@ -300,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `state` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.state : ~3 rows (environ)
+-- Listage des données de la table weddingplanner.state : ~0 rows (environ)
 INSERT IGNORE INTO `state` (`id`, `name`) VALUES
 	(1, 'En cours'),
 	(2, 'Accepté'),

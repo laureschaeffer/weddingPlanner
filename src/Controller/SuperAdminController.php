@@ -14,13 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SuperAdminController extends AbstractController
 {
-    #[Route('/super-coiffe', name: 'app_super_admin')]
-    public function index(): Response
-    {
-        return $this->render('super_admin/index.html.twig', [
-            'controller_name' => 'SuperAdminController',
-        ]);
-    }
 
     //----------------------------------------------partie demandes de contact--------------------------------
 
@@ -55,11 +48,11 @@ class SuperAdminController extends AbstractController
     
     //liste des utilisateurs sur le site
     #[Route('/super-coiffe/utilisateur', name: 'app_utilisateur')]
-    public function listUser(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository): Response
     {
         $utilisateurs = $userRepository->findBy([]);
 
-        return $this->render('admin/listeUser.html.twig', [
+        return $this->render('super_admin/index.html.twig', [
             'utilisateurs' => $utilisateurs
         ]);
     }
