@@ -30,7 +30,8 @@ class SuperAdminController extends AbstractController
 
        if($project){
         //recupere l'id de l'état dans le formulaire
-        $idState = $request->request->get('state');
+        $idState = filter_input(INPUT_POST, 'state', FILTER_VALIDATE_INT);
+        // $idState = $request->request->get('state');
         $state = $stateRepository->findOneBy(['id' => $idState]);
 
         //change l'etat de projet
@@ -69,33 +70,42 @@ class SuperAdminController extends AbstractController
     {
         
         //utilise la methode post pour récupérer les elements cochés
-        $roleAdmin = $request->request->get('role_a');
-        $roleSuperAdmin = $request->request->get('role_supera');
+        //filtre ce que je recupere
+        $roleAdmin = filter_input(INPUT_POST, 'role_a', FILTER_SANITIZE_SPECIAL_CHARS);
+        $roleSuperAdmin = filter_input(INPUT_POST, 'role_supera', FILTER_SANITIZE_SPECIAL_CHARS);
+        //honey pot field
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
         
-        $resultArray = [];
-        //si role admin est coché
-        if($roleAdmin){
-            $resultArray[]= "ROLE_ADMIN";
-        }
+        //si je recois "firstname" c'est un robot, je redirige
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        } else {
+            $resultArray = [];
+            //si role admin est coché
+            if($roleAdmin){
+                $resultArray[]= "ROLE_ADMIN";
+            }
+    
+            //si role superadmin est coché
+            if($roleSuperAdmin){
+                $resultArray[]= "ROLE_SUPERADMIN";
+            }
+    
+            //verifie si role acheteur est attribué à l'utilisateur ; comme ce n'est pas possible de le cocher il ne faut pas l'écraser
+            if(in_array("ROLE_ACHETEUR", $user->getRoles())){
+                $resultArray[]= "ROLE_ACHETEUR";
+            }
+            
+            $user->setRoles($resultArray); //setter dans la classe User attend un tableau json format ["ROLE_USER", "ROLE_ADMIN"]
+    
+            $entityManager->persist($user); //prepare
+            $entityManager->flush(); //execute
+            
+            
+            // redirection
+            $this->addFlash('success', 'Role changé');
+            return $this->redirectToRoute('app_utilisateur');
 
-        //si role superadmin est coché
-        if($roleSuperAdmin){
-            $resultArray[]= "ROLE_SUPERADMIN";
         }
-
-        //verifie si role acheteur est attribué à l'utilisateur ; comme ce n'est pas possible de le cocher il ne faut pas l'écraser
-        if(in_array("ROLE_ACHETEUR", $user->getRoles())){
-            $resultArray[]= "ROLE_ACHETEUR";
-        }
-        
-        $user->setRoles($resultArray); //setter dans la classe User attend un tableau json format ["ROLE_USER", "ROLE_ADMIN"]
-
-        $entityManager->persist($user); //prepare
-        $entityManager->flush(); //execute
-        
-        
-        // redirection
-        $this->addFlash('success', 'Role changé');
-        return $this->redirectToRoute('app_utilisateur');
     }
 }

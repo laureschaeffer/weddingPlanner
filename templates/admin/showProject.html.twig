@@ -79,6 +79,8 @@
         {# formulaire pour modifier un commentaire, s'ouvre au clic du bouton plus haut #}
         <form action="{{path('edit_comment', {'id': comment.id})}}" method="post" id="form{{comment.id}}" style="display: none;">
             <input type="text" name="comment" value="{{comment.content}}" style="width: 100%;">
+            {# honeypot #}
+		    <input name="firstname" type="text" id="firstname" class="hide-robot">
         </form>
     {% endfor %}
     
@@ -108,6 +110,8 @@
         <p>
             <label>Prix final</label> <br>
             <input type="number" name="price" value="{{price}}"/>
+            {# honeypot #}
+		    <input name="firstname" type="text" id="firstname" class="hide-robot">
         </p>
         <button type="submit" name="submit">Valider</button>
     </form>
@@ -142,6 +146,10 @@
             <button type="submit" name="submit">Valider</button>
         </form>
     {% endif %}
+
+    <br><br>
+    {# genere un pdf  #}
+    <button><a href="{{path('create_devis', {'id': project.id})}}" target="_blank">Générer un devis</a></button>
 
 </section>
 

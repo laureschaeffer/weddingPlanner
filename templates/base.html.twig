@@ -32,17 +32,19 @@
                         
                         
                         <div id="second-nav">
-                            <form action="{{ path('app_search')}}" method="GET" id="search-bar">
-                                <i class="fa-solid fa-magnifying-glass"></i> <input type="search" class="search" name="search" placeholder="Recherche">
-                            </form>
                             <a href="{{ path('app_contact') }}">Contact</a>
                             {% if app.user %}
                                 <a href="{{path('app_profil')}}"><i class="fa-solid fa-user"></i>{{app.user}}</a>
                                 <a href="{{path('app_logout')}}">Se déconnecter</a>
-                                {% else %}
+                            {% else %}
                                 <a href="{{path('app_login')}}">Se connecter</a>
-                                {# <a href="{{path('app_register')}}">S'inscrire</a> #}
+                            {# <a href="{{path('app_register')}}">S'inscrire</a> #}
                             {% endif %}
+                            <form action="{{ path('app_search')}}" method="GET" id="search-bar">
+                                <i class="fa-solid fa-magnifying-glass"></i> <input type="search" class="search" name="search" placeholder="Recherche">
+                                {# honeypot #}
+		                        <input name="firstname" type="text" id="firstname" class="hide-robot">
+                            </form>
                         </div>
                     </nav>
     

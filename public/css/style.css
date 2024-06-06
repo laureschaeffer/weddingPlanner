@@ -107,6 +107,11 @@ textarea{
     font-family: var(--main-font);
 }
 
+/* honeypot */
+.hide-robot{
+    display: none;
+}
+
 /* -----------bouton de formulaire */
 .add-btn{
     background-color: var(--grey-green-color);

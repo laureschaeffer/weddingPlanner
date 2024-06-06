@@ -102,7 +102,7 @@ class AdminController extends AbstractController
         $reservationsAPreparer = $reservationRepository->findBy(['isPrepared' => 0], ['datePicking' => 'ASC']);
         $reservationsPassees = $reservationRepository->findBy(['isPrepared' => 1], ['dateOrder' => 'ASC']);
 
-        return $this->render('admin/listeCommande.html.twig', [
+        return $this->render('admin/listeReservation.html.twig', [
             'reservationsAPreparer' => $reservationsAPreparer,
             'reservationsPassees' => $reservationsPassees
         ]);

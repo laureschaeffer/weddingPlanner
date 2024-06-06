@@ -80,12 +80,23 @@ class ProjectController extends AbstractController
 
             $idProjet = $comment->getProject()->getId(); //recupere l'id du projet pour la redirection
 
-            $content=$request->request->get('comment'); //recupere le commentaire dans l'input
-            $comment->setContent($content);
-            $entityManager->flush();
+            //recupere le commentaire dans l'input
+            $content = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
+            //honey pot field
+            $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
+        
+            //si je recois "firstname" c'est un robot, je redirige
+            if($honeypot){
+                return $this->redirectToRoute('app_home');
+            } else {
+                $comment->setContent($content);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Commentaire modifié');
+                return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
+                
+            }
 
-            $this->addFlash('success', 'Commentaire modifié');
-            return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
         }
     }
 
@@ -110,7 +121,7 @@ class ProjectController extends AbstractController
         }
     }
 
-    //passe le projet en "a été contacté"
+    //passe le projet en "a été contacté" ou "à contacter"
     #[Route('/coiffe/changeContactedProjet/{id}', name: 'change_contacted_projet')]
     public function changeContactedProjet(EntityManagerInterface $entityManager, Project $project = null){
 
@@ -135,14 +146,15 @@ class ProjectController extends AbstractController
 
     }
 
-    //ajoute le prix final
+    //ajoute/modifie le prix final
     #[Route('/coiffe/fixePrix/{id}', name: 'fixe_prix')]
     public function setPrice(Project $project = null, EntityManagerInterface $entityManager, Request $request){
 
         if($project){
 
             //recupere le prix dans le formulaire
-            $price = $request->request->get('price');
+            // $price = $request->request->get('price');
+            $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_INT);
 
             $project->setFinalPrice($price);
 

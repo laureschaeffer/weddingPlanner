@@ -19,20 +19,22 @@
     <p><i class="fa-solid fa-hourglass-start"></i></p>
 {% endif %}
 
-<p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
+
 <p>Commande n° {{reservation}}, passée le  {{reservation.dateOrder |date("d/m/Y")}}</p>
-<p> {{reservation.user}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+<p> {{reservation.firstname}} {{reservation.surname}} </p>
+<p><i class="fa-solid fa-arrow-right"></i> retire le {{reservation.datePicking |date("d/m/Y")}}</p>
 
 
     {# contact  #}
-    {# <p>{{reservation.user.telephone}}</p> #}
+    <p><b>Contact</b></p>
+    <p>{{reservation.telephone}}</p>
     <p> {{reservation.user.email}} </p>
 
     {# produits  #}
     {% if reservation.bookings |length >1  %}
-        <p>{{ reservation.bookings |length }} produits</p>
+        <p><b>{{ reservation.bookings |length }} produits</b></p>
     {% else %}
-        <p>{{ reservation.bookings |length }} produit</p>
+        <p><b>{{ reservation.bookings |length }} produit</b></p>
     {% endif %}
     
     {% for produit in reservation.bookings %}
@@ -41,14 +43,10 @@
             <legend>{{produit.quantite}}x {{produit.product}}</legend>
         </figure>
         
-        {# input pour proposer à l'utilisateur un checkbox  #}
-        {# <div>
-            <input type="checkbox" id="{{produit.product}}" />
-            <label for="{{produit.product}}">{{produit.quantite}}x {{produit.product}}</label>
-        </div> #}
 
     {% endfor %}
 
+    <br><br><hr>
 {# commande préparée #}
 {% if reservation.isPrepared %}
 <p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande à préparer</a></p>
@@ -67,5 +65,5 @@
 <p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande récupérée</a></p>
 {% endif %}
 
-
+<p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
 {% endblock %}
