@@ -45,7 +45,7 @@ class Project
     private ?bool $isContacted = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
-    private ?Destination $Destination = null;
+    private ?Destination $destination = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Budget $budget = null;
@@ -192,12 +192,12 @@ class Project
 
     public function getDestination(): ?Destination
     {
-        return $this->Destination;
+        return $this->destination;
     }
 
-    public function setDestination(?Destination $Destination): static
+    public function setDestination(?Destination $destination): static
     {
-        $this->Destination = $Destination;
+        $this->destination = $destination;
 
         return $this;
     }

@@ -21,7 +21,7 @@
             {# augmente #}
             <a href="{{path('increase_product', {'id': p.produit.id})}}"><i class="fa-solid fa-plus"></i></a>
         </p>
-        <p>Sous-total: {{p.sousTotal}}</p>
+        <p>Sous-total: {{p.sousTotal}} €</p>
 
         <p><a href="{{path('remove_product', {'id': p.produit.id})}}">Supprimer ce produit</a></p>
         {# calcule le total de la commande  #}
@@ -30,7 +30,7 @@
         <hr>
     {% endfor %}
 
-    <p>Total {{total}} </p>
+    <p>Total {{total}} €</p>
     <p><a href="{{path('delete_basket')}}">Supprimer tout le panier</a></p>
 
     <hr>

@@ -3,29 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-    </style>
+    <title>Devis</title>
 </head>
 <body>
+    <style>
+        h1{
+            text-align: center;
+        }
+        table {
+            width: 100%;
+          }
+          
+          td, th {
+            text-align: left;
+            padding: 8px 0;
+          }
+          .th-right{
+            text-align: right;
+          }
+    </style>
     <h1>Devis pour projet de mariage</h1>
-    
-    <p>Cérémonie Couture</p>
-    <p>1 rue des dev</p>
-    <p>67100</p>
-    <p>Strasbourg</p>
-    <p>ceremonie-couture@exemple.fr</p>
-    <br><br>
-    <hr>
-    <p> {{project.firstname}} </p>
-    <p> {{project.surname}} </p>
-    <p> {{project.email}} </p>
-    <p> {{project.telephone}} </p>
-    <br><br>
-    <hr>
+
+    <table>
+        <tr>
+          <th>Entreprise</th>
+          <th class="th-right">Client</th>
+        </tr>
+        <tr>
+          <td>Cérémonie Couture</td>
+          <td class="th-right">{{project.firstname}} {{project.surname}}</td>
+        </tr>
+        <tr>
+          <td>1 rue des dev 67100 Strasbourg</td>
+          <td class="th-right">{{project.telephone}}</td>
+        </tr>
+        <tr>
+          <td>ceremonie-couture@exemple.fr</td>
+          <td class="th-right">{{project.email}}</td>
+        </tr>
+      </table>
+      <br><hr>
 
     <p><b>Date de l'évènement: {{project.dateEvent | date("d.m.Y")}} </b></p>
     <p>Nombre d'invités: {{project.nbGuest}} </p>
+    <p>Destination: {{project.destination}} </p>
+
+    <h3>Description du projet: </h3>
+    <p>{{project.description}}</p>
+
+    <h3>Prestations choisies:</h3>
+    {% for prestation in project.prestations %}
+        <p>{{prestation}}</p>
+    {% endfor %}
+
+    <h3>Commentaires</h3>
+    {% for comment in project.comments %}
+        <p>{{comment}}</p>
+    {% endfor %}
+
+    <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
+
+    {# <img src="{{ asset('img/logo/logo-noncropped.png') }}" width="150px" height="150px" alt="ceremonie couture logo"> #}
+
 
 </body>
 </html>

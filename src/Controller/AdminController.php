@@ -16,6 +16,7 @@ use App\Repository\TestimonyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
 use App\Repository\StateRepository;
+use App\Service\PdfService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -137,20 +138,15 @@ class AdminController extends AbstractController
 
     //crée un pdf devis
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevisPdf(Project $project = null){
+    public function createDevisPdf(Project $project = null, PdfService $pdfService){
 
         if($project){
             
             $html =  $this->renderView('pdf/devis.html.twig', ["project" => $project]);
-            $domPdf = new Dompdf();
-            $domPdf->loadHtml($html);
-            $domPdf->setPaper('A4', 'landscape');
-            // Rendre le document PDF
-            $domPdf->render();
-    
+            //showPdf attend en argument quel html va être utilisé
+            $domPdf = $pdfService->showPdf($html);
             
-            // return new Response (
-            $domPdf->stream("doc.pdf", array('Attachment' => 0));
+            $domPdf->stream("devis.pdf", array('Attachment' => 0));
             return new Response('', 200, [
                     'Content-Type' => 'application/pdf',
             ]);
