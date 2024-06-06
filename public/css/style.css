@@ -413,8 +413,18 @@ footer p, footer a{
 .projet-suivi{
     border: var(--grey-color) solid 3px;
     margin: var(--main-padding) 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.projet-suivi i{
+    color: black;
 }
 
 .projet-suivi p{
     padding: var(--small-padding);
 }
+
+/* .change-form{
+    display: none;
+} */
