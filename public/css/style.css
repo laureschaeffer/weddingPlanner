@@ -35,6 +35,7 @@
     /* img  */
     --main-img-size: 200px;
     --big-img-size: 400px;
+    --bigger-img-size: 600px;
 
     /* padding ou margin */
     --escape-padding: 80px;
@@ -42,11 +43,15 @@
     --main-padding: 20px;
     --small-padding: 5px;
     --footer-padding: 130px;
+
+    /* hover  */
+    --hover-opacity: 0.7;
+    --hover-transition: 1s;
 }
 
-img{
+/* img{
     width: 200px;
-}
+} */
 
 /* ----------------------------------general */
 * {
@@ -61,7 +66,7 @@ img{
     font-family: var(--main-font);
     background-color: #F1F0F0;
     min-height: 100vh;
-    position: relative;
+    /* position: relative; */
 }
 
 h1{
@@ -80,16 +85,14 @@ h2{
 
 h3{
     font-size: var(--medium-font-size);
+    font-weight: var(--title-font-weight);
+    color: var(--burgundy-color);
 }
 
 #page-container{
     padding-bottom: var(--footer-padding);
 }
 
-/* ---------padding sur le coté----- */
-#home-presentation, #home-avis, #equipe, #prestation{
-    padding: 0 var(--big-padding);
-}
 
 .logo{
     width: 300px;
@@ -152,7 +155,7 @@ textarea{
 /* ----------------footer */
 footer{
     background-color: var(--footer-color);
-    position: absolute;
+    /* position: absolute; */
     bottom: 0;
     width: 100%;
     height: var(--footer-padding); 
@@ -173,11 +176,14 @@ footer p, footer a{
 /* ---------------------------------------------------------------landing page------------------------------------------------------- */
 
 /* --------separation des sections  */
-#home-intro, #home-presentation, #home-avis{
+#home-intro, #home-presentation, #home-avis, #home-prestation, #home-service{
     margin-bottom: var(--escape-padding);
 }
 
-
+/* ---------padding sur le coté----- */
+#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure{
+    padding: 0 var(--big-padding);
+}
 
 #home-intro p{
     background-color: var(--pink-color);
@@ -203,9 +209,72 @@ footer p, footer a{
     text-align: center;
 }
 
-/* -------avis------ */
-#home-avis h2{
+
+/* ------3 cards proposition, evjf, organisation----------- */
+
+#home-prestation h2{
     text-align: center;
+}
+
+.home-prestation-card{
+    display: flex;
+    align-items: center;
+    padding: var(--escape-padding) 100px;
+}
+
+/* inverse le sens une fois sur deux  */
+.home-prestation-card:nth-child(even){
+    flex-direction: row-reverse;
+}
+.home-prestation-card p{
+    text-align: center;
+}
+
+.home-prestation-card img{
+    width: var(--bigger-img-size);
+    border-radius: var(--border-radius);
+}
+
+.home-prestation-card h3{
+    padding: var(--big-padding) 0;
+}
+
+.home-prestation-card-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 var(--big-padding);
+}
+
+/* -------------------5 bulles "nous faire confiance"----------------- */
+
+#service-cards{
+    display: flex;
+    justify-content: space-around;
+    padding: var(--big-padding) 0;
+}
+
+.service-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.service-card figure{
+    background-color: var(--light-green);
+    border-radius: 50%;
+    margin-bottom: var(--main-padding);
+}
+
+.service-card img{
+    width: 120px;
+    padding: 30px;
+}
+
+/* ---------------------avis------------------------------------- */
+#home-avis h3, #home-service h3{
+    text-align: center;
+    font-size: var(--subtitle-font-size);
 }
 
 .avis-card-header p{
@@ -219,6 +288,46 @@ footer p, footer a{
 .avis-card-content p{
     text-align: justify;
 }
+
+/* bouton donner son avis  */
+.btn-avis{
+    padding: 10px 40px;
+    border: 3px solid var(--burgundy-color);
+    cursor: pointer;
+    margin: var(--big-padding) 0;
+}
+
+/* ----------------------------acces au formulaire de contact--------------------- */
+#home-contact figure{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#home-contact img{
+    width: 100%;
+}
+
+.btn-contact{
+    position: absolute;
+    top: 50%;
+    
+}
+
+.btn-contact button{
+    padding: var(--main-padding) var(--big-padding);
+    border-radius: 5px;
+    font-size: var(--title-font-size);
+    font-family: var(--title-font);
+    cursor: pointer;
+    border: none;
+    transition: var(--hover-transition);
+}
+
+.btn-contact button:hover{
+    opacity: var(--hover-opacity);
+}
+
 
 /* ---------------------------------------------------------------commerce------------------------------------------------------- */
 
