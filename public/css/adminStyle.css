@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Cormorant:ital,wght@0,500;1,500&display=swap');
+
+/* ------------------------------variables  */
+:root{
+    /* couleurs fixes + */
+    --nav-color: #0B3C49;
+    --footer-color: #13292F;
+
+    /* couleurs utilisés  */
+    --light-green: #DDD8B8;
+    --grey-green-color: #DAD7CD;
+    --pastel-green-color: #B3CBB9;
+    --burgundy-color: #5D2B42;
+    --grey-color: #D9D9D9;
+    --pink-color: #c4979942;
+    /* --pink-color: #C49799; */
+
+    /* polices d'ecriture  */
+    --main-font: "Cormorant Garamond", sans-serif;
+    --title-font: "Cormorant SC", sans-serif;
+
+    /* tailles  */
+    --p-font-size: 1.2rem;
+    --nav-font-size: 1.4rem;
+    --medium-font-size: 1.7rem;
+    --subtitle-font-size: 1.8rem;
+    --title-font-size: 2rem;
+
+    --title-font-weight: 500;
+    --semi-bold: 600;
+
+    --border-radius: 15px;
+
+    /* img  */
+    --main-img-size: 200px;
+    --big-img-size: 400px;
+    --bigger-img-size: 600px;
+
+    /* padding ou margin */
+    --escape-padding: 80px;
+    --big-padding: 50px;
+    --main-padding: 20px;
+    --small-padding: 5px;
+    --footer-padding: 130px;
+
+    /* hover  */
+    --hover-opacity: 0.7;
+    --hover-transition: 1s;
+}
+
+/* ----------------------------------general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+
+#wrapper{
+    font-family: var(--main-font);
+    background-color: #F1F0F0;
+    min-height: 100vh;
+    /* position: relative; */
+}
+
+h1{
+    font-family: var(--title-font);
+    font-size: var(--title-font-size);
+    font-weight: var(--title-font-weight);
+    text-align: center;
+    padding: var(--big-padding) 0;
+    letter-spacing: 1px;
+}
+
+h2{
+    font-weight: var(--title-font-weight);
+    font-size: var(--subtitle-font-size);
+    text-align: center
+}
+
+h3{
+    font-size: var(--medium-font-size);
+    font-weight: var(--title-font-weight);
+    color: var(--burgundy-color);
+}
+
+#page-container{
+    padding-bottom: var(--footer-padding);
+}
+
+
+.logo{
+    width: 300px;
+}
+
+
+p{
+    font-size: var(--p-font-size);
+}
+
+textarea{
+    width: 100%;
+    min-height: 200px;
+    font-size: var(--p-font-size);
+    font-family: var(--main-font);
+}
+
+/* honeypot */
+.hide-robot{
+    display: none;
+}
+
+
+
+/* ----------------------------------------------------------------------template------------------------------------------------------------------- */
+
+#admin-nav{
+    background-color: var(--burgundy-color);
+    display: flex;
+    justify-content: space-around;
+    padding: var(--main-padding) 0;
+}
+
+#admin-nav>div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#admin-nav a{
+    color: white;
+    font-size: var(--nav-font-size);
+}
+
+/* ============================================================================DEMANDES DE CONTACT =========================================================== */
+
+.projet-card{
+    background-color: #D9D9D9;
+    padding: var(--main-padding);
+}
+
+
+/* --------------------detail d'une demande de contact -------------------- */
+
+#detail-projet{
+    padding: var(--escape-padding);
+}
+
+
+.projet{
+    background-color: var(--grey-color);
+    padding: var(--main-padding);
+    margin-bottom: var(--big-padding);
+}
+
+.projet-state{
+    text-align: end;
+}
+
+.projet-entete{
+    display: flex;
+    justify-content: space-between;
+    padding: var(--main-padding) 0;
+}
+
+.projet-suivi{
+    border: var(--grey-color) solid 3px;
+    margin: var(--main-padding) 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.projet-suivi i{
+    color: black;
+}
+
+.projet-suivi p{
+    padding: var(--small-padding);
+}
+
+/* .change-form{
+    display: none;
+} */

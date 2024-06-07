@@ -7,26 +7,24 @@
 
 
 {% block body %}
-
-<section id="commerce-batch">
+<section id="shop-batch">
 
     <h1>Commerce</h1>
     
-    <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p>
-
+    {# <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p> #}
     <h2>{{batch}}</h2>
-    <p>{{batch.description}}</p>
+    <p class="batch-description">{{batch.description}}</p>
     
-    {% for product in batch.products %}
-        <hr>
-        <div class="collection-produit">
-            <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
-            <p><a href="{{path('show_product', {'id': product.id}) }}">{{product}}</a></p>    
-            <p>€ {{product.price|number_format(2, ',', ' ') }}</p>
-        </div>
-        <hr>
+    <div class="collection-produit">
+        {% for product in batch.products %}
+            <div class="collection-produit-card">
+                <a href="{{path('show_product', {'id': product.id}) }}"><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></a>
+                <a href="{{path('show_product', {'id': product.id}) }}"><p>{{product}}</p></a>
+                <p>€ {{product.price|number_format(2, ',', ' ') }}</p>
+            </div>
         
-    {% endfor %}
+        {% endfor %}
+    </div>
 
 </section>
 

@@ -21,8 +21,8 @@
     --title-font: "Cormorant SC", sans-serif;
 
     /* tailles  */
-    --p-font-size: 1.2rem;
-    --nav-font-size: 1.4rem;
+    --p-font-size: 1.3rem;
+    --nav-font-size: 1.5rem;
     --medium-font-size: 1.7rem;
     --subtitle-font-size: 1.8rem;
     --title-font-size: 2rem;
@@ -81,6 +81,7 @@ h1{
 h2{
     font-weight: var(--title-font-weight);
     font-size: var(--subtitle-font-size);
+    text-align: center
 }
 
 h3{
@@ -126,7 +127,17 @@ textarea{
     cursor: pointer;
 }
 
-/* -------------------------------------------------------templates------------------------------------------------------- */
+/* --------separation des sections  */
+#home-intro, #home-presentation, #home-avis, #home-prestation, #home-service{
+    margin-bottom: var(--escape-padding);
+}
+
+/* ---------padding sur le coté----- */
+#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit{
+    padding: 0 var(--big-padding);
+}
+
+/* ==================================================================================template=================================================================== */
 
 /* --------------header  */
 
@@ -173,17 +184,9 @@ footer p, footer a{
 }
 
 
-/* ---------------------------------------------------------------landing page------------------------------------------------------- */
+/* ==================================================================================landing page========================================================================= */
 
-/* --------separation des sections  */
-#home-intro, #home-presentation, #home-avis, #home-prestation, #home-service{
-    margin-bottom: var(--escape-padding);
-}
 
-/* ---------padding sur le coté----- */
-#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure{
-    padding: 0 var(--big-padding);
-}
 
 #home-intro p{
     background-color: var(--pink-color);
@@ -212,9 +215,6 @@ footer p, footer a{
 
 /* ------3 cards proposition, evjf, organisation----------- */
 
-#home-prestation h2{
-    text-align: center;
-}
 
 .home-prestation-card{
     display: flex;
@@ -321,20 +321,27 @@ footer p, footer a{
     font-family: var(--title-font);
     cursor: pointer;
     border: none;
-    transition: var(--hover-transition);
 }
 
-.btn-contact button:hover{
+/* ---------------------------effets visuels / hover --------------------- */
+
+.btn-contact button:hover, .service-card figure:hover{
     opacity: var(--hover-opacity);
 }
 
+.btn-contact button, .service-card figure{
+    transition: var(--hover-transition);
+}
 
-/* ---------------------------------------------------------------commerce------------------------------------------------------- */
+/* =================================================================================COMMERCE========================================================================== */
 
-/* --------batch/collection */
+/* ------------------------------index-------------------------- */
+.shop-intro{
+    padding: var(--big-padding);
+}
 
-#commerce-batch img{
-    width: var(--main-img-size);
+.shop-intro p{
+    text-align: center;
 }
 
 
@@ -343,12 +350,127 @@ footer p, footer a{
     justify-content: space-around;
     padding: var(--main-padding) 0;
     background-color: var(--light-green);
-    margin: var(--main-padding) 0;
+    margin: var(--big-padding) 0;
 }
 
 #nav-batch a{
     font-size: var(--subtitle-font-size);
     color: black;
+    text-decoration: none;
+}
+
+.shop-collection{
+    margin: var(--main-padding) 0;
+}
+
+.shop-collection h3{
+    margin-left: var(--main-padding);
+}
+
+.shop-collection-product{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.shop-collection-product img{
+    width: var(--big-img-size);
+    margin: var(--main-padding);
+}
+
+.shop-collection-title{
+    display: flex;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+}
+
+.shop-collection-title i {
+    padding: 0 var(--small-padding);
+}
+
+
+/* -----------------------------------batch/collection----------------------- */
+.batch-description{
+    padding: var(--big-padding);
+}
+
+.collection-produit{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.collection-produit-card{
+    margin: var(--main-padding) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.collection-produit-card p{
+    padding: var(--small-padding) 0;
+}
+
+#shop-batch img{
+    width: var(--big-img-size);
+}
+
+
+/* ------------------------------------detail produit----------------------------- */
+.produit-batch-title{
+    color: black;
+}
+
+#commerce-produit img{
+    width: var(--big-img-size);
+}
+
+.produit-card{
+    display: flex;
+    align-items: center;
+}
+
+.produit-card-main{
+    padding: 0 var(--main-padding);
+}
+
+.produit-card-main p{
+    padding: var(--small-padding) 0;
+}
+
+#commerce-produit h2{
+    text-align: left;
+    margin-bottom: var(--big-padding);
+}
+
+.produit-prix{
+    font-weight: var(--semi-bold);
+}
+
+small{
+    font-size: medium;
+}
+
+
+.add-basket-btn{
+    margin: var(--small-padding) 0;
+    padding: var(--main-padding) var(--big-padding);
+    border: solid 3px var(--grey-green-color);
+    cursor: pointer;
+}
+
+/* -----------------------------------panier----------------------- */
+
+.panier-head, .panier{
+    display: flex;
+    justify-content: space-between;
+    padding: var(--main-padding);
+}
+
+
+.panier-produit img{
+    width: var(--main-img-size);
 }
 
 .basket-qtt{
@@ -363,12 +485,7 @@ footer p, footer a{
 }
 
 
-/* --------detail produit */
-#commerce-produit img{
-    width: var(--big-img-size);
-}
-
-/* ---------------------------------------------------------------equipe------------------------------------------------------- */
+/* ==============================================================================EQUIPE=================================================================================== */
 
 .equipe-card{
     display: flex;
@@ -429,7 +546,7 @@ footer p, footer a{
     border-radius: 50%;
 }
 
-/* ---------------------------------------------------------------prestation------------------------------------------------------- */
+/* ===================================================================================PRESTATION===================================================================== */
 
 #prestation-intro img{
     width: 80%;
@@ -466,79 +583,3 @@ footer p, footer a{
 }
 
 
-/* =================================================================================================================================================================
-======================================================================ADMIN======================================================================================
-================================================================================================================================================================= */
-
-/* template */
-
-#admin-nav{
-    background-color: var(--burgundy-color);
-    display: flex;
-    justify-content: space-around;
-    padding: var(--main-padding) 0;
-}
-
-#admin-nav>div{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#admin-nav a{
-    color: white;
-    font-size: var(--nav-font-size);
-}
-
-/* ----------------------------------------------------------------------------demandes de contact------------------------------------ */
-
-.projet-card{
-    background-color: #D9D9D9;
-    padding: var(--main-padding);
-}
-
-
-/* --------------------detail d'une demande de contact -------------------- */
-
-#detail-projet{
-    padding: var(--escape-padding);
-}
-
-#detail-projet h2{
-    text-align: center;
-}
-
-.projet{
-    background-color: var(--grey-color);
-    padding: var(--main-padding);
-    margin-bottom: var(--big-padding);
-}
-
-.projet-state{
-    text-align: end;
-}
-
-.projet-entete{
-    display: flex;
-    justify-content: space-between;
-    padding: var(--main-padding) 0;
-}
-
-.projet-suivi{
-    border: var(--grey-color) solid 3px;
-    margin: var(--main-padding) 0;
-    display: flex;
-    justify-content: space-between;
-}
-
-.projet-suivi i{
-    color: black;
-}
-
-.projet-suivi p{
-    padding: var(--small-padding);
-}
-
-/* .change-form{
-    display: none;
-} */

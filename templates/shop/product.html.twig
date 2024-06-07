@@ -15,7 +15,7 @@
     
     <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p>
     
-    <h2>Collection <a href="{{path('show_batch', {'id': product.batch.id}) }}">{{product.batch |lower}}</a> </h2>
+    <h2>Collection <a href="{{path('show_batch', {'id': product.batch.id}) }}" class="produit-batch-title">{{product.batch |lower}}</a> </h2>
     
     <div class="produit-card">
         <figure><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></figure>
@@ -23,12 +23,11 @@
             <h3>{{product.name }}</h3>
             <p class="produit-description">{{product.description}}</p>
             <p class="produit-prix">€ {{product.price |number_format(2, ',', ' ') }}</p>
-            <small>Taxes incluses.</small>
+            <p><small>Taxes incluses.</small></p>
             
             {# ajout au panier  #}
-            <p>Quantité</p>
-            {# <p><a href="{{ path('add_basket', {'id': product.id}) }}"><i class="fa-solid fa-plus"></i></a></p> #}
-            <button><a href="{{ path('add_basket', {'id': product.id}) }}">Ajouter au panier</a></button>
+            {# <p>Quantité</p> #}
+            <a href="{{ path('add_basket', {'id': product.id}) }}"><button class="add-basket-btn">Ajouter au panier</button></a>
 
         </div>
     </div>

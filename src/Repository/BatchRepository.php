@@ -16,9 +16,10 @@ class BatchRepository extends ServiceEntityRepository
         parent::__construct($registry, Batch::class);
     }
 
-    //renvoie 3 premiers produits  d'une collection
-    //SELECT * FROM product p INNER JOIN batch b ON p.batch_id = b.id ORDER BY title LIMIT 3
+    //renvoie 3 premiers produits d'une collection
+    //SELECT * FROM product p inner JOIN batch b ON p.batch_id = b.id WHERE p.batch_id = :nb ORDER BY title LIMIT 3
     public function find3Product(){
+    // public function find3Product($id){
         $em = $this->getEntityManager(); //em=EntityManager
         $sub = $em->createQueryBuilder();
 
@@ -26,7 +27,9 @@ class BatchRepository extends ServiceEntityRepository
         $qb->select('p')
             ->from('App\Entity\Product', 'p')
             ->innerJoin('p.batch', 'b')
+            // ->andWhere('p.batch = :id')
             ->orderBy('b.title', 'ASC')
+            // ->setParameter('id', $id)
             ->setMaxResults(3);
 
         //renvoie le resultat

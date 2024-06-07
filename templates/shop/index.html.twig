@@ -4,14 +4,16 @@
 {% block meta %}Découvrez les objets créés dans nos ateliers en Alsace. Vous trouverez des objets clés pour un mariage, de la déco et des boxes cadeaux pour les mariés.{% endblock %}
 
 {% block body %}
-{# {{ dump(troisProduits) }} #}
+
 <h1>Commerce</h1>
 
-<p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p>
+{# <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p> #}
 
 <h2>Création de nos ateliers</h2>
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus</p>
+<div class="shop-intro">
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus</p>
+</div>
 
 {# nav pour retrouver la collection cherchée  #}
 <div id="nav-batch">
@@ -19,24 +21,21 @@
         <a href="#{{col.id}}">{{col}}</a>
     {% endfor %}
 </div>
-
+{# -------------------------differentes collections-------------------- #}
 {% for collection in collections %}
-   
 
-<div id="{{collection.id}}">
-    <h3>{{collection}} <a href="{{path('show_batch', {'id': collection.id}) }}"><i class="fa-solid fa-arrow-right"></i></a></h3>
-    <br><br>
-</div>
+    <div class="shop-collection" id="{{collection.id}}">
+        <h3><a href="{{path('show_batch', {'id': collection.id}) }}" class="shop-collection-title">{{collection}}<i class="fa-solid fa-arrow-right"></i></a></h3>
     
-
-
-    {# l'objet collection possède un tableau d'objets Produit  #}
-    {# {% for product in collection.products %}
+        {# l'objet collection possède un tableau d'objets Produit  #}
+        <div class="shop-collection-product">
+            {% for product in collection.products %}
+                <figure><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></figure>
+                {# <p>{{product}}</p> #}
     
-        <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
-        <p>{{product}}</p>
-
-    {% endfor %} #}
+            {% endfor %}
+        </div>
+    </div>
 
 {% endfor %}
 
