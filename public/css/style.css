@@ -634,5 +634,29 @@ small{
         text-align: start;
         margin-bottom: var(--main-padding);
     }
+}
+/* ===============================================================PROFIL============================================================ */
 
+/* historique de reservation */
+.reservation-card{
+    padding: var(--main-padding);
+}
+
+.reservation-card img{
+    width: var(--main-img-size);
+}
+
+.reservation-card-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.reservation-produit-card{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+}
+
+.reservation-produit-card figure{
+    padding-right: var(--main-padding);
 }
