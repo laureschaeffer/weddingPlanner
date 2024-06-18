@@ -5,21 +5,25 @@
 
 {% block body %}
 
-<h1>Nos créations</h1>
-
-<h2>{{creation.category}}</h2>
-<p>{{creation.description}}</p>
-
-
-{# creation.picture est un tableau de tableau associatif avec l'url de l'image et son alt, il faut donc 2 boucles  #}
-{% for picture in creation.pictures %}
-    {% for p in picture %}
-
-        <img src="{{ asset(p.url) }}" alt="{{p.alt}}">
-        
+<section id="detail-creation">
+    
+    <h1>Nos créations</h1>
+    
+    <h2>{{creation.title}}</h2>
+    <p>{{creation.description}}</p>
+    
+    {# creation.picture est un tableau de tableau associatif avec l'url de l'image et son alt, il faut donc 2 boucles  #}
+    {% for picture in creation.pictures %}
+        {% for p in picture %}
+    
+            <img src="{{ asset(p.url) }}" alt="{{p.alt}}">
+            
+        {% endfor %}
+    
     {% endfor %}
 
-{% endfor %}
+
+</section>
 
 
 

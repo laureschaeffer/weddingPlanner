@@ -4,31 +4,37 @@
 {% block meta %}Cérémonie Couture, wedding planner à Strasbourg. Organisation de mariage, boutique avec création de faire parts de mariage personnalisés et autres.{% endblock %}
 {% block body %}
 
-<h1>Nos créations</h1>
-{% for categorie in categories %}
-    <h2>{{categorie}}</h2>
-
-    {# chaque categorie contient une collection de creations #}
-    {% for crea in categorie.creations %}
-        <h3> <a href="{{path('show_creation', {'id': crea.id}) }}"> {{crea}} </a></h3>
-        <p></p>
-        {# {{ dump(crea.pictures) }} #}
-        {# tableau de photos #}
-        {# si pictures est un tableau de tableau associatif, il faut une boucle, sinon j'utilise l'index "alt" et "url" #}
-        {% if crea.pictures is iterable %}
-            {% for picture in crea.pictures %}
-                {% for p in picture %}
-                    <figure><img src="{{ asset(p.url) }}" alt="{{p.alt}}"></figure>
-            
-                {% endfor %}
-
-            {% endfor %}
-
-        {% endif %}
-
-    {% endfor %}
+<section id="creation">
     
+    <h1>Nos créations</h1>
+    {% for categorie in categories %}
+        <h2>{{categorie}}</h2>
 
-{% endfor %}
+        <div class="creation-container">
+            {# chaque categorie contient une collection de creations #}
+            {% for crea in categorie.creations %}
+                {# tableau de photos #}
+                {% for picture in crea.pictures %}
+    
+                    {% for p in picture %}
+                        <div class="creation-card">
+                            <figure>
+                                <a href="{{path('show_creation', {'id': crea.id}) }}"><img src="{{ asset(p.url) }}" alt="{{p.alt}}"></a>
+                                <a href="{{path('show_creation', {'id': crea.id}) }}"><figcaption> {{crea}} </figcaption></a>
+                            </figure>
+                        </div>
+                
+                    {% endfor %}
+    
+                {% endfor %} 
+            {% endfor %}
+        </div>
+    
+        
+    
+    {% endfor %}
+
+</section>
+
 
 {% endblock %}

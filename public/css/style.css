@@ -133,7 +133,7 @@ textarea{
 }
 
 /* ---------padding sur le coté----- */
-#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit{
+#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation{
     padding: 0 var(--big-padding);
 }
 
@@ -583,3 +583,56 @@ small{
 }
 
 
+/* ================================================================================CREATION portefolio===================================================================== */
+
+/* -------------------liste---------------  */
+.creation-container{
+    display: flex;
+    flex-wrap: wrap;
+    
+    
+    img{
+        width: var(--big-img-size);
+    }
+
+    .creation-card{
+        margin: var(--main-padding);
+        transition: var(--hover-transition);
+
+        position: relative;
+    }
+
+    figcaption{
+        text-align: center;
+        font-size: var(--p-font-size);  
+        position: absolute;
+        bottom: 0;
+        background-color: white;
+        width: 100%;
+        padding: 10px 0;
+        display: none;    
+        color: #000;
+    }
+
+
+}
+
+.creation-card:hover figcaption{
+    display: block;
+}
+
+/* -------------------detail---------------  */
+#detail-creation{
+    
+    img{
+        width: var(--big-img-size);
+        padding: var(--main-padding);
+        padding-left: 0;
+    }
+
+    h2{
+        text-align: start;
+        margin-bottom: var(--main-padding);
+    }
+
+}

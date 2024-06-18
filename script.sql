@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.booking : ~14 rows (environ)
+-- Listage des données de la table weddingplanner.booking : ~16 rows (environ)
 INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(3, 1, 6, 16),
 	(4, 1, 7, 2),
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.comment : ~2 rows (environ)
+-- Listage des données de la table weddingplanner.comment : ~3 rows (environ)
 INSERT IGNORE INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
 	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum!', '2024-06-05 12:17:03'),
@@ -128,8 +128,8 @@ CREATE TABLE IF NOT EXISTS `creation` (
 -- Listage des données de la table weddingplanner.creation : ~3 rows (environ)
 INSERT IGNORE INTO `creation` (`id`, `category_id`, `title`, `description`, `pictures`) VALUES
 	(1, 1, 'Mariage de luxe', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"pictures": [{"alt": "Mariage2", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}, {"alt": "Mariage de luxe", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}]}'),
-	(2, 2, 'Fleurs', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"alt": "Fleurs", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}'),
-	(3, 2, 'Objets', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"alt": "Objet de décoration", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}');
+	(2, 2, 'Fleurs', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"pictures": [{"alt": "Fleurs", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}, {"alt": "Fleurs", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}]}'),
+	(3, 2, 'Objets', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '{"pictures": [{"alt": "Objet de décoration", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}, {"alt": "Objet de décoration", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.jpg"}]}');
 
 -- Listage de la structure de table weddingplanner. destination
 CREATE TABLE IF NOT EXISTS `destination` (
@@ -210,13 +210,14 @@ CREATE TABLE IF NOT EXISTS `product` (
   PRIMARY KEY (`id`),
   KEY `IDX_D34A04ADF39EBE7A` (`batch_id`),
   CONSTRAINT `FK_D34A04ADF39EBE7A` FOREIGN KEY (`batch_id`) REFERENCES `batch` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.product : ~3 rows (environ)
 INSERT IGNORE INTO `product` (`id`, `batch_id`, `name`, `price`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Lettre pour carton d\'invitation', 20, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/invitation_card_with_a_ribbon.jpg', 'lettre pour carton d\'invitation'),
 	(2, 4, 'Box soin ', 50, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/pexels-tima-miroshnichenko-7879833.jpg', 'box cadeau, soin pour les mariés'),
-	(3, 2, 'Crème pour les mains', 15, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/pexels-karolina-grabowska-4465121.jpg', 'crème pour les mains');
+	(3, 2, 'Crème pour les mains', 15, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/pexels-karolina-grabowska-4465121.jpg', 'crème pour les mains'),
+	(4, 1, 'Marque place', 10, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/invitation_card_with_a_ribbon.jpg', 'marque place');
 
 -- Listage de la structure de table weddingplanner. project
 CREATE TABLE IF NOT EXISTS `project` (
@@ -243,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~1 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~0 rows (environ)
 INSERT IGNORE INTO `project` (`id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, 1, 1, 2, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000);
 
@@ -301,11 +302,11 @@ INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_orde
 -- Listage de la structure de table weddingplanner. state
 CREATE TABLE IF NOT EXISTS `state` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.state : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.state : ~3 rows (environ)
 INSERT IGNORE INTO `state` (`id`, `name`) VALUES
 	(1, 'En cours'),
 	(2, 'Accepté'),
