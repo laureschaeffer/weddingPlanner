@@ -23,39 +23,66 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
-                'attr' => [
-                    'class' => '',
+                'row_attr' => [
+                    'class' => 'form-col'
                 ],
                 'label' => 'Prénom'
             ])
             ->add('surname', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Nom'
             ])
             ->add('email', EmailType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Email'
             ])
             ->add('telephone', TelType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Téléphone'
             ])
             ->add('dateEvent', DateTimeType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'widget' => 'single_text',
                 'label' => 'Date de l\'évènement'
             ])
             ->add('nbGuest', IntegerType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Nombre d\'invités'
             ])
             ->add('description', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Commentaires'
             ])
             ->add('Destination', EntityType::class, [
                 'class' => Destination::class,
                 'choice_label' => 'name',
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
             ])
             ->add('budget', EntityType::class, [
                 'class' => Budget::class,
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 // 'choice_label' => 'id',
             ])
             ->add('prestations', EntityType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'class' => Prestation::class,
                 'choice_label' => 'title',
                 'multiple' => true, //obligatoire car ça suit la cardinalité établie entre Projet et Prestation

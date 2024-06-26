@@ -7,24 +7,35 @@
 
 <h1>Nous contacter</h1>
 
-<div id="contact">
+<section id="contact">
 
     <h2>Parlons de votre projet</h2>
+
+    <div id="contact-form">
+
+        {{ form_start(form) }}
+        
+        <div class="form-flex">
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.surname) }}
+        </div>
+        <div class="form-flex">
+            {{ form_row(form.email) }}
+            {{ form_row(form.telephone) }}
+        </div>
+        <div class="form-flex">
+            {{ form_row(form.dateEvent) }}
+            {{ form_row(form.nbGuest) }}
+        </div>
+        {{ form_row(form.Destination) }}
+        {{ form_row(form.budget) }}
+        {{ form_row(form.prestations) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.Envoyer) }}
     
-    {# {{form(form)}} #}
-    
-    {{ form_start(form) }}
-    
-    {{ form_row(form.firstname) }} {{ form_row(form.surname) }}
-    
-    {{ form_row(form.email, {'attr': {'class': 'test'}}) }}
-    {{ form_row(form.telephone) }}
-    {{ form_row(form.dateEvent) }}
-    {{ form_row(form.nbGuest) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.Destination) }}
-    {{ form_row(form.budget) }}
-    {{ form_row(form.prestations) }}
+        {{ form_end(form) }}
+
+    </div>
     
     {# <p>La responsable de traitement Laure Schaeffer traite les données recueillies pour: rentrer en communication, afin d'effectuer une opération technique de prospection, et l'élaboration d'un potentiel devis et contrat.
     Pour en savoir plus sur la gestion de vos données personnelles et pour exercer vos droits, reportez-vous à la notice ci-jointe.
@@ -37,10 +48,8 @@
         Pour exercer ces droits ou pour toute question sur le traitement de vos données dans ce dispositif, vous pouvez contacter data-controller[at]ceremonie-couture.fr
         Si vous estimez, après nous avoir contactés, que vos droits « Informatique et Libertés » ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.
     </p> #}
-    {{ form_row(form.Envoyer) }}
     
-    {{ form_end(form) }}
 
-</div>
+</section>
 
 {% endblock %}
