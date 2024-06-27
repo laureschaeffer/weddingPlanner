@@ -146,6 +146,70 @@ class ShopController extends AbstractController
         ]);
     }
 
+    //traite la création de réservation avec le formulaire, factorisation de la fonction makeReservation
+    public function createReservation(BasketService $basketService, $form, UserInterface $user){
+        
+        //récupère les données du formulaire 
+        $reservation = $form->getData();
+
+        //crée un nombre unique aléatoire
+        $referenceOrder = uniqid();
+
+        //remplit à la main car pas demandé dans le formulaire
+        $reservation->setUser($user); //remplit par l'utilisateur connecté
+        $reservation->setReferenceOrder($referenceOrder);
+        $reservation->setPrepared(false);
+        $reservation->setPicked(false);
+
+        
+        $panier = $basketService->getBasket(); //recupere le panier en session
+        $total = end($panier)["total"]; //recupere le total au dernier index du tableau
+
+        $reservation->setTotalPrice($total);
+        $ajd = new \DateTime();
+        $reservation->setDateOrder($ajd); 
+
+        return $reservation;
+        
+    }
+
+    //traite la création booking avec le formulaire, factorisation de la fonction makeReservation
+    public function createBooking($panier, $reservation, $entityManager){
+
+        //il faut créer autant d'entité booking que de produit dans le panier
+        foreach($panier as $p){
+            $booking = new Booking();
+            $booking->setProduct($p['produit']);
+            $booking->setReservation($reservation);
+            $booking->setQuantite($p['qtt']);
+
+            //hydrate l'objet reservation pour pouvoir accèder plus tard aux réservations
+            $reservation->addBooking($booking);
+
+            $entityManager->persist($booking); //prepare
+            $entityManager->flush(); //execute
+            
+        }
+    }
+
+    //envoie un mail, factorisation de la fonction makeReservation
+    public function sendConfirmationMail($user, $reservation, $mailer){
+        $email = (new TemplatedEmail())
+            ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+            ->to($user->getEmail())
+            ->subject('Confirmation de commande')
+            // ->text('Sending emails is fun again!')
+            // pass variables (name => value) to the template
+            ->context([
+                'reservation' => $reservation
+            ])
+            ->htmlTemplate('email/confirmationCommande.html.twig')
+            // ->addPart((new DataPart(new File('public/img/logo/logo-noncropped.png'), 'footer-signature', 'image/gif'))->asInline())
+            ;
+
+        $mailer->send($email);
+    }
+
     //=========================================================================================RESERVATION=================================================================
 
     //ajoute le panier en réservation
@@ -156,7 +220,6 @@ class ShopController extends AbstractController
         //la personne doit être connectée pour que la réservation soit associée à une entité
         if($user){
             
-
             $roles = $user->getRoles();
             array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
 
@@ -168,29 +231,13 @@ class ShopController extends AbstractController
             //crée le form
             $form = $this->createForm(ReservationType::class, $reservation);
     
-            //prend en charge
+            // prend en charge
             $form->handleRequest($request);
     
             if($form->isSubmitted() && $form->isValid()){
-                //récupère les données du formulaire 
-                $reservation = $form->getData();
 
-                //crée un nombre unique aléatoire
-                $referenceOrder = uniqid();
-
-                //remplit à la main car pas demandé dans le formulaire
-                $reservation->setUser($user); //remplit par l'utilisateur connecté
-                $reservation->setReferenceOrder($referenceOrder);
-                $reservation->setPrepared(false);
-                $reservation->setPicked(false);
-
-                
-                $panier = $basketService->getBasket(); //recupere le panier en session
-                $total = end($panier)["total"]; //recupere le total au dernier index du tableau
-
-                $reservation->setTotalPrice($total);
-                $ajd = new \DateTime();
-                $reservation->setDateOrder($ajd); 
+                //traite la création de reservation
+                $reservation = $this->createReservation($basketService, $form, $user);
     
                 $entityManager->persist($reservation); //prepare
                 $entityManager->flush(); //execute
@@ -198,36 +245,12 @@ class ShopController extends AbstractController
                 //---------------------------------------------------entité booking------------------------------
 
                 $panier = $basketService->getBasket();
-                //il faut créer autant d'entité booking que de produit dans le panier
-                foreach($panier as $p){
-                    $booking = new Booking();
-                    $booking->setProduct($p['produit']);
-                    $booking->setReservation($reservation);
-                    $booking->setQuantite($p['qtt']);
+                //traite la création de booking
+                $this->createBooking($panier, $reservation, $entityManager);
 
-                    //hydrate l'objet reservation pour pouvoir accèder plus tard aux réservations
-                    $reservation->addBooking($booking);
-
-                    $entityManager->persist($booking); //prepare
-                    $entityManager->flush(); //execute
-                    
-                }
                 
                 //-----------------------------------------envoie d'un email de confirmation
-                $email = (new TemplatedEmail())
-                ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
-                ->to($user->getEmail())
-                ->subject('Confirmation de commande')
-                // ->text('Sending emails is fun again!')
-                // pass variables (name => value) to the template
-                ->context([
-                    'reservation' => $reservation
-                ])
-                ->htmlTemplate('email/confirmationCommande.html.twig')
-                // ->addPart((new DataPart(new File('public/img/logo/logo-noncropped.png'), 'footer-signature', 'image/gif'))->asInline())
-                ;
-
-                $mailer->send($email);
+                $this->sendConfirmationMail($user, $reservation, $mailer);
 
                 $this->addFlash('success', 'Réservation effectuée');
                 return $this->redirectToRoute('app_home');
