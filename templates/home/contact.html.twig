@@ -27,8 +27,10 @@
             {{ form_row(form.dateEvent) }}
             {{ form_row(form.nbGuest) }}
         </div>
-        {{ form_row(form.Destination) }}
-        {{ form_row(form.budget) }}
+        <div class="form-flex">
+            {{ form_row(form.Destination) }}
+            {{ form_row(form.budget) }}
+        </div>
         {{ form_row(form.prestations) }}
         {{ form_row(form.description) }}
         {{ form_row(form.Envoyer) }}
