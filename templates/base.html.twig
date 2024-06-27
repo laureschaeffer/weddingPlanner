@@ -41,11 +41,7 @@
                                 <a href="{{path('app_login')}}">Se connecter</a>
                             {# <a href="{{path('app_register')}}">S'inscrire</a> #}
                             {% endif %}
-                            <form action="{{ path('app_search')}}" method="GET" id="search-bar">
-                                <i class="fa-solid fa-magnifying-glass"></i> <input type="search" class="search" name="search" placeholder="Recherche">
-                                {# honeypot #}
-		                        <input name="firstname" type="text" id="firstname" class="hide-robot">
-                            </form>
+                            
                         </div>
                     </nav>
     
@@ -70,8 +66,27 @@
             <footer>
                 <p>COPYRIGHT &#169; Cérémonie Couture</p>
                 <div class="footer-align">
-                    <p>Contact</p>
-                    <p>Mentions légales</p>
+                    <ul>
+                        <li>Contact</li>
+                        <li>5 boulevard Laine</li>
+                        <li>SchneiderBourg</li>
+                        <li>01 97 59 96 00</li>
+                        <li>diane@ceremonie-couture.fr</li>
+                    </ul>
+                    <ul>
+                        <li>Légal</li>
+                        <li>Mentions légales</li>
+                    </ul>
+                    <form action="{{ path('app_search')}}" method="GET" id="search-bar">
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                            <g>
+                                <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                            </g>
+                        </svg>
+                        <input type="search" class="search" name="search" placeholder="Recherche">
+                        {# honeypot #}
+                        <input name="firstname" type="text" id="firstname" class="hide-robot">
+                    </form>
                     {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
                     {% if app.user %}
                         {% if ("ROLE_ADMIN" in app.user.roles) or ("ROLE_SUPERADMIN" in app.user.roles)  %}
