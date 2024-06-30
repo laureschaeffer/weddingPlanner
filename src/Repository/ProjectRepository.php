@@ -16,13 +16,17 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
-    //SELECT *, DATEDIFF(NOW(), date_event) FROM project
+    //trouve les projets dont la date de l'évènement était il y a plus de deux ans
     public function findOldProjects(){
+        $dateExp = new \DateTime();
+        //enleve 2 ans à la date d'ajd afin d'obtenir à partir de quand un projet est expiré
+        $dateExp->modify('-2 years');
         $qb = $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('p, CURRENT_TIMESTAMP() - p.dateEvent')
+            ->select('p')
             ->from('App\Entity\Project', 'p')
-            // ->where('p.dateEvent < CURRENT_TIMESTAMP()')
+            ->where('p.dateEvent < :dateExp')
+            ->setParameter('dateExp', $dateExp)
             ;
 
         $query = $qb->getQuery();

@@ -76,7 +76,14 @@
                     <ul>
                         <li>Légal</li>
                         <li>Mentions légales</li>
+                        {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
+                    {% if app.user %}
+                        {% if ("ROLE_ADMIN" in app.user.roles) or ("ROLE_SUPERADMIN" in app.user.roles)  %}
+                            <li><a href="{{path('app_admin')}}">Office</a></li>
+                        {% endif %}
+                    {% endif %}
                     </ul>
+                    
                     <form action="{{ path('app_search')}}" method="GET" id="search-bar">
                         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
                             <g>
@@ -87,12 +94,6 @@
                         {# honeypot #}
                         <input name="firstname" type="text" id="firstname" class="hide-robot">
                     </form>
-                    {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
-                    {% if app.user %}
-                        {% if ("ROLE_ADMIN" in app.user.roles) or ("ROLE_SUPERADMIN" in app.user.roles)  %}
-                            <p><a href="{{path('app_admin')}}">Office</a></p>
-                        {% endif %}
-                    {% endif %}
 
                 </div>
             </footer>
