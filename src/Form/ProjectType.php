@@ -88,7 +88,11 @@ class ProjectType extends AbstractType
                 'multiple' => true, //obligatoire car ça suit la cardinalité établie entre Projet et Prestation
                 'expanded' => true //pour avoir des checkbox au lieu d'un select
             ])
-            ->add('Envoyer', SubmitType::class)
+            ->add('Envoyer', SubmitType::class, [
+                'attr' => [
+                    'class' => 'contact-btn'
+                ]
+            ])
         ;
     }
 

@@ -20,9 +20,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
     #[Route('/coiffe', name: 'app_admin')]
-    public function index(): Response
+    public function index(ProjectRepository $projectRepo): Response
     {
-        return $this->render('admin/index.html.twig', []);
+        $projects = $projectRepo->findOldProjects();
+        return $this->render('admin/index.html.twig', ['projects' => $projects]);
     }
 
 

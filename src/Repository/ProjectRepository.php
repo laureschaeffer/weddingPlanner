@@ -16,6 +16,20 @@ class ProjectRepository extends ServiceEntityRepository
         parent::__construct($registry, Project::class);
     }
 
+    //SELECT *, DATEDIFF(NOW(), date_event) FROM project
+    public function findOldProjects(){
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('p, CURRENT_TIMESTAMP() - p.dateEvent')
+            ->from('App\Entity\Project', 'p')
+            // ->where('p.dateEvent < CURRENT_TIMESTAMP()')
+            ;
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+
     //    /**
     //     * @return Project[] Returns an array of Project objects
     //     */
