@@ -477,6 +477,7 @@ footer p, footer a{
 .produit-card{
     display: flex;
     align-items: center;
+    margin-bottom: var(--big-padding);
 }
 
 .produit-card-main{
@@ -506,6 +507,12 @@ small{
     padding: var(--main-padding) var(--big-padding);
     border: solid 3px var(--grey-green-color);
     cursor: pointer;
+}
+
+/* ----propositions---- */
+#propositions-container{
+    display: flex;
+    flex-wrap: wrap;
 }
 
 /* -----------------------------------panier----------------------- */

@@ -58,13 +58,16 @@ class ShopController extends AbstractController
 
     //detail d'un produit
     #[Route('/shop/produit/{id}', name: 'show_product')]
-    public function showProduct(Product $product = null): Response 
+    public function showProduct(Product $product = null, ProductRepository $productRepository): Response 
     {
 
         //si le produit existe
         if($product){
+            //propose 6 produits de la meme collection
+            $propositions = $productRepository->findBy(['batch' => $product->getBatch()->getId()], [], 6 );
             return $this->render('shop/product.html.twig', [
-                'product' => $product
+                'product' => $product,
+                'propositions' => $propositions
             ]);
         }
     }

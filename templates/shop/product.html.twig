@@ -32,7 +32,20 @@
         </div>
     </div>
     
-    <h3>Vous pourriez aimer</h3>
+    {# propose 6 autres produits de la collection  #}
+    <h4>Vous pourriez aimer</h4>
+    <div id="propositions-container">
+        {% for proposition in propositions %}
+            {% if proposition != product %}
+                <div class="proposition-card">
+                    <figure><a href="{{path('show_product', {'id': proposition.id}) }}"><img src="{{asset(proposition.urlPicture)}}" alt="{{proposition.altPicture}}"></a></figure>
+                    <p><a href="{{path('show_product', {'id': proposition.id}) }}">{{proposition}}</a></p>
+                    <p>€ {{proposition.price |number_format(2, ',', ' ')}}</p>
+                </div>
+            {% endif %}
+            
+        {% endfor %}
+    </div>
 
 </section>
 
