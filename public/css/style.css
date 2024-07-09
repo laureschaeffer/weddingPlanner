@@ -44,6 +44,9 @@
     --small-padding: 5px;
     --footer-padding: 130px;
 
+    /* version mobile  */
+    --padding-tel: 10px;
+
     /* hover  */
     --hover-opacity: 0.7;
     --hover-transition: 1s;
@@ -147,8 +150,15 @@ textarea{
     background-color: var(--nav-color);
 }
 
-#nav>div{
+#nav-icon{
+    display: none;
+}
+
+#first-nav, #second-nav{
     display: flex;
+}
+
+#first-nav, #second-nav, #nav-icon{
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -298,6 +308,7 @@ footer p, footer a{
 
 #service-cards{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     padding: var(--big-padding) 0;
 }
@@ -806,4 +817,66 @@ small{
 
 .reservation-produit-card figure{
     padding-right: var(--main-padding);
+}
+
+/* ======================================================================================================================================================================================================================================================REPONSIVE==================================================================================================================================================================================================================================== */
+@media screen and (max-width: 768px){
+
+    /* navbar */
+    #nav{
+        flex-direction: column;
+    }
+
+    #nav .logo{
+        display: none;
+    }
+
+    #nav-icon{
+        display: flex;
+        flex-direction: row;
+        padding: 15px 0;
+        gap: 15px;
+    }
+    
+    #nav-icon svg{
+        fill: white;
+        width: 30px;
+    }
+
+    #first-nav a, #second-nav a{
+        border-top: 1px solid rgb(0 0 0 / 93%);
+    }
+
+
+    /* ============================================================================landing page======================================================================= */
+    
+    /* flex direction en commun  */
+    .home-prestation-card, .home-prestation-card:nth-child(even), #home-presentation{
+        flex-direction: column;
+    }
+
+    #home-intro p{
+        padding: var(--padding-tel);
+        text-align: center;
+    }
+
+    .home-prestation-card{
+        padding: var(--padding-tel) 0;
+    }
+
+    .home-prestation-card img{
+        width: var(--main-img-size);
+    }
+
+    .service-card img{
+        width: 70px;
+        padding: 15px;
+    }
+
+    /* **********footer*********** */
+    .footer-align{
+        flex-direction: column;
+        gap: 30px;
+    }
+
 }
