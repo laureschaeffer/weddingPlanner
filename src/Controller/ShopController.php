@@ -4,7 +4,6 @@
 
 namespace App\Controller;
 
-use DateTime;
 use App\Entity\Batch;
 use App\Entity\Booking;
 use App\Entity\Product;
@@ -14,6 +13,7 @@ use App\Service\BasketService;
 use App\Repository\BatchRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProductRepository;
+use App\Repository\ReservationRepository;
 use Symfony\Component\Mime\Part\File;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mime\Part\DataPart;
@@ -32,8 +32,7 @@ class ShopController extends AbstractController
     public function index(BatchRepository $batchRepository): Response
     {
         $collections = $batchRepository->findBy([]);
-        $troisProduits = $batchRepository->find3Product();
-
+        $troisProduits = $batchRepository->find3Product();        
         return $this->render('shop/index.html.twig', [
             'collections' => $collections,
             'troisProduits' => $troisProduits
@@ -150,10 +149,10 @@ class ShopController extends AbstractController
     }
 
     //traite la création de réservation avec le formulaire, factorisation de la fonction makeReservation
-    public function createReservation(BasketService $basketService, $form, UserInterface $user){
+    public function createReservation(BasketService $basketService, $form, UserInterface $user, $reservation){
         
         //récupère les données du formulaire 
-        $reservation = $form->getData();
+        // $reservation = $form->getData();
 
         //crée un nombre unique aléatoire
         $referenceOrder = uniqid();
@@ -172,7 +171,7 @@ class ShopController extends AbstractController
         $ajd = new \DateTime();
         $reservation->setDateOrder($ajd); 
 
-        return $reservation;
+        // return $reservation;
         
     }
 
@@ -222,11 +221,7 @@ class ShopController extends AbstractController
 
         //la personne doit être connectée pour que la réservation soit associée à une entité
         if($user){
-            
-            $roles = $user->getRoles();
-            array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
 
-            
             //---------------------------------------------------entité reservation------------------------------
             //crée la reservation
             $reservation = new Reservation();
@@ -239,25 +234,38 @@ class ShopController extends AbstractController
     
             if($form->isSubmitted() && $form->isValid()){
 
-                //traite la création de reservation
-                $reservation = $this->createReservation($basketService, $form, $user);
+                //récupère les données du formulaire 
+                $reservation = $form->getData();
+
+                //si la date est valide
+                if($reservation->getValidDate()){
+
+                    //traite la création de reservation
+                    $this->createReservation($basketService, $form, $user, $reservation);
+        
+                    $entityManager->persist($reservation); //prepare
+                    $entityManager->flush(); //execute
     
-                $entityManager->persist($reservation); //prepare
-                $entityManager->flush(); //execute
-
-                //---------------------------------------------------entité booking------------------------------
-
-                $panier = $basketService->getBasket();
-                //traite la création de booking
-                $this->createBooking($panier, $reservation, $entityManager);
-
-                
-                //-----------------------------------------envoie d'un email de confirmation
-                $this->sendConfirmationMail($user, $reservation, $mailer);
-
-                $this->addFlash('success', 'Réservation effectuée');
-                return $this->redirectToRoute('app_home');
-                // return $this->redirectToRoute('app_profil');
+                    //---------------------------------------------------entité booking------------------------------
+    
+                    $panier = $basketService->getBasket();
+                    //traite la création de booking
+                    $this->createBooking($panier, $reservation, $entityManager);
+    
+                    
+                    //-----------------------------------------envoie d'un email de confirmation
+                    $this->sendConfirmationMail($user, $reservation, $mailer);
+    
+                    $roles = $user->getRoles();
+                    array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
+    
+                    $this->addFlash('success', 'Réservation effectuée');
+                    return $this->redirectToRoute('app_home');
+                    // return $this->redirectToRoute('app_profil');
+                } else {
+                    $this->addFlash('error', 'Date invalide');
+                    return $this->redirectToRoute('make_reservation');
+                }
             }
 
         }
