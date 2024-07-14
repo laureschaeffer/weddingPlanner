@@ -217,4 +217,17 @@ class Reservation
     public function __toString(){
         return $this->referenceOrder;
     }
+    
+    //----------------------------------------------------methodes-----------------------------------------
+    //verifie si la date pour récupérer est valide: pas passée et pas plus de 3 mois
+    public function getValidDate() : bool 
+    {
+        $ajd = new \DateTime();
+
+        if($this->datePicking < $ajd || $this->datePicking > $ajd->modify('+3 months')){
+            return false; 
+        } else {
+            return true ;
+        }
+    }
 }
