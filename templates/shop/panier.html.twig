@@ -25,7 +25,7 @@
             <div class="panier">
                 <div class="panier-produit">
                     <figure><img src="{{asset(p.produit.urlPicture)}}" alt="{{p.produit.altPicture}}"></figure>
-                    <p>{{p.produit}} </p>
+                    <p><a href="{{path('show_product', {'id': p.produit.id}) }}">{{p.produit}}</a></p>
                     <p>{{p.produit.price}} €</p>
                 </div>
 
