@@ -56,6 +56,18 @@ class Reservation
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
+
+        //initialise
+        $ajd = new \DateTime();
+        $referenceOrder = uniqid(); //crée un nombre unique aléatoire
+
+        $this->setDateOrder($ajd);
+        $this->setReferenceOrder($referenceOrder);
+        $this->setPrepared(false);
+        $this->setPicked(false); 
+
+        $roles = $this->user->getRoles();
+        array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
     }
 
     public function getId(): ?int
