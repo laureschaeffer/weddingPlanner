@@ -2,74 +2,103 @@
 
 namespace App\Security;
 
-use App\Entity\User; // your user entity
+use App\Repository\UserRepository;
+use App\Entity\User;
+use App\Security\OAuthRegistrationService;
 use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class AbstractOAuthAuthenticator extends OAuth2Authenticator implements AuthenticationEntrypointInterface
+
+abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator 
+// implements AuthenticationEntrypointInterface
 {
-    private readonly ClientRegistry $clientRegistry;
-    private $entityManager;
-    private $router;
+    
     use TargetPathTrait;
     protected string $serviceName = "";
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $entityManager, RouterInterface $router)
+    public function __construct(
+        private ClientRegistry $clientRegistry,
+        private RouterInterface $router,
+        private EntityManagerInterface $entityManager,
+        private readonly UserRepository $repository,
+        private readonly OAuthRegistrationService $registrationService
+        )
     {
         $this->clientRegistry = $clientRegistry;
-        $this->entityManager = $entityManager;
         $this->router = $router;
+        $this->entityManager = $entityManager;
     }
+
+    // public function supports(Request $request): ?bool
+    // {
+       
+    //     return $request->attributes->get("_route") === "oauth_callback";
+    // }
 
     public function supports(Request $request): ?bool
     {
-        // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'auth_oauth_check' && $request->get(key: 'service') === $this->serviceName;
+        if ($request->attributes->get("_route") !== "oauth_callback") {
+            return false;
+        }
+
+        $storedState = $request->getSession()->get('oauth_state');
+        $receivedState = $request->query->get('state');
+
+        if ($storedState !== $receivedState) {
+            throw new \Exception('Invalid state parameter');
+        }
+
+        // Supprimer le state de la session une fois vérifié
+        $request->getSession()->remove('oauth_state');
+
+        return true;
     }
 
-    public function authenticate(Request $request): Passport
+
+    public function authenticate(Request $request): SelfValidatingPassport
     {
-        $client = $this->clientRegistry->getClient('facebook_main');
-        $accessToken = $this->fetchAccessToken($client); //infos users
+        $client = $this->getClient();
+        $accessToken = $this->fetchAccessToken($client);
+
+        $resourceOwner = $this->getResourceOwnerFromCredentials($accessToken);
+        $user = $this->getUserFromResourceOwner($resourceOwner, $this->repository);
+
+        
+        //si l'user n'existe pas, crée son compte
+        if (null === $user) {
+            $user = $this->registrationService->persist($resourceOwner);
+        }
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
-                /** @var GoogleUser $googleUser */
-                $googleUser = $client->fetchUserFromToken($accessToken);
-
-                $email = $googleUser->getEmail();
-
-                // 1) have they logged in with Facebook before? Easy!
-                $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['googleId' => $googleUser->getId()]);
-
-                if ($existingUser) {
-                    return $existingUser;
-                }
-
-                // 2) do we have a matching user by email?
-                $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-
-                // 3) Maybe you just want to "register" them by creating
-                // a User object
-                $user->setGoogleId($googleUser->getId());
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-
-                return $user;
-            })
+            userBadge: new UserBadge($user->getEmail(), fn () => $user),
+            badges: [
+                new RememberMeBadge()
+            ]
         );
+    }
+
+    public function getResourceOwnerFromCredentials(AccessToken $credentials): ResourceOwnerInterface
+    {
+        return $this->getClient()->fetchUserFromToken($credentials);
+    }
+
+    private function getClient(): OAuth2ClientInterface
+    {
+        return $this->clientRegistry->getClient($this->serviceName);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -79,13 +108,12 @@ class AbstractOAuthAuthenticator extends OAuth2Authenticator implements Authenti
         if($targetPath){
             return new RedirectResponse($targetPath);
         }
-        // change "app_homepage" to some route in your app
+        
+
         $targetUrl = $this->router->generate('app_home');
 
         return new RedirectResponse($targetUrl);
     
-        // or, on success, let the request continue to be handled by the controller
-        //return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
@@ -95,15 +123,30 @@ class AbstractOAuthAuthenticator extends OAuth2Authenticator implements Authenti
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
     
-   /**
-     * Called when authentication is needed, but it's not sent.
-     * This redirects to the 'login'.
-     */
+    // public function start(Request $request, AuthenticationException $authException = null): Response
+    // {
+    //     return new RedirectResponse(
+    //         '/connect/', // might be the site, where users choose their oauth provider
+    //         Response::HTTP_TEMPORARY_REDIRECT
+    //     );
+    // }
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
-        return new RedirectResponse(
-            '/connect/', // might be the site, where users choose their oauth provider
-            Response::HTTP_TEMPORARY_REDIRECT
-        );
+        // génére un state unique
+        $state = bin2hex(random_bytes(16));
+        
+        // stocke le state dans la session
+        $request->getSession()->set('oauth_state', $state);
+
+        // url avec le state
+        $authUrl = $this->router->generate('connect_oauth', [
+            'service' => $this->serviceName,
+            'state' => $state
+        ]);
+
+        return new RedirectResponse($authUrl, Response::HTTP_TEMPORARY_REDIRECT);
     }
+
+    abstract protected function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $repository): ?User ;
+    
 }
