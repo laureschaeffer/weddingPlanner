@@ -19,15 +19,15 @@ class Appointment
     private ?User $User = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTime $dateStart = null;
+    private ?\DateTimeInterface $dateStart = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTime $dateEnd = null;
+    private ?\DateTimeInterface $dateEnd = null;
 
     public function __construct()
     {
         //crée une copie indépendante de dateStart pour ne pas la modifier directement
-        $this->setDateEnd((clone $this->dateStart)->modify('+1 hour'));
+        // $this->setDateEnd((clone $this->dateStart)->modify('+1 hour'));
     }
 
     public function getId(): ?int
@@ -48,24 +48,24 @@ class Appointment
         return $this;
     }
 
-    public function getDateStart(): ?\DateTime
+    public function getDateStart(): ?\DateTimeInterface
     {
         return $this->dateStart;
     }
 
-    public function setDateStart(\DateTime $dateStart): static
+    public function setDateStart(\DateTimeInterface $dateStart): static
     {
         $this->dateStart = $dateStart;
 
         return $this;
     }
 
-    public function getDateEnd(): ?\DateTime
+    public function getDateEnd(): ?\DateTimeInterface
     {
         return $this->dateEnd;
     }
 
-    public function setDateEnd(?\DateTime $dateEnd): static
+    public function setDateEnd(?\DateTimeInterface $dateEnd): static
     {
         $this->dateEnd = $dateEnd;
 

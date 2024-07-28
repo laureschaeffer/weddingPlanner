@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prise de rendez-vous{% endblock %}
+{% block meta %}Cérémonie Couture, wedding planner à Strasbourg. Organisation de mariage, boutique avec création de faire parts de mariage personnalisés et autres.{% endblock %}
+
+{% block body %}
+
+<h1>Prise de rendez-vous</h1>
+
+<form action="{{path('create_appointment')}}" method="POST">
+    <label for="appointment">Choisissez une date</label><br>
+    <input type="date" name="appointment" value="{{ "now"|date_modify("+1 day")|date("Y-m-d") }}"><br>
+    {# honeypot #}
+    <input name="firstname" type="text" id="firstname" class="hide-robot">
+    <button type="submit" name="submit">Valider</button>
+</form>
+
+{% endblock %}
