@@ -19,6 +19,21 @@
 CREATE DATABASE IF NOT EXISTS `weddingplanner` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `weddingplanner`;
 
+-- Listage de la structure de table weddingplanner. appointment
+CREATE TABLE IF NOT EXISTS `appointment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `date_start` datetime NOT NULL,
+  `date_end` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_FE38F844A76ED395` (`user_id`),
+  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table weddingplanner.appointment : ~1 rows (environ)
+INSERT IGNORE INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`) VALUES
+	(1, 4, '2024-07-25 15:00:00', '2024-07-25 16:00:00');
+
 -- Listage de la structure de table weddingplanner. batch
 CREATE TABLE IF NOT EXISTS `batch` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -45,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `IDX_E00CEDDEB83297E7` (`reservation_id`),
   CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.booking : ~16 rows (environ)
 INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
@@ -64,7 +79,8 @@ INSERT IGNORE INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) 
 	(15, 3, 17, 2),
 	(16, 3, 18, 2),
 	(17, 2, 19, 1),
-	(18, 2, 20, 1);
+	(18, 2, 20, 1),
+	(19, 3, 21, 1);
 
 -- Listage de la structure de table weddingplanner. budget
 CREATE TABLE IF NOT EXISTS `budget` (
@@ -212,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `FK_D34A04ADF39EBE7A` FOREIGN KEY (`batch_id`) REFERENCES `batch` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.product : ~3 rows (environ)
+-- Listage des données de la table weddingplanner.product : ~4 rows (environ)
 INSERT IGNORE INTO `product` (`id`, `batch_id`, `name`, `price`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Lettre pour carton d\'invitation', 20, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/invitation_card_with_a_ribbon.jpg', 'lettre pour carton d\'invitation'),
 	(2, 4, 'Box soin ', 50, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/pexels-tima-miroshnichenko-7879833.jpg', 'box cadeau, soin pour les mariés'),
@@ -224,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `id` int NOT NULL AUTO_INCREMENT,
   `destination_id` int DEFAULT NULL,
   `budget_id` int DEFAULT NULL,
-  `state_id` int NOT NULL DEFAULT '1',
+  `state_id` int DEFAULT NULL,
   `firstname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `surname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -242,9 +258,9 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE36ABA6B8` FOREIGN KEY (`budget_id`) REFERENCES `budget` (`id`),
   CONSTRAINT `FK_2FB3D0EE5D83CC1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~1 rows (environ)
 INSERT IGNORE INTO `project` (`id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, 1, 1, 2, 'Laure', 'Nom', 'laure@exemple.fr', '0611223344', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000);
 
@@ -279,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   PRIMARY KEY (`id`),
   KEY `IDX_42C84955A76ED395` (`user_id`),
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.reservation : ~15 rows (environ)
 INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
@@ -297,7 +313,8 @@ INSERT IGNORE INTO `reservation` (`id`, `user_id`, `reference_order`, `date_orde
 	(17, 4, '666054bc25692', '2024-06-05 12:06:20', 30, '2024-06-06', 0, 0, 'Laure', 'Test3', '0611223344'),
 	(18, 4, '6660561134070', '2024-06-05 12:12:01', 30, '2024-06-06', 0, 0, 'Laure', 'Test4', '0611223344'),
 	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, '2024-06-07', 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
-	(20, 3, '6661689eec632', '2024-06-06 07:43:26', 50, '2024-06-07', 0, 0, 'Laure', 'Nomdefamille', '0611223344');
+	(20, 3, '6661689eec632', '2024-06-06 07:43:26', 50, '2024-06-07', 0, 0, 'Laure', 'Nomdefamille', '0611223344'),
+	(21, 4, '6698d2b2ba004', '2024-07-18 08:30:40', 15, '2024-08-30', 0, 0, 'Acheteur', 'Acheteur', '0611223344');
 
 -- Listage de la structure de table weddingplanner. state
 CREATE TABLE IF NOT EXISTS `state` (
@@ -334,16 +351,17 @@ CREATE TABLE IF NOT EXISTS `user` (
   `roles` json NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_verified` tinyint(1) NOT NULL,
+  `google_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.user : ~4 rows (environ)
-INSERT IGNORE INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`) VALUES
-	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0),
-	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0),
-	(3, 'test@exemple.fr', 'Test', '["ROLE_SUPERADMIN"]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0),
-	(4, 'person2@exemple.fr', 'Person2', '["ROLE_USER", "ROLE_ACHETEUR"]', '$2y$13$A16IcbMl8dQ5caZGlGfK1eiciuQlkPBfsI62PBmCJh4hbdTTSrPa.', 0);
+INSERT IGNORE INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`, `google_id`) VALUES
+	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0, ''),
+	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0, ''),
+	(3, 'test@exemple.fr', 'Test', '["ROLE_SUPERADMIN"]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0, ''),
+	(4, 'person2@exemple.fr', 'Person2', '["ROLE_USER", "ROLE_ACHETEUR"]', '$2y$13$A16IcbMl8dQ5caZGlGfK1eiciuQlkPBfsI62PBmCJh4hbdTTSrPa.', 0, '');
 
 -- Listage de la structure de table weddingplanner. worker
 CREATE TABLE IF NOT EXISTS `worker` (
