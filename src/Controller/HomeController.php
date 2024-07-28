@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Appointment;
 use App\Entity\Project;
 use App\Entity\Creation;
 use App\Entity\Testimony;
@@ -11,14 +12,13 @@ use App\Form\TestimonyType;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkerRepository;
-use App\Repository\ProjectRepository;
-use App\Repository\CreationRepository;
 use App\Repository\TestimonyRepository;
 use App\Repository\PrestationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends AbstractController
 {
@@ -40,7 +40,7 @@ class HomeController extends AbstractController
 
     //gère le formulaire de contact pour parler d'un projet
     #[Route('/contact', name: 'app_contact')]
-    public function newProject(ProjectRepository $projectRepository, EntityManagerInterface $entityManager, Request $request)
+    public function newProject(EntityManagerInterface $entityManager, Request $request)
     {
         $project = new Project();
 
@@ -66,7 +66,7 @@ class HomeController extends AbstractController
 
     //gère le formulaire d'un utilisateur qui donne son avis
     #[Route('/temoignage', name: 'app_temoignage')]
-    public function newTestimony(TestimonyRepository $testimonyRepository, EntityManagerInterface $entityManager, Request $request){
+    public function newTestimony(EntityManagerInterface $entityManager, Request $request){
 
         $testimony = new Testimony();
 
@@ -90,6 +90,47 @@ class HomeController extends AbstractController
             'form' => $form
         ]);
 
+    }
+
+    // affiche formulaire prise de rendez-vous
+    #[Route('/rendez-vous', name: 'app_rendezvous')]
+    public function showAppointment(){
+
+    
+        return $this->render('home/appointment.html.twig');
+    }
+
+    //crée le rendez-vous
+    #[Route('/rendez-vous/new', name: 'create_appointment')]
+    public function newAppointment(EntityManagerInterface $entityManager, UserInterface $user){
+        if($user){
+            
+            //filtre
+            $dateChoisie = filter_input(INPUT_POST, "appointment", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS); //honey pot field
+        
+            //s'il y a une erreur on redirige
+            if($honeypot){
+                return $this->redirectToRoute('app_home');
+            } else {
+                //crée le rendez-vous
+                $appointment = new Appointment();
+                $appointment->setDateStart($dateChoisie);
+                $appointment->setDateEnd($dateChoisie);
+                $appointment->setUser($user);
+
+                // $entityManager->persist($appointment); //prepare
+                $entityManager->flush(); //execute
+
+                $this->addFlash('success', 'Le rendez-vous a été confirmé');
+                return $this->redirectToRoute('app_home');
+
+            }
+                    
+        } else {
+            $this->addFlash('error', 'Veuillez vous connecter');
+            return $this->redirectToRoute('app_login');
+        }
     }
 
     //-------------------------------------------------------------------------partie EQUIPE------------------------------------------------------------------------
