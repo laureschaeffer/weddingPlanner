@@ -1,7 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'adminBase.html.twig' %}
 
 {% block title %}Prise de rendez-vous{% endblock %}
-{% block meta %}Cérémonie Couture, wedding planner à Strasbourg. Organisation de mariage, boutique avec création de faire parts de mariage personnalisés et autres.{% endblock %}
 
 {% block body %}
 
@@ -9,7 +8,9 @@
 
 <form action="{{path('create_appointment')}}" method="POST">
     <label for="appointment">Choisissez une date</label><br>
-    <input type="date" name="appointment" value="{{ "now"|date_modify("+1 day")|date("Y-m-d") }}"><br>
+    {# choisit la date avec comme valeur par defaut demain meme heure, min demain meme heure et max dans 2 mois #}
+    <input type="datetime-local" name="appointment" value="{{ "now"|date_modify("+1 day")|date("Y-m-d H:i") }}" min="{{ "now"|date_modify("+1 day")|date("Y-m-d H:i") }}"
+    max="{{ "now"|date_modify("+2 months")|date("Y-m-d H:i") }}"><br>
     {# honeypot #}
     <input name="firstname" type="text" id="firstname" class="hide-robot">
     <button type="submit" name="submit">Valider</button>

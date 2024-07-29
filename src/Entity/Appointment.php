@@ -26,8 +26,6 @@ class Appointment
 
     public function __construct()
     {
-        //crée une copie indépendante de dateStart pour ne pas la modifier directement
-        // $this->setDateEnd((clone $this->dateStart)->modify('+1 hour'));
     }
 
     public function getId(): ?int

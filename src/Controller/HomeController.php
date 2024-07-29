@@ -92,46 +92,6 @@ class HomeController extends AbstractController
 
     }
 
-    // affiche formulaire prise de rendez-vous
-    #[Route('/rendez-vous', name: 'app_rendezvous')]
-    public function showAppointment(){
-
-    
-        return $this->render('home/appointment.html.twig');
-    }
-
-    //crée le rendez-vous
-    #[Route('/rendez-vous/new', name: 'create_appointment')]
-    public function newAppointment(EntityManagerInterface $entityManager, UserInterface $user){
-        if($user){
-            
-            //filtre
-            $dateChoisie = filter_input(INPUT_POST, "appointment", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS); //honey pot field
-        
-            //s'il y a une erreur on redirige
-            if($honeypot){
-                return $this->redirectToRoute('app_home');
-            } else {
-                //crée le rendez-vous
-                $appointment = new Appointment();
-                $appointment->setDateStart($dateChoisie);
-                $appointment->setDateEnd($dateChoisie);
-                $appointment->setUser($user);
-
-                // $entityManager->persist($appointment); //prepare
-                $entityManager->flush(); //execute
-
-                $this->addFlash('success', 'Le rendez-vous a été confirmé');
-                return $this->redirectToRoute('app_home');
-
-            }
-                    
-        } else {
-            $this->addFlash('error', 'Veuillez vous connecter');
-            return $this->redirectToRoute('app_login');
-        }
-    }
 
     //-------------------------------------------------------------------------partie EQUIPE------------------------------------------------------------------------
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Testimony;
+use App\Entity\Appointment;
 use App\Entity\Reservation;
 use App\Form\ReservationEditType;
 use Symfony\Component\Mime\Address;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
@@ -219,5 +221,49 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_commande');
         }
 
+    }
+
+    //-------------------------------------------------------------------------partie RENDEZ-VOUS ------------------------------------------------------------------------
+
+    // affiche formulaire prise de rendez-vous
+    #[Route('/coiffe/rendez-vous', name: 'app_rendezvous')]
+    public function showAppointment(){
+
+    
+        return $this->render('home/appointment.html.twig');
+    }
+
+    //crée le rendez-vous
+    #[Route('/coiffe/rendez-vous/new', name: 'create_appointment')]
+    public function newAppointment(EntityManagerInterface $entityManager, UserInterface $user){
+            
+        //filtre
+        $dateChoisie = filter_input(INPUT_POST, "appointment", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS); //honey pot field
+    
+        //s'il y a une erreur on redirige
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        } else {
+            //crée le rendez-vous
+            $appointment = new Appointment();
+            //convertit en DateTime puis DateTimeInterface
+            $dateChoisie = new \DateTime();
+            $dateChoisie = \DateTime::createFromInterface($dateChoisie);
+
+            //crée une copie indépendante de dateStart pour ne pas la modifier directement, partant du principe qu'un rdv dure une heure
+            $dateEnd = clone $dateChoisie->modify('+1 hour');
+            $appointment->setDateStart($dateChoisie);
+            $appointment->setDateEnd($dateEnd);
+            $appointment->setUser($user);
+
+            $entityManager->persist($appointment); //prepare
+            $entityManager->flush(); //execute
+
+            $this->addFlash('success', 'Le rendez-vous a été confirmé');
+            return $this->redirectToRoute('app_home');
+
+        }
+        
     }
 }
