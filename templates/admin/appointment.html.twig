@@ -4,16 +4,42 @@
 
 {% block body %}
 
-<h1>Prise de rendez-vous</h1>
 
-<form action="{{path('create_appointment')}}" method="POST">
-    <label for="appointment">Choisissez une date</label><br>
-    {# choisit la date avec comme valeur par defaut demain meme heure, min demain meme heure et max dans 2 mois #}
-    <input type="datetime-local" name="appointment" value="{{ "now"|date_modify("+1 day")|date("Y-m-d H:i") }}" min="{{ "now"|date_modify("+1 day")|date("Y-m-d H:i") }}"
-    max="{{ "now"|date_modify("+2 months")|date("Y-m-d H:i") }}"><br>
-    {# honeypot #}
-    <input name="firstname" type="text" id="firstname" class="hide-robot">
-    <button type="submit" name="submit">Valider</button>
-</form>
+<div id="calendar-holder"></div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const calendarEl = document.getElementById('calendar-holder');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                editable: true,
+                eventSources: [
+                    {
+                        url: "{{ path('fc_load_events') }}",
+                        method: 'POST',
+                        extraParams: {
+                            filters: JSON.stringify({})
+                        },
+                        failure: () => {
+                            // alert('There was an error while fetching FullCalendar!');
+                        },
+                    },
+                ],
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                },
+                timeZone: 'UTC',
+            });
+
+            calendar.render();
+        });
+    </script>
 {% endblock %}
