@@ -22,7 +22,7 @@ class Project
     #[ORM\Column(length: 100)]
     private ?string $surname = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable:true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 20)]
@@ -70,6 +70,9 @@ class Project
     #[ORM\JoinColumn(nullable: true)]
     // #[ORM\JoinColumn(nullable: false)]
     private ?State $state = null;
+
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -291,6 +294,18 @@ class Project
     {
         $this->state = $state;
         
+        return $this;
+    }
+    
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
         return $this;
     }
     
