@@ -66,8 +66,6 @@ class Reservation
         $this->setPrepared(false);
         $this->setPicked(false); 
 
-        $roles = $this->user->getRoles();
-        array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
     }
 
     public function getId(): ?int
@@ -232,12 +230,15 @@ class Reservation
     
     //----------------------------------------------------methodes-----------------------------------------
     //verifie si la date pour récupérer est valide: pas passée et pas plus de 3 mois
-    public function getValidDate() : bool 
+    public function getValidDate() : bool
     {
-        $ajd = new \DateTime();
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $ajd = new \DateTime('now', $timezone);
+        $dateMax = clone $ajd; //crée une version indépendante
+        $dateMax->modify('+3 months');
 
-        if($this->datePicking < $ajd || $this->datePicking > $ajd->modify('+3 months')){
-            return false; 
+        if($this->datePicking < $ajd || $this->datePicking > $dateMax){
+            return $ajd; 
         } else {
             return true ;
         }

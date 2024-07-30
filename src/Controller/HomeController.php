@@ -51,11 +51,19 @@ class HomeController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $project=$form->getData();
 
-            $entityManager->persist($project); //prepare
-            $entityManager->flush(); //execute
+            //si la date de l'evenement n'est pas dépassée
+            if($project->isDateValid()){
+                $entityManager->persist($project); //prepare
+                $entityManager->flush(); //execute
+    
+                $this->addFlash('success', 'Demande envoyée');
+                return $this->redirectToRoute('app_home');
+                
+            } else {
+                $this->addFlash('error', 'La date de l\'évenement est dépassée!');
+                return $this->redirectToRoute('app_contact');
+            }
 
-            //msg flash
-            return $this->redirectToRoute('app_home');
         }
 
         //vue du formulaire

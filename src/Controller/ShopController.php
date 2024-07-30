@@ -13,10 +13,7 @@ use App\Service\BasketService;
 use App\Repository\BatchRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProductRepository;
-use App\Repository\ReservationRepository;
-use Symfony\Component\Mime\Part\File;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -154,8 +151,8 @@ class ShopController extends AbstractController
     //traite la création de réservation avec le formulaire, factorisation de la fonction makeReservation
     public function createReservation(BasketService $basketService, UserInterface $user, $reservation){
         
-        //récupère les données du formulaire 
-        // $reservation = $form->getData();
+        $roles = $user->getRoles();
+        array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
 
         //remplit à la main car pas demandé dans le formulaire, remplit par l'utilisateur connecté
         $reservation->setUser($user); 

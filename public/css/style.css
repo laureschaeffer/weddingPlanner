@@ -295,6 +295,7 @@ footer p, footer a{
 
 .home-prestation-card h3{
     padding: var(--big-padding) 0;
+    text-align: center;
 }
 
 .home-prestation-card-content{
@@ -855,9 +856,18 @@ small{
         flex-direction: column;
     }
 
+    /* padding  */
+    #home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, .home-prestation-card-content{
+        padding: 5px;
+    }
+
     #home-intro p{
         padding: var(--padding-tel);
         text-align: center;
+    }
+
+    #home-presentation{
+        gap: var(--padding-tel);
     }
 
     .home-prestation-card{

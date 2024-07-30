@@ -78,6 +78,11 @@ class Project
     {
         $this->prestations = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        //initialise
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateAjd = new \DateTime('now', $timezone);
+        $this->dateReceipt = \DateTime::createFromInterface($dateAjd);
+        $this->setContacted(false);
     }
 
     public function getId(): ?int
@@ -311,5 +316,18 @@ class Project
     
     public function __toString(){
         return $this->firstname . " " . $this->surname;
+    }
+
+    //verifie si la date est valide: pas dépassée
+    public function isDateValid() : bool 
+    {
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $ajd = new \DateTime('now', $timezone);
+
+        if($this->dateEvent < $ajd){
+            return false; 
+        } else {
+            return true ;
+        }
     }
 }

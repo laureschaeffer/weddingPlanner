@@ -255,7 +255,8 @@ class AdminController extends AbstractController
             $dateChoisie = \DateTime::createFromInterface($dateChoisie);
 
             //crée une copie indépendante de dateStart pour ne pas la modifier directement, partant du principe qu'un rdv dure une heure
-            $dateEnd = clone $dateChoisie->modify('+1 hour');
+            $dateEnd = clone $dateChoisie;
+            $dateEnd->modify('+1 hour');
             $appointment->setDateStart($dateChoisie);
             $appointment->setDateEnd($dateEnd);
             $appointment->setUser($user);

@@ -40,7 +40,7 @@ class DeleteOldProjectsCommand extends Command
 
         $this->entityManager->flush();
 
-        $output->writeln('Les projets datant de plus de 2 ans ont été supprimées.');
+        $output->writeln('Les projets datant de plus de 2 ans ont été supprimés.');
 
         return Command::SUCCESS;
     }

@@ -51,8 +51,6 @@ class ProjectController extends AbstractController
 
                 $comment->setProject($project); //remplit par le projet où se trouve l'utilisateur
                 $comment->setUser($user); //remplit par l'utilisateur connecté
-                $ajd = new \DateTime();
-                $comment->setDatePost($ajd); 
     
                 $entityManager->persist($comment); //prepare
                 $entityManager->flush(); //execute

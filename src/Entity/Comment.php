@@ -28,6 +28,14 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    public function __construct()
+    {
+        //initialise
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateAjd = new \DateTime('now', $timezone);
+        $this->datePost = \DateTime::createFromInterface($dateAjd);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
