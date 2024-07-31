@@ -21,6 +21,9 @@
           .th-right{
             text-align: right;
           }
+          img{
+            text-align: center;
+          }
     </style>
     <h1>Devis pour projet de mariage</h1>
 
@@ -39,6 +42,11 @@
         </tr>
         <tr>
           <td>ceremonie-couture@exemple.fr</td>
+          {% if project.email %}
+            <td class="th-right">{{project.email}}</td>
+            {% else %}
+            <td class="th-right">{{project.user.email}}</td>
+          {% endif %}
           <td class="th-right">{{project.email}}</td>
         </tr>
       </table>
@@ -61,9 +69,13 @@
         <p>{{comment}}</p>
     {% endfor %}
 
-    <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
+    {% if project.finalPrice %}
+      <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
+    {% endif %}
 
-    {# <img src="{{ asset('img/logo/logo-noncropped.png') }}" width="150px" height="150px" alt="ceremonie couture logo"> #}
+
+    <br><hr>
+    <img src="data:image/png;base64,{{ imageData }}" width="250px" height="250px" alt="ceremonie couture logo">
 
 
 </body>

@@ -169,12 +169,18 @@ class ProjectController extends AbstractController
 
     //crée un pdf devis
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevisPdf(Project $project = null, PdfService $pdfService){
 
+    public function createDevisPdf(Project $project = null, PdfService $pdfService){
         if($project){
+            //gere l'image
+            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
+            $imageData = base64_encode(file_get_contents($imagePath)); //encode
             
-            $html =  $this->renderView('pdf/devis.html.twig', ["project" => $project]);
-            //showPdf attend en argument quel html va être utilisé
+            $html = $this->renderView('pdf/devis.html.twig', [
+                "project" => $project,
+                "imageData" => $imageData
+            ]);
+            
             $domPdf = $pdfService->showPdf($html);
             
             $domPdf->stream("devis.pdf", array('Attachment' => 0));
