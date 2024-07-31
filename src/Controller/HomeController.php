@@ -3,7 +3,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Appointment;
 use App\Entity\Project;
 use App\Entity\Creation;
 use App\Entity\Testimony;
@@ -14,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\WorkerRepository;
 use App\Repository\TestimonyRepository;
 use App\Repository\PrestationRepository;
+use App\Repository\StateRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -40,28 +40,37 @@ class HomeController extends AbstractController
 
     //gère le formulaire de contact pour parler d'un projet
     #[Route('/contact', name: 'app_contact')]
-    public function newProject(EntityManagerInterface $entityManager, Request $request)
+    public function newProject(EntityManagerInterface $entityManager, Request $request, UserInterface $user, StateRepository $stateRepository)
     {
-        $project = new Project();
+        //si l'utilisateur est connecté
+        if($user){
+            $project = new Project();
+            $project->setUser($user);
 
-        //crée le formulaire
-        $form = $this->createForm(ProjectType::class, $project);
-        $form->handleRequest($request); 
-
-        if($form->isSubmitted() && $form->isValid()){
-            $project=$form->getData();
-
-            //si la date de l'evenement n'est pas dépassée
-            if($project->isDateValid()){
-                $entityManager->persist($project); //prepare
-                $entityManager->flush(); //execute
+            //initialise
+            $stateEnCours = $stateRepository->findOneBy(['id' => 1]);
+            $project->setState($stateEnCours);
     
-                $this->addFlash('success', 'Demande envoyée');
-                return $this->redirectToRoute('app_home');
-                
-            } else {
-                $this->addFlash('error', 'La date de l\'évenement est dépassée!');
-                return $this->redirectToRoute('app_contact');
+            //crée le formulaire
+            $form = $this->createForm(ProjectType::class, $project);
+            $form->handleRequest($request); 
+    
+            if($form->isSubmitted() && $form->isValid()){
+                $project=$form->getData();
+    
+                //si la date de l'evenement n'est pas dépassée
+                if($project->isDateValid()){
+                    $entityManager->persist($project); //prepare
+                    $entityManager->flush(); //execute
+        
+                    $this->addFlash('success', 'Demande envoyée');
+                    return $this->redirectToRoute('app_home');
+                    
+                } else {
+                    $this->addFlash('error', 'La date de l\'évenement est dépassée!');
+                    return $this->redirectToRoute('app_contact');
+                }
+    
             }
 
         }

@@ -38,7 +38,8 @@ class ProjectType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-col'
                 ],
-                'label' => 'Email'
+                'label' => 'Email',
+                'required' => false
             ])
             ->add('telephone', TelType::class, [
                 'row_attr' => [
