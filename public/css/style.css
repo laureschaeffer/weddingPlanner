@@ -337,6 +337,11 @@ footer p, footer a{
     font-size: var(--subtitle-font-size);
 }
 
+.avis-card-header{
+    display: flex;
+    justify-content: space-between;
+}
+
 .avis-card-header p{
     color: var(--burgundy-color);
     font-family: var(--title-font);

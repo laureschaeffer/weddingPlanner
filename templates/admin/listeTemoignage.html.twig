@@ -3,7 +3,7 @@
 {% block title %}Pannel admin{% endblock %}
 
 {% block body %}
-
+{% dump(avisPublies) %}
 <h1>Vérifier les avis</h1>
 
 <p>Vous pouvez choisir maximum 5 avis qui seront publiés</p>
@@ -12,6 +12,7 @@
 
 {% for ap in avisPublies %}
     <p>{{ap}} <a href="{{path('change_avis', {'id': ap.id})}}"><i class="fa-solid fa-minus"></i></a> </p>
+    <p> {{ap.dateReceipt | date("d-m-Y")}} </p>
     <p>{{ap.description}}</p>
 {% endfor %}
 
@@ -20,6 +21,7 @@
 
 {% for anp in avisNonPublies %}
     <p>{{anp}}  <a href="{{path('change_avis', {'id': anp.id})}}"><i class="fa-solid fa-plus"></i></a> </p>
+    <p> {{anp.dateReceipt | date("d-m-Y")}} </p>
     <p>{{anp.description}}</p>
     <p><a href="{{path('remove_avis', {'id': anp.id})}}">Supprimer définitivement</a></p>
 {% endfor %}

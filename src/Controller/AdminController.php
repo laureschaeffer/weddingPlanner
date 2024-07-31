@@ -40,8 +40,8 @@ class AdminController extends AbstractController
     public function listTestimony(TestimonyRepository $testimonyRepository): Response
     {
         //liste des avis publiés ou non publiés
-        $avisPublies = $testimonyRepository->findBy(['isPublished' => 1]);
-        $avisNonPublies = $testimonyRepository->findBy(['isPublished' => 0]);
+        $avisPublies = $testimonyRepository->findBy(['isPublished' => 1], ['dateReceipt' => 'DESC']);
+        $avisNonPublies = $testimonyRepository->findBy(['isPublished' => 0], ['dateReceipt' => 'DESC']);
 
         return $this->render('admin/listeTemoignage.html.twig', [
             'avisPublies' => $avisPublies,

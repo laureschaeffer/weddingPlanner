@@ -23,6 +23,18 @@ class Testimony
     #[ORM\Column(nullable: true)]
     private ?bool $isPublished = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateReceipt = null;
+
+    public function __construct()
+    {
+        //initialise
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateAjd = new \DateTime('now', $timezone);
+        $this->dateReceipt = \DateTime::createFromInterface($dateAjd);
+        $this->setPublished(false);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +73,19 @@ class Testimony
     {
         $this->isPublished = $isPublished;
 
+        return $this;
+    }
+
+    
+    public function getDateReceipt(): ?\DateTimeInterface
+    {
+        return $this->dateReceipt;
+    }
+    
+    public function setDateReceipt(\DateTimeInterface $dateReceipt): static
+    {
+        $this->dateReceipt = $dateReceipt;
+        
         return $this;
     }
 

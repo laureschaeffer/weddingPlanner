@@ -88,7 +88,7 @@ class HomeController extends AbstractController
             $entityManager->persist($testimony); //prepare
             $entityManager->flush(); //execute
 
-            //msg flash
+            $this->addFlash('success', 'Témoignage envoyé');
             return $this->redirectToRoute('app_home');
 
         }
