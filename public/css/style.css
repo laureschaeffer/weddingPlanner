@@ -131,7 +131,7 @@ textarea{
 }
 
 /* --------separation des sections  */
-#home-intro, #home-presentation, #home-avis, #home-prestation, #home-service{
+#home-intro, #home-presentation, #home-contact, #home-prestation, #home-service{
     margin-bottom: var(--escape-padding);
 }
 
@@ -239,7 +239,32 @@ footer p, footer a{
     height: 1rem;
   }
   
-  
+/*=============== SCROLL UP ===============*/
+
+.scrollup{
+    position: fixed;
+    right: 1rem;
+    bottom: -50%;
+    background-color: black;
+    color: white;
+    box-shadow: 0 12px 24px hsla(228, 48%, 4%, .5);
+    display: inline-flex;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    transition: bottom .4s, transform .4s;
+    border-radius: 50%;
+    text-decoration: none;
+    }
+    
+    .scrollup:hover{
+    transform: translateY(-.5rem);
+    }
+    
+    /* Show Scroll Up */
+    
+    .show-scroll{
+    bottom: 4rem;
+    }
 
 
 /* ============================================================================landing page======================================================================= */
@@ -273,7 +298,6 @@ footer p, footer a{
 
 /* ------3 cards proposition, evjf, organisation----------- */
 
-
 .home-prestation-card{
     display: flex;
     align-items: center;
@@ -284,8 +308,12 @@ footer p, footer a{
 .home-prestation-card:nth-child(even){
     flex-direction: row-reverse;
 }
+.home-prestation-card:nth-child(even) p{
+    text-align: left;
+
+}
 .home-prestation-card p{
-    text-align: center;
+    text-align: right;
 }
 
 .home-prestation-card img{
@@ -538,6 +566,7 @@ small{
     display: flex;
     justify-content: space-between;
     padding: var(--main-padding);
+    align-items: center;
 }
 
 
@@ -554,6 +583,11 @@ small{
 .basket-qtt-nb{
     font-size: 1.5rem;
     padding: 0 var(--small-padding);
+}
+
+.basket-soustotal{
+    display: flex;
+    flex-direction: column;
 }
 
 

@@ -105,6 +105,17 @@
 
 </section>
 
+{# ---------------------------------------------------contact--------------------------------------- #}
+
+<div id="home-contact">
+    {# <p>Prêts à commencer votre aventure avec nous ? Contactez Cérémonie Couture dès aujourd'hui pour discuter de vos idées et commencer à <strong>planifier le mariage</strong> de vos rêves. Ensemble, créons une cérémonie qui sera gravée dans votre mémoire pour toujours.
+    </p> #}
+    <figure>
+        <img src="{{asset('img/accueil/contact-bg.jpg')}}" alt="image d'étincelle">
+        <a href="{{ path('app_contact') }}" class="btn-contact"><button>On en discute ensemble?</button></a>
+    </figure>
+    
+</div>
 
 {# -----------------------------------------------------avis----------------------------------------- #}
 
@@ -125,15 +136,4 @@
     <a href="{{ path('app_temoignage') }}"><button class="btn-avis">Donner son avis</button></a>
 </section>
 
-{# ---------------------------------------------------contact--------------------------------------- #}
-
-<div id="home-contact">
-    {# <p>Prêts à commencer votre aventure avec nous ? Contactez Cérémonie Couture dès aujourd'hui pour discuter de vos idées et commencer à <strong>planifier le mariage</strong> de vos rêves. Ensemble, créons une cérémonie qui sera gravée dans votre mémoire pour toujours.
-    </p> #}
-    <figure>
-        <img src="{{asset('img/accueil/contact-bg.jpg')}}" alt="image d'étincelle">
-        <a href="{{ path('app_contact') }}" class="btn-contact"><button>On en discute ensemble?</button></a>
-    </figure>
-    
-</div>
 {% endblock %}
