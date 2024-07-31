@@ -10,6 +10,7 @@
 <section id="contact">
 
     <h2>Parlons de votre projet</h2>
+    <p>Pour un meilleur suivi de projet, si ce n'est pas déjà fait veuillez créer un compte ou vous connecter <a href="{{path('app_login')}}">ici</a> </p>
 
     <div id="contact-form">
 
@@ -19,6 +20,7 @@
             {{ form_row(form.firstname) }}
             {{ form_row(form.surname) }}
         </div>
+        <p>Remplir l'email de contact si différent de votre compte utilisateur</p>
         <div class="form-flex">
             {{ form_row(form.email) }}
             {{ form_row(form.telephone) }}

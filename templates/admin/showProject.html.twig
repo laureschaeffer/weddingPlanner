@@ -35,7 +35,12 @@
             </div>
             <div class="projet-entete-flex">
                 <p> {{project.telephone }} </p>
-                <p> {{project.email}} </p>
+                {# s'il y a email c'est que l'user prefere etre contacté par celui donné dans le form plutot que celui du compte utilisateur #}
+                {% if project.email %}
+                    <p> {{project.email}} </p>
+                    {% else %}
+                    <p>{{project.user.email}}</p>
+                {% endif %}
             </div>
         </div>
 
@@ -156,8 +161,8 @@
     {# genere un pdf  #}
     <button><a href="{{path('create_devis', {'id': project.id})}}" target="_blank">Devis</a></button>
 
-    <h4>Prendre rendez-vous avec le client</h4>
-    <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p>
+    {# <h4>Prendre rendez-vous avec le client</h4>
+    <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p> #}
 
 </section>
 
