@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\Column(length: 255)]
-    private ?string $google_id = null;
+    private ?bool $googleUser = null;
 
     /**
      * @var Collection<int, Appointment>
@@ -255,14 +255,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getGoogleId(): ?string
+    public function getGoogleUser(): ?bool
     {
-        return $this->google_id;
+        return $this->googleUser;
     }
 
-    public function setGoogleId(string $google_id): static
+    public function setGoogleUser(bool $googleUser): static
     {
-        $this->google_id = $google_id;
+        $this->googleUser = $googleUser;
 
         return $this;
     }

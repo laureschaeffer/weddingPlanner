@@ -21,41 +21,15 @@ class SecurityController extends AbstractController
         'google' => []
     ];
 
-    // #[Route(path: '/oauth/connect/{service}', name: 'auth_oauth_connect')]
-    // public function connect(string $service, ClientRegistry $clientRegistry): RedirectResponse
-    // {
-
-    //     //si le service auquel l'utilisateur essaye de se connecter existe
-    //     //condition indispensable, sinon la méthode redirect envoie une exception qui empeche définitivement de se reconnecter
-    //     if( ! in_array($service, array_keys(array: self::SCOPES), strict: true)){
-    //         throw $this->createNotFoundException();
-    //     }
-
-    //     return $clientRegistry
-    //     ->getClient($service)
-    //     ->redirect(self::SCOPES[$service], []);
-        
-    // }
-
-    #[Route(path: '/oauth/connect/{service}', name: 'auth_oauth_connect')]
-    public function connect(string $service, ClientRegistry $clientRegistry, SessionInterface $session ): RedirectResponse
+    #[Route(path: '/connect/google', name: 'auth_oauth_connect')]
+    public function connect(ClientRegistry $clientRegistry)
     {
-        // si le service est valide
-        if (!in_array($service, array_keys(self::SCOPES), strict: true)) {
-            throw $this->createNotFoundException();
-        }
 
-        // génère un state unique
-        $state = bin2hex(random_bytes(16));
-        
-        // stock le state dans la session
-        $session->set('oauth_state', $state);
 
         return $clientRegistry
-            ->getClient($service)
-            ->redirect(self::SCOPES[$service], ['state' => $state]);
+            ->getClient('google')
+            ->redirect([], []);
     }
-    
 
     #[Route('/oauth/check/{service}', name: 'auth_oauth_check')]
     public function check(): Response
