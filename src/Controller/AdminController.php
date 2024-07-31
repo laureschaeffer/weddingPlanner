@@ -9,18 +9,14 @@ use App\Form\ReservationEditType;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
 use App\Repository\TestimonyRepository;
-use CalendarBundle\Event\CalendarEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\AppointmentRepository;
 use App\Repository\ReservationRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
