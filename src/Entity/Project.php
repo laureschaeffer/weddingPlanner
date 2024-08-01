@@ -74,6 +74,12 @@ class Project
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Quotation>
+     */
+    #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'project')]
+    private Collection $quotations;
+
     public function __construct()
     {
         $this->prestations = new ArrayCollection();
@@ -83,6 +89,7 @@ class Project
         $dateAjd = new \DateTime('now', $timezone);
         $this->dateReceipt = \DateTime::createFromInterface($dateAjd);
         $this->setContacted(false);
+        $this->quotations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -329,5 +336,35 @@ class Project
         } else {
             return true ;
         }
+    }
+
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotations(): Collection
+    {
+        return $this->quotations;
+    }
+
+    public function addQuotation(Quotation $quotation): static
+    {
+        if (!$this->quotations->contains($quotation)) {
+            $this->quotations->add($quotation);
+            $quotation->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotations->removeElement($quotation)) {
+            // set the owning side to null (unless already changed)
+            if ($quotation->getProject() === $this) {
+                $quotation->setProject(null);
+            }
+        }
+
+        return $this;
     }
 }
