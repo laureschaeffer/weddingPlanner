@@ -7,19 +7,23 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %} #}
 
-    <h1>S'inscrire</h1>
+    <section id="login">
 
-    {{ form_errors(registrationForm) }}
+        <h1>S'inscrire</h1>
+    
+        {{ form_errors(registrationForm) }}
+    
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.pseudo) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+            {{ form_row(registrationForm.Valider) }}
+    
+        {{ form_end(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.pseudo) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-        {{ form_row(registrationForm.Valider) }}
-
-    {{ form_end(registrationForm) }}
+    </section>
 
 {% endblock %}
