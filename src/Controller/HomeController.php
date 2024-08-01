@@ -18,12 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends AbstractController
 {
 
-    //-------------------------------------------------------------------------page d'accueil------------------------------------------------------------------------
+    //--------------------------------------------------------page d'accueil------------------------------------------------------------
 
     //accueil
     #[Route('/', name: 'app_home')]
@@ -40,23 +39,27 @@ class HomeController extends AbstractController
 
     //gère le formulaire de contact pour parler d'un projet
     #[Route('/contact', name: 'app_contact')]
-    public function newProject(EntityManagerInterface $entityManager, Request $request, UserInterface $user, StateRepository $stateRepository)
+    public function newProject(EntityManagerInterface $entityManager, Request $request, StateRepository $stateRepository)
     {
-        //si l'utilisateur est connecté
-        if($user){
-            $project = new Project();
-            $project->setUser($user);
+        $user = $this->getUser();
+                
+        $project = new Project();
+        
 
-            //initialise
-            $stateEnCours = $stateRepository->findOneBy(['id' => 1]);
-            $project->setState($stateEnCours);
+        //crée le formulaire
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request); 
     
-            //crée le formulaire
-            $form = $this->createForm(ProjectType::class, $project);
-            $form->handleRequest($request); 
-    
-            if($form->isSubmitted() && $form->isValid()){
+        if($form->isSubmitted() && $form->isValid()){
+
+            //si l'utilisateur est connecté
+            if($user){
                 $project=$form->getData();
+                
+                //initialise
+                $project->setUser($user);
+                $stateEnCours = $stateRepository->findOneBy(['id' => 1]);
+                $project->setState($stateEnCours);
     
                 //si la date de l'evenement n'est pas dépassée
                 if($project->isDateValid()){
@@ -71,6 +74,9 @@ class HomeController extends AbstractController
                     return $this->redirectToRoute('app_contact');
                 }
     
+            } else {
+                $this->addFlash('error', 'Veuillez vous connecter');
+                return $this->redirectToRoute('app_contact');
             }
 
         }
