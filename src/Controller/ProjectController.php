@@ -1,5 +1,5 @@
 <?php
-//----------------------------------------------------pannel admin qui gere exclusivement la partie suivi de projet-------------------------------------------------------
+//----------------------------------------- gere la partie suivi de projet----------------------------------------------------
 
 namespace App\Controller;
 
@@ -11,11 +11,14 @@ use App\Service\PdfService;
 use App\Repository\StateRepository;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
 
 class ProjectController extends AbstractController
 {
@@ -235,17 +238,32 @@ class ProjectController extends AbstractController
 
     //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository){
+    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer){
         if($project){
             //il faut absolument avoir établi un prix final
             if($project->getFinalPrice() ==! NULL){
-                //enregistre dans la bdd
+                //----enregistre dans la bdd
                 $this->createQuotationBdd($project, $entityManager);
     
-                //change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
+                //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
                 $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
                 $project->setState($stateEnAttente);
                 $entityManager->persist($project);
+
+                //----envoie d'un mail
+                $emailContact = $project->getEmail()==! NULL ? $project->getEmail() : $project->getUser()->getEmail();
+                $email = (new TemplatedEmail())
+                ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                ->to($emailContact)
+                ->subject('Vous avez reçu un devis')
+
+                ->context([
+                    'project' => $project
+                ])
+                ->htmlTemplate('email/informationDevis.html.twig')
+                ;
+
+                $mailer->send($email);
     
     
                 $entityManager->flush(); //execute
