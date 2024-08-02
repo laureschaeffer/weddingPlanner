@@ -155,7 +155,7 @@
             {% else %}
                 <p>Un devis a été généré par l'entreprise!</p>
                 {% for quot in project.quotations %}
-                    <a href="#">
+                    <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank">
                         <button>
                             Télécharger le devis
                         </button>

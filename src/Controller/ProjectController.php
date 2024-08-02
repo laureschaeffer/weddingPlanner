@@ -196,6 +196,32 @@ class ProjectController extends AbstractController
         }
     }
 
+    //devis final (pour le client)
+    #[Route('/devisFinal/{id}', name: 'show_devis')]
+    public function showDevis(Quotation $quotation = null, PdfService $pdfService){
+        if($quotation){
+            //gere l'image
+            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
+            $imageData = base64_encode(file_get_contents($imagePath)); //encode
+
+            //projet associé au devis
+            $project = $quotation->getProject();
+            
+            $html = $this->renderView('pdf/devisFinal.html.twig', [
+                "project" => $project,
+                'quotation' => $quotation,
+                "imageData" => $imageData
+            ]);
+            
+            $domPdf = $pdfService->showPdf($html);
+            
+            $domPdf->stream("devis.pdf", array('Attachment' => 0));
+            return new Response('', 200, [
+                    'Content-Type' => 'application/pdf',
+            ]);
+        }  
+    }
+
 
     //enregistre le devis en base de donnée, factorisation de la fonction CreateDevis
     public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager){
@@ -205,18 +231,31 @@ class ProjectController extends AbstractController
         $quotation->setProject($project);
 
         $entityManager->persist($quotation); //prepare
-        $entityManager->flush(); //execute
     }
 
     //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevis(Project $project = null, EntityManagerInterface $entityManager){
+    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository){
         if($project){
-            //enregistre dans la bdd
-            $this->createQuotationBdd($project, $entityManager);
-
-            $this->addFlash('success', 'Devis enregistré');
-            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+            //il faut absolument avoir établi un prix final
+            if($project->getFinalPrice() ==! NULL){
+                //enregistre dans la bdd
+                $this->createQuotationBdd($project, $entityManager);
+    
+                //change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
+                $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
+                $project->setState($stateEnAttente);
+                $entityManager->persist($project);
+    
+    
+                $entityManager->flush(); //execute
+    
+                $this->addFlash('success', 'Devis enregistré');
+                return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+            } else {
+                $this->addFlash('error', 'Veuillez fixer un prix final !');
+                return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+            }
         }
 
 

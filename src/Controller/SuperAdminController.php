@@ -15,34 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SuperAdminController extends AbstractController
 {
 
-    //----------------------------------------------partie demandes de contact--------------------------------
-
-    //change l'etat de la demande de contact: en cours, refusé, accepté
-    #[Route('/super-coiffe/changeProjet/{id}', name: 'change_projet')]
-    public function changeProjectState(EntityManagerInterface $entityManager, Project $project = null, StateRepository $stateRepository, Request $request){
-
-       if($project){
-        //recupere l'id de l'état dans le formulaire
-        $idState = filter_input(INPUT_POST, 'state', FILTER_VALIDATE_INT);
-        // $idState = $request->request->get('state');
-        $state = $stateRepository->findOneBy(['id' => $idState]);
-
-        //change l'etat de projet
-        $project->setState($state);
-
-        $entityManager->persist($project);
-        $entityManager->flush();
-
-
-        $this->addFlash('success', 'Statut de la demande changé');
-        return $this->redirectToRoute('show_projet', ['id'=>$project->getId()]);
-        
-       } else {
-        $this->addFlash('error', 'Ce projet n\'existe pas');
-        return $this->redirectToRoute('app_projet');
-       }
-
-    }
 
     //----------------------------------------------partie utilisateurs--------------------------------
     
