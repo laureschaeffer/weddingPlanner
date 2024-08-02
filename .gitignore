@@ -25,3 +25,6 @@
 ###< symfony/asset-mapper ###
 
 node_modules
+
+# upload pdf
+public/upload/pdf

@@ -9,16 +9,17 @@ use App\Entity\Quotation;
 use App\Form\CommentType;
 use App\Service\PdfService;
 use App\Repository\StateRepository;
+use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\MailerInterface;
 
 class ProjectController extends AbstractController
 {
@@ -174,7 +175,7 @@ class ProjectController extends AbstractController
 
     // --------------------------------------------------------------------------DEVIS-------------------------------------------------------------------
 
-    //crée un pdf devis (pour l'admin)
+    //aperçu du futur devis en pdf (pour l'admin)
     #[Route('/coiffe/createDevisPdf/{id}', name: 'create_devis_pdf')]
     public function createDevisPdf(Project $project = null, PdfService $pdfService){
         if($project){
@@ -199,7 +200,7 @@ class ProjectController extends AbstractController
         }
     }
 
-    //devis final (pour le client)
+    //sur le profil utilisateur, montre le devis finalisé
     #[Route('/devisFinal/{id}', name: 'show_devis')]
     public function showDevis(Quotation $quotation = null, PdfService $pdfService){
         if($quotation){
@@ -226,7 +227,7 @@ class ProjectController extends AbstractController
     }
 
 
-    //enregistre le devis en base de donnée, factorisation de la fonction CreateDevis
+    //enregistre le devis en base de donnée, factorisation de la fonction createDevis
     public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager){
 
         $quotation = new Quotation();
@@ -234,16 +235,47 @@ class ProjectController extends AbstractController
         $quotation->setProject($project);
 
         $entityManager->persist($quotation); //prepare
+        return $quotation;
     }
+
+    //télécharge dans le dossier upload/pdf le devis, factorisation de la fonction createDevis
+    public function uploadDevis($quotation, $project, $pdfService){
+        // gère l'image
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imageData = base64_encode(file_get_contents($imagePath));
+
+        
+        $html = $this->renderView('pdf/devisFinal.html.twig', [
+            "project" => $project,
+            'quotation' => $quotation,
+            "imageData" => $imageData
+        ]);
+        
+        $domPdf = $pdfService->showPdf($html);
+        
+        // génère un nom de fichier unique
+        $filename = 'devis_' . uniqid() . '.pdf';
+        
+        // chemin complet
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/pdf/' . $filename;
+        
+        // sauvegarde le pdf
+        file_put_contents($filePath, $domPdf->output());
+        
+        // télécharge le fichier
+        return new BinaryFileResponse($filePath);
+
+    }
+
 
     //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer){
+    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer, PdfService $pdfService){
         if($project){
             //il faut absolument avoir établi un prix final
             if($project->getFinalPrice() ==! NULL){
                 //----enregistre dans la bdd
-                $this->createQuotationBdd($project, $entityManager);
+                $quotation = $this->createQuotationBdd($project, $entityManager);
     
                 //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
                 $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
@@ -265,11 +297,14 @@ class ProjectController extends AbstractController
 
                 $mailer->send($email);
     
+                //----télécharge en local le devis pdf
+                $this->uploadDevis($quotation, $project, $pdfService);
     
                 $entityManager->flush(); //execute
     
-                $this->addFlash('success', 'Devis enregistré');
+                $this->addFlash('success', 'Devis créé et enregistré');
                 return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+
             } else {
                 $this->addFlash('error', 'Veuillez fixer un prix final !');
                 return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
