@@ -20,12 +20,21 @@ class Quotation
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?bool $isAccepted = null;
 
     #[ORM\ManyToOne(inversedBy: 'quotations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
+
+    public function __construct()
+    {
+        //initialise
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateAjd = new \DateTime('now', $timezone);
+        $this->dateCreation = \DateTime::createFromInterface($dateAjd);
+        // $this->isAccepted = false;
+    }
 
     public function getId(): ?int
     {

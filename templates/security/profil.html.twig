@@ -149,6 +149,20 @@
             {% endfor %}
     
         {% endif %}
+
+        {# s'il y a un devis  #}
+        {% if project.quotations is empty %}
+            {% else %}
+                <p>Un devis a été généré par l'entreprise!</p>
+                {% for quot in project.quotations %}
+                    <a href="#">
+                        <button>
+                            Télécharger le devis
+                        </button>
+                    </a>
+                {% endfor %}
+            
+        {% endif %}
             
         {% endfor %}
     

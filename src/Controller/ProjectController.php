@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Project;
+use App\Entity\Quotation;
 use App\Form\CommentType;
 use App\Service\PdfService;
 use App\Repository\StateRepository;
@@ -167,9 +168,11 @@ class ProjectController extends AbstractController
         }
     }
 
-    //crée un pdf devis
-    #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
 
+    // --------------------------------------------------------------------------DEVIS-------------------------------------------------------------------
+
+    //crée un pdf devis (pour l'admin)
+    #[Route('/coiffe/createDevisPdf/{id}', name: 'create_devis_pdf')]
     public function createDevisPdf(Project $project = null, PdfService $pdfService){
         if($project){
             //gere l'image
@@ -192,4 +195,31 @@ class ProjectController extends AbstractController
             return $this->redirectToRoute('app_projet');
         }
     }
+
+
+    //enregistre le devis en base de donnée, factorisation de la fonction CreateDevis
+    public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager){
+
+        $quotation = new Quotation();
+        $quotation->setQuotationNumber(10);
+        $quotation->setProject($project);
+
+        $entityManager->persist($quotation); //prepare
+        $entityManager->flush(); //execute
+    }
+
+    //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
+    #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
+    public function createDevis(Project $project = null, EntityManagerInterface $entityManager){
+        if($project){
+            //enregistre dans la bdd
+            $this->createQuotationBdd($project, $entityManager);
+
+            $this->addFlash('success', 'Devis enregistré');
+            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        }
+
+
+    }
+
 }

@@ -106,7 +106,7 @@
 
 
     {{ form_end(form) }}
-
+<br><br>
     <h4>Fixer le prix final</h4>
     {# fixe le prix final  #}
     {% if project.finalPrice %}
@@ -132,8 +132,8 @@
         {% else %}
         <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a></button>
     {% endif %}
+    <br><br>
 
-    
     {# select pour que le superadmin puisse changer l'état du projet: en cours, accepté, refusé  #}
     {% if app.user and "ROLE_SUPERADMIN" in app.user.roles %}
             
@@ -157,9 +157,11 @@
     {% endif %}
 
 
-    <h4>Générer un dévis</h4>
+    <h4>Générer un dévis pour vous</h4>
     {# genere un pdf  #}
-    <button><a href="{{path('create_devis', {'id': project.id})}}" target="_blank">Devis</a></button>
+    <button><a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">Devis</a></button>
+    <br>
+    <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
 
     {# <h4>Prendre rendez-vous avec le client</h4>
     <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p> #}
