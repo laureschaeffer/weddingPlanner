@@ -27,4 +27,5 @@
 node_modules
 
 # upload pdf
-public/upload/pdf
+public/upload/devis/
+public/upload/facture/

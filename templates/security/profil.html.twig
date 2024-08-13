@@ -154,14 +154,19 @@
         {# s'il y a un devis  #}
         {% if project.quotations is empty %}
             {% else %}
-                <p>Un devis a été généré par l'entreprise!</p>
-                {% for quot in project.quotations %}
+            {% for quot in project.quotations %}
+                {# si le devis a été accepté  #}
+                {% if quot.isAccepted %}
+                    <p><a href="{{path('download_facture', {'id': project.id})}}" target="_blank">Télécharger la facture</a></p>
+                    {% else %}
+
+                    <p>Un devis a été généré par l'entreprise!</p>
                     <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank">
                         <button>
                             Télécharger le devis
                         </button>
                     </a>
-
+    
                     {# accepter ou refuser le devis #}
                     <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
                     <div>
@@ -176,7 +181,10 @@
                             </button>
                         </a>
                     </div>
-                {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+
             
         {% endif %}
             

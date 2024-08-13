@@ -13,7 +13,7 @@
     {# en fonction de l'état du projet  #}
     <p class="projet-state">
         {# en attente ou en cours  #}
-        {% if project.state.id == (1 or 2) %}
+        {% if project.state.id == 1 or project.state.id == 2 %}
             <i class="fa-solid fa-hourglass-start"></i>
         {# accepté  #}
         {% elseif project.state.id == 3 %}
@@ -153,6 +153,7 @@
         
         {% elseif project.state.id == 3 %}
         <p>Le devis a été accepté!</p>
+        <p><a href="{{path('download_facture', {'id': project.id})}}" target="_blank">Télécharger la facture</a></p>
         
         {% elseif project.state.id == 4 %}
         <p>Le devis a été refusé, fin du projet.</p>

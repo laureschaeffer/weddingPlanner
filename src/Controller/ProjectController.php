@@ -8,11 +8,13 @@ use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\Quotation;
 use App\Form\CommentType;
+use App\Repository\BillRepository;
 use App\Service\PdfService;
 use App\Service\UniqueIdService;
 use App\Repository\StateRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
+use App\Repository\QuotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,10 +43,13 @@ class ProjectController extends AbstractController
     
     //detail d'une demande
     #[Route('/coiffe/projet/{id}', name: 'show_projet')]
-    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user, StateRepository $stateRepository): Response
+    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user, BillRepository $billRepository): Response
     {
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
         if($project){
+
+            //si une facture a été créée
+            $billProject = $billRepository->findOneBy(['quotation' => 2]);
 
             //formulaire ajout d'un commentaire au suivi du projet
 
@@ -68,8 +73,8 @@ class ProjectController extends AbstractController
             
             return $this->render('admin/showProject.html.twig', [
                 'project' => $project,
-                'states' => $stateRepository->findBy([]),
-                'form' => $form
+                'form' => $form,
+                'billProject' => $billProject
             ]);
 
         } else {
@@ -241,7 +246,7 @@ class ProjectController extends AbstractController
         return $quotation;
     }
 
-    //télécharge dans le dossier upload/pdf le devis, factorisation de la fonction createDevis
+    //télécharge dans le dossier upload/devis le devis, factorisation de la fonction createDevis
     public function uploadDevis($quotation, $project, $pdfService, $uniqueIdService){
         // gère l'image
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
@@ -261,7 +266,7 @@ class ProjectController extends AbstractController
         $filename = 'devis_' . $uniqueId . '.pdf';
         
         // chemin complet
-        $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/pdf/' . $filename;
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/devis/' . $filename;
         
         // sauvegarde le pdf
         file_put_contents($filePath, $domPdf->output());
@@ -342,6 +347,40 @@ class ProjectController extends AbstractController
             $this->addFlash('success', 'Devis accepté!');
             return $this->redirectToRoute('app_profil');
         }
+
+    }
+
+    //telecharge la facture dans le dossier upload/facture
+    #[Route('/downloadFacture/{id}', name: 'download_facture')]
+    public function downloadFacture(Project $project = null, PdfService $pdfService, UniqueIdService $uniqueIdService, BillRepository $billRepository, QuotationRepository $quotationRepository){
+        $quotation = $quotationRepository->findOneBy(['project' => $project->getId()]); //devis associé au projet
+        $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
+
+        // gère l'image
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imageData = base64_encode(file_get_contents($imagePath));
+
+        
+        $html = $this->renderView('pdf/facture.html.twig', [
+            'bill' => $bill,
+            "project" => $project,
+            "imageData" => $imageData
+        ]);
+        
+        $domPdf = $pdfService->showPdf($html);
+        
+        $uniqueId = $uniqueIdService->generateUniqueId();
+        // génère un nom de fichier unique
+        $filename = 'facture_' . $uniqueId . '.pdf';
+        
+        // chemin complet
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/facture/' . $filename;
+        
+        // sauvegarde le pdf
+        file_put_contents($filePath, $domPdf->output());
+        
+        // télécharge le fichier
+        return new BinaryFileResponse($filePath);
 
     }
 
