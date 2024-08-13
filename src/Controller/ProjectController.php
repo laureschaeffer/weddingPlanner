@@ -311,6 +311,24 @@ class ProjectController extends AbstractController
             }
         }
 
+    }
+
+    //accepte le devis (utilisateur)
+    #[Route('/accepteDevis/{id}', name: 'accepte_devis')]
+    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository){
+        if($quotation){
+            //----change le statut du projet de "en attente" à "accepté"
+            $project = $quotation->getProject();
+            $stateAccepte = $stateRepository->findOneBy(['id' => 3]);
+            $project->setState($stateAccepte);
+            $entityManager->persist($project);
+
+            //passe le statut du devis à accepté
+            $quotation->setAccepted(true);
+
+
+            $entityManager->flush(); //execute
+        }
 
     }
 

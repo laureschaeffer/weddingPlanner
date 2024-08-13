@@ -77,15 +77,16 @@
     
             {# en fonction de l'état du projet  #}
          <p class="projet-state">
-            {# en cours  #}
-            {% if project.state.id == 1 %}
+            {# en cours ou en attente #}
+            {% if project.state.id == (1 or 2) %}
                 <i class="fa-solid fa-hourglass-start"></i>
+
             {# accepté  #}
-            {% elseif project.state.id == 2 %}
-            <i class="fa-solid fa-circle-check"></i>
-    
-            {# refusé  #}
             {% elseif project.state.id == 3 %}
+            <i class="fa-solid fa-circle-check"></i>
+
+            {# refusé  #}
+            {% elseif project.state.id == 4 %}
             <i class="fa-regular fa-circle-xmark"></i>
             
             {% endif %}
@@ -160,6 +161,21 @@
                             Télécharger le devis
                         </button>
                     </a>
+
+                    {# accepter ou refuser le devis #}
+                    <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
+                    <div>
+                        <a href="#">
+                            <button>
+                                Refuser le devis
+                            </button>
+                        </a>
+                        <a href="{{path('accepte_devis', {id: quot.id})}}">
+                            <button>
+                                Accepter le devis
+                            </button>
+                        </a>
+                    </div>
                 {% endfor %}
             
         {% endif %}
