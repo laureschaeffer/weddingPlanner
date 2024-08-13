@@ -17,7 +17,7 @@
 
         <div class="projet-card">
 
-            <p>{{pnt}} {{pnt.surname}}, évènement le {{pnt.dateEvent | date("d.m.Y")}}, reçu le {{pnt.dateReceipt | date("d.m.Y")}} </p>
+            <p>{{pnt}}, évènement le {{pnt.dateEvent | date("d.m.Y")}}, reçu le {{pnt.dateReceipt | date("d.m.Y")}} </p>
         
             <p> {{pnt.description}} </p>
             <p><a href="{{path('show_projet', {'id': pnt.id})}}">Voir plus</a></p>

@@ -14,7 +14,7 @@ class Bill
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $billNumber = null;
+    private ?string $billNumber = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -25,12 +25,12 @@ class Bill
         return $this->id;
     }
 
-    public function getBillNumber(): ?int
+    public function getBillNumber(): ?string
     {
         return $this->billNumber;
     }
 
-    public function setBillNumber(int $billNumber): static
+    public function setBillNumber(string $billNumber): static
     {
         $this->billNumber = $billNumber;
 

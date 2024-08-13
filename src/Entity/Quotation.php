@@ -15,7 +15,7 @@ class Quotation
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $quotationNumber = null;
+    private ?string $quotationNumber = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
@@ -33,7 +33,6 @@ class Quotation
         $timezone = new \DateTimeZone('Europe/Paris');
         $dateAjd = new \DateTime('now', $timezone);
         $this->dateCreation = \DateTime::createFromInterface($dateAjd);
-        // $this->isAccepted = false;
     }
 
     public function getId(): ?int
@@ -41,12 +40,12 @@ class Quotation
         return $this->id;
     }
 
-    public function getQuotationNumber(): ?int
+    public function getQuotationNumber(): ?string
     {
         return $this->quotationNumber;
     }
 
-    public function setQuotationNumber(int $quotationNumber): static
+    public function setQuotationNumber(string $quotationNumber): static
     {
         $this->quotationNumber = $quotationNumber;
 

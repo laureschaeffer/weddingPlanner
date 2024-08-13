@@ -12,15 +12,15 @@
     
     {# en fonction de l'état du projet  #}
     <p class="projet-state">
-        {# en cours  #}
-        {% if project.state.id == 1 %}
+        {# en attente ou en cours  #}
+        {% if project.state.id == (1 or 2) %}
             <i class="fa-solid fa-hourglass-start"></i>
         {# accepté  #}
-        {% elseif project.state.id == 2 %}
+        {% elseif project.state.id == 3 %}
         <i class="fa-solid fa-circle-check"></i>
 
         {# refusé  #}
-        {% elseif project.state.id == 3 %}
+        {% elseif project.state.id == 4 %}
         <i class="fa-regular fa-circle-xmark"></i>
         
     {% endif %}
@@ -89,82 +89,77 @@
 		    <input name="firstname" type="text" id="firstname" class="hide-robot">
         </form>
     {% endfor %}
+    {# ---------------------------------interactions suivi de projet----------------------------------- #}
+
+    {# si le projet est "en cours"  #}
+    {% if  project.state.id == 1 %}
+
+        <h4>Ajouter un commentaire</h4>
+        {# ajout de commentaires  #}
+        {{ form_start(form) }}
     
-    <h4>Ajouter un commentaire</h4>
-    {# ajout de commentaires  #}
-    {{ form_start(form) }}
-
-        {# {{ form_row(form.content) }} #}
-
-        {{ form_errors(form.content) }}
-        {{ form_label(form.content) }}
-        <br>
-        {{ form_widget(form.content) }}
-
-        <br>
-        {{ form_row(form.Envoyer, {'attr': {'class': 'add-btn'}}) }}
-
-
-    {{ form_end(form) }}
-<br><br>
-    <h4>Fixer le prix final</h4>
-    {# fixe le prix final  #}
-    {% if project.finalPrice %}
-        {% set price = project.finalPrice %}
-        {% else %}
-        {% set price = "" %}
-    {% endif %}
-    <form action="{{ path('fixe_prix', {'id': project.id})}}" method="post">
-        <p>
-            <label>Prix final</label> <br>
-            <input type="number" name="price" value="{{price}}"/>
-            {# honeypot #}
-		    <input name="firstname" type="text" id="firstname" class="hide-robot">
-        </p>
-        <button type="submit" name="submit">Valider</button>
-    </form>
-
+            {# {{ form_row(form.content) }} #}
     
-    {# passe le projet en "la personne a été contacté" #}
-    <h4>Changer le statut du projet</h4>
-    {% if project.isContacted %}
-        <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a></button>
-        {% else %}
-        <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a></button>
-    {% endif %}
+            {{ form_errors(form.content) }}
+            {{ form_label(form.content) }}
+            <br>
+            {{ form_widget(form.content) }}
+    
+            <br>
+            {{ form_row(form.Envoyer, {'attr': {'class': 'add-btn'}}) }}
+    
+    
+        {{ form_end(form) }}
     <br><br>
-
-    {# select pour que le superadmin puisse changer l'état du projet: en cours, accepté, refusé  #}
-    {% if app.user and "ROLE_SUPERADMIN" in app.user.roles %}
-            
-        <form action="{{ path('change_projet', {'id': project.id})}}" method="post">
-            <label for="state-select">Etat de la demande:</label><br>
-            <select name="state" id="state-select">
-                {% for state in states %}
-                {# met par defaut (selected) l'etat actuel #}
-                {% if project.state == state %}
-                    {% set selected = "selected" %}
-                    {% else %}
-                    {% set selected = "" %}
-                {% endif %}
-
-                    <option value="{{state.id}}" {{selected}}>{{state}}</option>
-                    
-                {% endfor %}
-            </select> <br>
+        <h4>Fixer le prix final</h4>
+        {# fixe le prix final  #}
+        {% if project.finalPrice %}
+            {% set price = project.finalPrice %}
+            {% else %}
+            {% set price = "" %}
+        {% endif %}
+        <form action="{{ path('fixe_prix', {'id': project.id})}}" method="post">
+            <p>
+                <label>Prix final</label> <br>
+                <input type="number" name="price" value="{{price}}"/>
+                {# honeypot #}
+                <input name="firstname" type="text" id="firstname" class="hide-robot">
+            </p>
             <button type="submit" name="submit">Valider</button>
         </form>
+    
+        
+        {# passe le projet en "la personne a été contacté" #}
+        <h4>Changer le statut du projet</h4>
+        {% if project.isContacted %}
+            <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a></button>
+            {% else %}
+            <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a></button>
+        {% endif %}
+        <br><br>
+
+        <h4>Générer un dévis pour vous</h4>
+        {# genere un pdf  #}
+        <button><a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">Devis</a></button>
+        <br>
+        <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
+    
+        {# <h4>Prendre rendez-vous avec le client</h4>
+        <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p> #}
+
+        {# un devis a été généré, en attente de la réponse du client  #}
+        {% elseif project.state.id == 2 %}
+        <p>Un devis a été généré, en attente de la réponse du client, vous ne pouvez plus modifier.</p>
+        
+        {% elseif project.state.id == 3 %}
+        <p>Le devis a été accepté!</p>
+        
+        {% elseif project.state.id == 4 %}
+        <p>Le devis a été refusé, fin du projet.</p>
+
     {% endif %}
 
 
-    <h4>Générer un dévis pour vous</h4>
-    {# genere un pdf  #}
-    <button><a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">Devis</a></button>
-    <br>
-    <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
-
-    {# <h4>Prendre rendez-vous avec le client</h4>
-    <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p> #}
 
 </section>
 

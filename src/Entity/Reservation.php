@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ReservationRepository;
+use App\Service\UniqueIdService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -53,13 +54,13 @@ class Reservation
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'reservation', cascade: ['persist'])]
     private Collection $bookings;
 
-    public function __construct()
+    public function __construct(UniqueIdService $uniqueIdService)
     {
         $this->bookings = new ArrayCollection();
 
         //initialise
         $ajd = new \DateTime();
-        $referenceOrder = uniqid(); //crée un nombre unique aléatoire
+        $referenceOrder = $uniqueIdService->generateUniqueId(); //crée un nombre unique aléatoire
 
         $this->setDateOrder($ajd);
         $this->setReferenceOrder($referenceOrder);
