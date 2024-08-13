@@ -3,11 +3,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Bill;
 use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\Quotation;
 use App\Form\CommentType;
 use App\Service\PdfService;
+use App\Service\UniqueIdService;
 use App\Repository\StateRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
@@ -228,18 +230,19 @@ class ProjectController extends AbstractController
 
 
     //enregistre le devis en base de donnée, factorisation de la fonction createDevis
-    public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager){
+    public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager, $uniqueIdService){
 
         $quotation = new Quotation();
-        $quotation->setQuotationNumber(10);
         $quotation->setProject($project);
+        $quotationNumber = "DEV_" . $uniqueIdService->generateUniqueId(); //crée un nom unique aléatoire
+        $quotation->setQuotationNumber($quotationNumber);
 
         $entityManager->persist($quotation); //prepare
         return $quotation;
     }
 
     //télécharge dans le dossier upload/pdf le devis, factorisation de la fonction createDevis
-    public function uploadDevis($quotation, $project, $pdfService){
+    public function uploadDevis($quotation, $project, $pdfService, $uniqueIdService){
         // gère l'image
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
         $imageData = base64_encode(file_get_contents($imagePath));
@@ -253,8 +256,9 @@ class ProjectController extends AbstractController
         
         $domPdf = $pdfService->showPdf($html);
         
+        $uniqueId = $uniqueIdService->generateUniqueId();
         // génère un nom de fichier unique
-        $filename = 'devis_' . uniqid() . '.pdf';
+        $filename = 'devis_' . $uniqueId . '.pdf';
         
         // chemin complet
         $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/pdf/' . $filename;
@@ -270,12 +274,12 @@ class ProjectController extends AbstractController
 
     //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer, PdfService $pdfService){
+    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer, PdfService $pdfService, UniqueIdService $uniqueIdService){
         if($project){
             //il faut absolument avoir établi un prix final
             if($project->getFinalPrice() ==! NULL){
                 //----enregistre dans la bdd
-                $quotation = $this->createQuotationBdd($project, $entityManager);
+                $quotation = $this->createQuotationBdd($project, $entityManager, $uniqueIdService);
     
                 //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
                 $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
@@ -298,7 +302,7 @@ class ProjectController extends AbstractController
                 $mailer->send($email);
     
                 //----télécharge en local le devis pdf
-                $this->uploadDevis($quotation, $project, $pdfService);
+                $this->uploadDevis($quotation, $project, $pdfService, $uniqueIdService);
     
                 $entityManager->flush(); //execute
     
@@ -315,7 +319,7 @@ class ProjectController extends AbstractController
 
     //accepte le devis (utilisateur)
     #[Route('/accepteDevis/{id}', name: 'accepte_devis')]
-    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository){
+    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, UniqueIdService $uniqueIdService){
         if($quotation){
             //----change le statut du projet de "en attente" à "accepté"
             $project = $quotation->getProject();
@@ -326,8 +330,17 @@ class ProjectController extends AbstractController
             //passe le statut du devis à accepté
             $quotation->setAccepted(true);
 
+            //crée une facture
+            $bill = new Bill();
+            $bill->setQuotation($quotation);
+            $billNumber = "FACT_" . $uniqueIdService->generateUniqueId(); //genere un nom unique
+            $bill->setBillNumber($billNumber);
+            $entityManager->persist($bill);
 
             $entityManager->flush(); //execute
+
+            $this->addFlash('success', 'Devis accepté!');
+            return $this->redirectToRoute('app_profil');
         }
 
     }
