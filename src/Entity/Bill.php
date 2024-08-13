@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BillRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BillRepository::class)]
@@ -19,6 +20,17 @@ class Bill
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Quotation $quotation = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateCreation = null;
+
+    public function __construct()
+    {
+        //initialise
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateAjd = new \DateTime('now', $timezone);
+        $this->dateCreation = \DateTime::createFromInterface($dateAjd);
+    }
 
     public function getId(): ?int
     {
@@ -47,5 +59,22 @@ class Bill
         $this->quotation = $quotation;
 
         return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): static
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->billNumber;
     }
 }

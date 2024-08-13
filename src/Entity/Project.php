@@ -22,7 +22,7 @@ class Project
     #[ORM\Column(length: 100)]
     private ?string $surname = null;
 
-    #[ORM\Column(length: 50, nullable:true)]
+    #[ORM\Column(length: 170, nullable:true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 20)]
