@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Cormorant:ital,wght@0,500;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@300;400;500;600;700&display=swap');
 
 /* ------------------------------variables  */
 :root{
@@ -19,6 +20,7 @@
     /* polices d'ecriture  */
     --main-font: "Cormorant Garamond", sans-serif;
     --title-font: "Cormorant SC", sans-serif;
+    --contact-font: "Cormorant Unicase", serif;
 
     /* tailles  */
     --p-font-size: 1.3rem;
@@ -26,6 +28,12 @@
     --medium-font-size: 1.7rem;
     --subtitle-font-size: 1.8rem;
     --title-font-size: 2rem;
+
+    /* tailles tel */
+    --title-mb: 1.8rem;
+    --subtitle-mb: 1.6rem;
+    --medium-mb: 1.4rem;
+    --p-mb: 1.2rem;
 
     --title-font-weight: 500;
     --semi-bold: 600;
@@ -169,13 +177,22 @@ textarea{
 
 /* --------------header  */
 
-#nav{
+header{
     display: flex;
     justify-content: space-around;
     background-color: var(--nav-color);
 }
+nav{
+    display: flex;
+    gap: 3rem;
+}
 
-#nav-icon{
+#burgerIcon {
+    width: 25px;
+    margin: 35px;
+}
+
+#nav-icon, header label{
     display: none;
 }
 
@@ -183,7 +200,7 @@ textarea{
     display: flex;
 }
 
-#first-nav, #second-nav, #nav-icon{
+#first-nav, #second-nav{
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -373,6 +390,12 @@ footer p, footer a{
     align-items: center;
 }
 
+/* .service-card svg{
+    background-color: var(--light-green);
+    border-radius: 50%;
+    margin-bottom: var(--main-padding);
+    padding: 30px;
+} */
 .service-card figure{
     background-color: var(--light-green);
     border-radius: 50%;
@@ -416,29 +439,30 @@ footer p, footer a{
 }
 
 /* ----------------------------acces au formulaire de contact--------------------- */
-#home-contact figure{
+#home-contact{
+    background-color: #D2DDD2;
+    padding: 50px;
+    border: 1px solid;
+    margin: 20px;
+}
+
+#home-contact svg{
+    width: 4rem;
+}
+
+#home-contact p{
+    font-family: var(--contact-font);
+    font-weight: var(--title-font-weight);
+    font-size: 2.5rem;
+    letter-spacing: 1.5px;
+
     display: flex;
     justify-content: center;
-    position: relative;
 }
 
-#home-contact img{
-    width: 100%;
-}
-
-.btn-contact{
-    position: absolute;
-    top: 50%;
-    
-}
-
-.btn-contact button{
-    padding: var(--main-padding) var(--big-padding);
-    border-radius: 5px;
-    font-size: var(--title-font-size);
-    font-family: var(--title-font);
-    cursor: pointer;
-    border: none;
+#home-contact a{
+    text-decoration: none;
+    color: black;
 }
 
 /* ---------------------------effets visuels / hover --------------------- */
@@ -992,7 +1016,21 @@ small{
 /* ======================================================================================================================================================================================================================================================REPONSIVE==================================================================================================================================================================================================================================== */
 @media screen and (max-width: 768px){
 
-    /* navbar */
+    /* ---------navbar------ */
+    header{
+        flex-direction: column;
+    }
+    header label{
+        display: initial;
+        text-align: center;
+    }
+    #first-nav, #second-nav{
+        display: none;
+    }
+
+    #nav-icon:checked #first-nav, #nav-icon:checked #second-nav{
+        display: initial !important;
+    }
     #nav{
         flex-direction: column;
     }
@@ -1001,20 +1039,30 @@ small{
         display: none;
     }
 
-    #nav-icon{
-        display: flex;
-        flex-direction: row;
-        padding: 15px 0;
-        gap: 15px;
-    }
-    
-    #nav-icon svg{
-        fill: white;
-        width: 30px;
-    }
-
     #first-nav a, #second-nav a{
         border-top: 1px solid rgb(0 0 0 / 93%);
+    }
+
+    /* ---------general------------ */
+    h1{
+        font-size: var(--title-mb);
+        margin: 0 var(--padding-tel);
+    }
+
+    h2{
+        font-size: var(--subtitle-mb);
+    }
+
+    h3{
+        font-size: var(--medium-mb);
+    }
+
+    p{
+        font-size: var(--p-mb);
+    }
+
+    #page-container{
+        padding: 0;
     }
 
 
@@ -1043,8 +1091,24 @@ small{
         padding: var(--padding-tel) 0;
     }
 
+    .home-prestation-card h3{
+        padding: var(--padding-tel);
+    }
+
+    .home-prestation-card p {
+        padding: var(--padding-tel);
+    }
+
     .home-prestation-card img{
         width: var(--main-img-size);
+    }
+
+    /* ----contact---- */
+    #home-contact{
+        padding: var(--padding-tel);
+    }
+    #home-contact p{
+        font-size: var(--title-mb);
     }
 
     .service-card img{

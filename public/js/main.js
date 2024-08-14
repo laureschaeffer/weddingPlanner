@@ -1,18 +1,3 @@
-//----------------------------------responsive menu burger
-const navIcon = document.querySelector('#nav-icon');
-
-navIcon.addEventListener('click', toggleNav)
-
-function toggleNav(){
-    console.log("test")
-    // if ( .className === "nav"){
-    //      .className = "navbarResponsive";
-    // } else{
-    //      .className = "nav" ;
-    // }
-}
-
-
 //----------------------------------fonction pour afficher ou enlever le formulaire page showProject.php
 
 // a chaque bouton, ajoute un ecouteur d'evenement
