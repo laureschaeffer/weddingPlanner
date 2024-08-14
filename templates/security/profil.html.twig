@@ -76,22 +76,22 @@
         {% for project in app.user.projects %}
     
             {# en fonction de l'état du projet  #}
-         <p class="projet-state">
-            {# en cours ou en attente #}
-            {% if project.state.id == (1 or 2) %}
-                <i class="fa-solid fa-hourglass-start"></i>
+            <p class="projet-state">
+                {# en cours ou en attente #}
+                {% if project.state.id == (1 or 2) %}
+                    <i class="fa-solid fa-hourglass-start"></i>
 
-            {# accepté  #}
-            {% elseif project.state.id == 3 %}
-            <i class="fa-solid fa-circle-check"></i>
+                {# accepté  #}
+                {% elseif project.state.id == 3 %}
+                <i class="fa-solid fa-circle-check"></i>
 
-            {# refusé  #}
-            {% elseif project.state.id == 4 %}
-            <i class="fa-regular fa-circle-xmark"></i>
-            
-            {% endif %}
-          {{project.state}} 
-        </p>
+                {# refusé  #}
+                {% elseif project.state.id == 4 %}
+                <i class="fa-regular fa-circle-xmark"></i>
+                
+                {% endif %}
+             {{project.state}} 
+            </p>
         <div class="projet">
             <h2>{{project}}</h2>
             <div class="projet-entete">
