@@ -169,7 +169,7 @@ textarea{
 }
 
 /* ---------padding sur le coté----- */
-#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, #login{
+#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, #login, #temoignage{
     padding: 0 var(--big-padding);
 }
 
@@ -204,6 +204,9 @@ nav{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.accueil{
+    display: none;
 }
 
 #nav a{
@@ -575,6 +578,8 @@ footer p, footer a{
 #nav-batch{
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
     padding: var(--main-padding) 0;
     background-color: var(--light-green);
     margin: var(--big-padding) 0;
@@ -739,10 +744,9 @@ small{
 
 
 /* inverse le sens une fois sur deux  */
-#equipe .equipe-card:nth-child(odd){
+.equipe-card:nth-child(odd){
     flex-direction: row-reverse;
 }
-
 
 
 .equipe-card-title{
@@ -867,6 +871,20 @@ small{
         border: 2px solid transparent;
         transition: border-color .3s cubic-bezier(.25,.01,.25,1) 0s, color .3s cubic-bezier(.25,.01,.25,1) 0s,background .2s cubic-bezier(.25,.01,.25,1) 0s;
       }
+    
+    /* pour le formulaire de contact  */
+    textarea {
+        border-radius: 15px;
+        padding: 0 10px;
+        border: 2px solid transparent;
+        background-color: #05060f0a;
+        transition: border-color .3s cubic-bezier(.25,.01,.25,1) 0s, color .3s cubic-bezier(.25,.01,.25,1) 0s,background .2s cubic-bezier(.25,.01,.25,1) 0s;
+      }
+      #testimony div{
+        display: flex;
+        flex-direction: column;
+        margin: 20px 0;
+      }
       
       label {
         margin-bottom: 10px;
@@ -896,6 +914,7 @@ small{
 .creation-container{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     
     
     img{
@@ -1024,11 +1043,11 @@ small{
         display: initial;
         text-align: center;
     }
-    #first-nav, #second-nav{
+    nav{
         display: none;
     }
 
-    #nav-icon:checked #first-nav, #nav-icon:checked #second-nav{
+    #nav-icon:checked ~ nav{
         display: initial !important;
     }
     #nav{
@@ -1041,6 +1060,10 @@ small{
 
     #first-nav a, #second-nav a{
         border-top: 1px solid rgb(0 0 0 / 93%);
+    }
+
+    .accueil{
+        display: block;
     }
 
     /* ---------general------------ */
@@ -1064,14 +1087,23 @@ small{
     #page-container{
         padding: 0;
     }
-
-
-    /* ============================================================================landing page======================================================================= */
-    
-    /* flex direction en commun  */
-    .home-prestation-card, .home-prestation-card:nth-child(even), #home-presentation{
+    /* ---------flex-direction column------- */
+    .home-prestation-card, .home-prestation-card:nth-child(even), #home-presentation, .prestation-card, .equipe-card, .equipe-card:nth-child(odd), #contact-form .form-flex, .produit-card {
         flex-direction: column;
     }
+
+    /* ---------padding tel---------  */
+    .home-prestation-card, .home-prestation-card h3, .home-prestation-card p, #home-contact, #prestation-intro p, .prestation-card-main, .equipe-card-main, .shop-intro, .batch-description{
+        padding: var(--padding-tel);
+    }
+
+    /* images  */
+    .home-prestation-card img, .shop-collection-product img, #detail-creation img, #shop-batch img, #commerce-produit img{
+        width: var(--main-img-size);
+        padding: var(--padding-tel);
+    }
+
+    /* =======================================================================landing page======================================================================= */
 
     /* padding  */
     #home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, .home-prestation-card-content, #login{
@@ -1087,26 +1119,9 @@ small{
         gap: var(--padding-tel);
     }
 
-    .home-prestation-card{
-        padding: var(--padding-tel) 0;
-    }
 
-    .home-prestation-card h3{
-        padding: var(--padding-tel);
-    }
-
-    .home-prestation-card p {
-        padding: var(--padding-tel);
-    }
-
-    .home-prestation-card img{
-        width: var(--main-img-size);
-    }
 
     /* ----contact---- */
-    #home-contact{
-        padding: var(--padding-tel);
-    }
     #home-contact p{
         font-size: var(--title-mb);
     }
@@ -1121,6 +1136,25 @@ small{
         flex-direction: column;
         gap: 30px;
     }
+
+    /* =======================================================================PORTFOLIO======================================================================= */
+    .creation-container img{
+        width: 70vw;
+        margin: auto;
+    }
+    .creation-container figcaption {
+        display: block;
+    }
+
+    /* =======================================================================EQUIPE======================================================================= */
+    .equipe-card {
+        margin: 20px 0;
+    }
+    /* =======================================================================CONTACT======================================================================= */
+    #contact-form .form-flex {
+        gap: 10px;
+    }
+    
 
     /* --------------------------------------------LOGIN---------------------------------------------- */
     #login-form{

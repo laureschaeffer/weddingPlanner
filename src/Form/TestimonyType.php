@@ -21,7 +21,11 @@ class TestimonyType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => 'Témoignage'
             ])
-            ->add('Envoyer', SubmitType::class)
+            ->add('Envoyer', SubmitType::class, [
+                'attr' => [
+                    'class' => 'contact-btn'
+                ]
+            ])
         ;
     }
 

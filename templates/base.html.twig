@@ -41,6 +41,7 @@
                         
                         
                         <div id="second-nav">
+                            <a href="{{ path('app_home') }}" class="accueil">Accueil</a>
                             <a href="{{ path('app_contact') }}">Contact</a>
                             {% if app.user %}
                                 <a href="{{path('app_profil')}}"><i class="fa-solid fa-user"></i>{{app.user}}</a>
