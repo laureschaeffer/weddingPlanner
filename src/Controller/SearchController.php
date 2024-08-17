@@ -15,12 +15,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SearchController extends AbstractController
 {
 
-    #[Route('/search', name: 'app_search')]
+    #[Route('/search/{word}', name: 'app_search')]
     //renvoie le resultat de la recherche en fonction d'un mot, fonction dans chaque repository ; mettre par défaut word à null pour ne pas avoir d'erreur
     public function index(BatchRepository $br, CreationRepository $cr, PrestationRepository $pr, ProductRepository $productRepository, WorkerRepository $wr, Request $request, $word = null): Response
     {
         //utilise la methode get pour récupérer le mot tapé dans la barre de recherche
-        $word = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+        $word = $request->query->get('search');
+        $cleanWord = htmlspecialchars(strip_tags($word), ENT_QUOTES, 'UTF-8');
+        
         //honey pot field
         $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
         
@@ -30,7 +32,7 @@ class SearchController extends AbstractController
         } else {
             
             return $this->render('search/index.html.twig', [
-                'word' => $word,
+                'word' => $cleanWord,
                 'batchs' => $br->findByWord($word),
                 'creations' => $cr->findByWord($word),
                 'prestations' => $pr->findByWord($word),
