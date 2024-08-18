@@ -187,6 +187,18 @@ nav{
     gap: 3rem;
 }
 
+.callToAction{
+    border: 3px solid black;
+    padding: 5px 25px !important;
+    background: #D2DDD2;
+    color: black !important;
+    cursor: pointer;
+
+    svg{
+        width: 30px;
+    }
+}
+
 #burgerIcon {
     width: 25px;
     margin: 35px;
@@ -353,12 +365,9 @@ footer p, footer a{
 .home-prestation-card:nth-child(even){
     flex-direction: row-reverse;
 }
-.home-prestation-card:nth-child(even) p{
-    text-align: left;
 
-}
 .home-prestation-card p{
-    text-align: right;
+    text-align: center;
 }
 
 .home-prestation-card img{
@@ -393,16 +402,14 @@ footer p, footer a{
     align-items: center;
 }
 
-/* .service-card svg{
+.service-card figure, .service-card svg{
     background-color: var(--light-green);
     border-radius: 50%;
     margin-bottom: var(--main-padding);
+}
+
+.service-card svg{
     padding: 30px;
-} */
-.service-card figure{
-    background-color: var(--light-green);
-    border-radius: 50%;
-    margin-bottom: var(--main-padding);
 }
 
 .service-card img{
@@ -461,11 +468,16 @@ footer p, footer a{
 
     display: flex;
     justify-content: center;
+    text-align: center;
 }
 
 #home-contact a{
     text-decoration: none;
     color: black;
+}
+
+#home-contact:hover a{
+    opacity: 0.6;
 }
 
 /* ---------------------------effets visuels / hover --------------------- */
