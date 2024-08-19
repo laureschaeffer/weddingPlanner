@@ -67,7 +67,7 @@ class HomeController extends AbstractController
                     $entityManager->flush(); //execute
         
                     $this->addFlash('success', 'Demande envoyée');
-                    return $this->redirectToRoute('app_home');
+                    return $this->redirectToRoute('app_profil');
                     
                 } else {
                     $this->addFlash('error', 'La date de l\'évenement est dépassée!');
@@ -156,7 +156,7 @@ class HomeController extends AbstractController
             ]);
 
         } else {
-            //msg d'erreur
+            $this->addFlash('error', 'Cet album n\existe pas');
             return $this->redirectToRoute('app_creation');
         }
     }
