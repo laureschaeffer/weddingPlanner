@@ -48,11 +48,8 @@ class ProjectController extends AbstractController
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
         if($project){
 
-            //si une facture a été créée
-            $billProject = $billRepository->findOneBy(['quotation' => 2]);
 
             //formulaire ajout d'un commentaire au suivi du projet
-
             $comment = new Comment();
 
             $form = $this->createForm(CommentType::class, $comment);
@@ -73,8 +70,7 @@ class ProjectController extends AbstractController
             
             return $this->render('admin/showProject.html.twig', [
                 'project' => $project,
-                'form' => $form,
-                'billProject' => $billProject
+                'form' => $form
             ]);
 
         } else {
@@ -227,6 +223,13 @@ class ProjectController extends AbstractController
     #[Route('/devisFinal/{id}', name: 'show_devis')]
     public function showDevis(Quotation $quotation = null, PdfService $pdfService){
         if($quotation){
+
+            //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
+            if($this->getUser()!== $quotation->getProject()->getUser()){
+                $this->addFlash('error', 'Vous n\'avez pas le droit de voir ce devis');
+                return $this->redirectToRoute('app_home');
+            }
+
             //gere l'image
             $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
             $imageData = base64_encode(file_get_contents($imagePath)); //encode
@@ -380,6 +383,11 @@ class ProjectController extends AbstractController
     public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, UniqueIdService $uniqueIdService, PdfService $pdfService){
         if($quotation){
             $project = $quotation->getProject();
+            //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
+            if($this->getUser()!== $project->getUser()){
+                $this->addFlash('error', 'Vous n\'avez pas le droit de valider ce devis');
+                return $this->redirectToRoute('app_home');
+            }
             //si le projet n'est pas modifiable
             if($project->getState()->getId()!==2){
                 $this->addFlash('error', 'L\'état du projet ne vous permet pas de faire cette action');
@@ -414,6 +422,11 @@ class ProjectController extends AbstractController
     //affiche la facture pdf: pour l'utilisateur ou l'admin
     #[Route('/facture/{id}', name: 'show_facture')]
     public function showFacture(Project $project = null, PdfService $pdfService, BillRepository $billRepository, QuotationRepository $quotationRepository){
+        //si l'utilisateur connecté n'est pas le propriétaire du projet/devis ou admin
+        if($this->getUser()!== $project->getUser() || !$this->isGranted('ROLE_ADMIN')){
+            $this->addFlash('error', 'Vous n\'avez pas le droit de voir cette facture');
+            return $this->redirectToRoute('app_home');
+        }
         $quotation = $quotationRepository->findOneBy(['project' => $project->getId()]); //devis associé au projet
         $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
 

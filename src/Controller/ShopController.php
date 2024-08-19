@@ -13,6 +13,7 @@ use App\Service\BasketService;
 use App\Repository\BatchRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProductRepository;
+use App\Service\UniqueIdService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -149,13 +150,15 @@ class ShopController extends AbstractController
     //=========================================================================================RESERVATION=================================================================
     
     //traite la création de réservation avec le formulaire, factorisation de la fonction makeReservation
-    public function createReservation(BasketService $basketService, UserInterface $user, $reservation){
+    public function createReservation($basketService, $uniqueIdService, $user, $reservation){
         
         $roles = $user->getRoles();
         array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
 
-        //remplit à la main car pas demandé dans le formulaire, remplit par l'utilisateur connecté
-        $reservation->setUser($user); 
+        //remplit à la main car pas demandé dans le formulaire
+        $reservation->setUser($user); //utilisateur connecté
+        $referenceOrder = $uniqueIdService->generateUniqueId(); //id unique
+        $reservation->setReferenceOrder($referenceOrder);
 
         $panier = $basketService->getBasket(); //recupere le panier en session
         $total = end($panier)["total"]; //recupere le total au dernier index du tableau
@@ -205,7 +208,7 @@ class ShopController extends AbstractController
 
     //ajoute le panier en réservation
     #[Route('/shop/reservation', name: 'make_reservation')]
-    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService, MailerInterface $mailer): Response
+    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService, UniqueIdService $uniqueIdService, MailerInterface $mailer): Response
     {
 
         //la personne doit être connectée pour que la réservation soit associée à une entité
@@ -213,7 +216,7 @@ class ShopController extends AbstractController
 
             //---------------------------------------------------entité reservation------------------------------
             //crée la reservation
-            $reservation = new Reservation();
+            $reservation = new Reservation();           
     
             //crée le form
             $form = $this->createForm(ReservationType::class, $reservation);
@@ -230,7 +233,7 @@ class ShopController extends AbstractController
                 if($reservation->getValidDate()){
 
                     //traite la création de reservation
-                    $this->createReservation($basketService, $user, $reservation);
+                    $this->createReservation($basketService, $uniqueIdService, $user, $reservation);
         
                     $entityManager->persist($reservation); //prepare
                     $entityManager->flush(); //execute
