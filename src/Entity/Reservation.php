@@ -54,16 +54,14 @@ class Reservation
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'reservation', cascade: ['persist'])]
     private Collection $bookings;
 
-    public function __construct(UniqueIdService $uniqueIdService)
+    public function __construct()
     {
         $this->bookings = new ArrayCollection();
 
         //initialise
         $ajd = new \DateTime();
-        $referenceOrder = $uniqueIdService->generateUniqueId(); //crée un nombre unique aléatoire
 
         $this->setDateOrder($ajd);
-        $this->setReferenceOrder($referenceOrder);
         $this->setPrepared(false);
         $this->setPicked(false); 
 
