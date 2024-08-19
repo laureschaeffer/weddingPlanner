@@ -338,6 +338,16 @@ class Project
         }
     }
 
+    //verifie si certaines actions peuvent etre commises sur le projet: il doit etre seulement "en cours"
+    public function isEditable() : bool
+    {
+        if($this->getState()->getId() === 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return Collection<int, Quotation>
      */

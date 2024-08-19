@@ -116,25 +116,31 @@ class AdminController extends AbstractController
     #[Route('coiffe/editCommande/{id<\d+>}', name: 'edit_commande')]
     public function editCommande(Request $request, EntityManagerInterface $entityManager, Reservation $reservation): Response
     {
+        if($reservation){
 
-        //crée le formulaire
-        $form = $this->createForm(ReservationEditType::class, $reservation);
-        $form->handleRequest($request); 
+            //crée le formulaire
+            $form = $this->createForm(ReservationEditType::class, $reservation);
+            $form->handleRequest($request); 
+    
+            if($form->isSubmitted() && $form->isValid()){
+                $reservation=$form->getData();
+    
+                $entityManager->persist($reservation); //prepare
+                $entityManager->flush(); //execute
+    
+                $this->addFlash('success', 'Commande modifiée');
+                return $this->redirectToRoute('show_commande', ['id' => $reservation->getId()]);
+            }
+    
+            //vue du formulaire
+            return $this->render('admin/editReservation.html.twig', [
+                'form'=>$form
+            ]);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $reservation=$form->getData();
-
-            $entityManager->persist($reservation); //prepare
-            $entityManager->flush(); //execute
-
-            $this->addFlash('success', 'Commande modifiée');
-            return $this->redirectToRoute('show_commande', ['id' => $reservation->getId()]);
+        } else {
+            $this->addFlash('error', 'Cette commande n\'existe pas');
+            return $this->redirectToRoute('app_commande');
         }
-
-        //vue du formulaire
-        return $this->render('admin/editReservation.html.twig', [
-            'form'=>$form
-        ]);
     }
 
     //detail d'une reservation

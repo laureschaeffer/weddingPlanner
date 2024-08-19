@@ -153,7 +153,7 @@
         
         {% elseif project.state.id == 3 %}
         <p>Le devis a été accepté!</p>
-        <p><a href="{{path('download_facture', {'id': project.id})}}" target="_blank">Télécharger la facture</a></p>
+        <p><a href="{{path('show_facture', {'id': project.id})}}" target="_blank">Afficher la facture</a></p>
         
         {% elseif project.state.id == 4 %}
         <p>Le devis a été refusé, fin du projet.</p>
