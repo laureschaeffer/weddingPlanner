@@ -359,6 +359,7 @@ footer p, footer a{
     display: flex;
     align-items: center;
     padding: var(--escape-padding) 100px;
+    gap: 10rem;
 }
 
 /* inverse le sens une fois sur deux  */
@@ -371,7 +372,7 @@ footer p, footer a{
 }
 
 .home-prestation-card img{
-    width: var(--bigger-img-size);
+    width: 30vw;
     border-radius: var(--border-radius);
 }
 
@@ -384,7 +385,6 @@ footer p, footer a{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 var(--big-padding);
 }
 
 /* -------------------5 bulles "nous faire confiance"----------------- */
@@ -394,6 +394,7 @@ footer p, footer a{
     flex-wrap: wrap;
     justify-content: space-around;
     padding: var(--big-padding) 0;
+    gap: 1rem;
 }
 
 .service-card{
@@ -408,11 +409,7 @@ footer p, footer a{
     margin-bottom: var(--main-padding);
 }
 
-.service-card svg{
-    padding: 30px;
-}
-
-.service-card img{
+.service-card svg, .service-card img{
     width: 120px;
     padding: 30px;
 }
@@ -1044,6 +1041,28 @@ small{
     padding: var(--small-padding);
 }
 
+/* ------------------------formulaire edit profil, s'ouvre au clic------------------------ */
+#openFormProfil{
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--p-font-size);
+    color: #000;
+
+    &:hover{
+        opacity: var(--hover-opacity);
+    }
+}
+
+.editProfil{
+    display: none;
+}
+
+/* formulaire ouvert  */
+.editProfil.open{
+    display: initial;
+}
+
 /* ======================================================================================================================================================================================================================================================REPONSIVE==================================================================================================================================================================================================================================== */
 @media screen and (max-width: 768px){
 
@@ -1131,14 +1150,16 @@ small{
         gap: var(--padding-tel);
     }
 
-
+    .home-prestation-card{
+        gap: 1rem;
+    }
 
     /* ----contact---- */
     #home-contact p{
         font-size: var(--title-mb);
     }
 
-    .service-card img{
+    .service-card img, .service-card svg{
         width: 70px;
         padding: 15px;
     }

@@ -31,3 +31,11 @@ const scrollUp = () =>{
 
 }
 window.addEventListener('scroll', scrollUp)
+
+//----------------------------------fonction pour afficher ou enlever le formulaire modifie les infos profil
+openEditForm = document.querySelector('#openFormProfil');
+formEdit = document.querySelector('.editProfil');
+
+openEditForm.addEventListener('click', () => {
+    formEdit.classList.toggle('open')
+})

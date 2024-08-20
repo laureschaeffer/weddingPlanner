@@ -12,6 +12,25 @@
     
     <p>Email : {{ app.user.email}} </p>
     <p>Pseudo : {{app.user }} </p>
+
+    {# modifier son pseudo  #}
+    <a href="#" id="openFormProfil">Modifier son pseudo</a>
+    <form action="{{path('edit_profil')}}" method="post" class="editProfil">
+
+    
+        <div class="login-row">
+            <label for="inputPseudo">Pseudo</label>
+            <input type="texte" name="pseudo" class="form-control" value="{{app.user.pseudo}}" required>
+        </div>
+        
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+    
+        <button class="contact-btn" type="submit">
+            Enregistrer
+        </button>
+    </form>
     
     
     {# <a href="{{ path('delete_profil') }}">Supprimer son compte</a> #}

@@ -6,12 +6,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class SecurityController extends AbstractController
 {
@@ -69,6 +73,37 @@ class SecurityController extends AbstractController
 
         $this->addFlash('success', 'Vous êtes déconnecté');
         $this->redirectToRoute("app_login"); 
+    }
+
+
+    //traite le formulaire
+    #[Route('/modifieProfil', name: 'edit_profil')]
+    public function editProfil(Request $request, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        //filtre
+        $pseudo = filter_input(INPUT_POST, 'pseudo', FILTER_SANITIZE_SPECIAL_CHARS); 
+        $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $csrfTokenId = 'authenticate';
+
+        //si le token de la session et du formulaire n'est pas le meme, déconnecte
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
+            // throw new InvalidCsrfTokenException('Token CSRF invalide.');
+            return $this->redirectToRoute('app_logout');
+        }
+    
+        if(!$pseudo) {
+            $this->addFlash('error', 'Pseudo invalide');
+            return $this->redirectToRoute('edit_profil');
+        } 
+
+        $newPseudo = str_replace(" ", "", $pseudo); //supprime les espaces
+        $this->getUser()->setPseudo($newPseudo);
+
+        $entityManager->flush();
+        $this->addFlash('success', 'Informations modifiées');
+        return $this->redirectToRoute('app_profil');
+
     }
 
     //anonymisation des données du profil

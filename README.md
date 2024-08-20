@@ -32,10 +32,10 @@ Une fois le projet téléchargé, mettre cette ligne dans l'invité de commande 
 ``` sh
 composer install
 ```
-
-**[mailhog](https://github.com/mailhog/MailHog/releases)**  
-**[localhost email](http://localhost:8025/)**  
-
+Démarrer le serveur
 ``` sh
-composer require dompdf/dompdf
+symfony server:start -d
 ```
+
+télécharger le fichier .exe **[mailhog](https://github.com/mailhog/MailHog/releases)**    
+ouvrir **[localhost email](http://localhost:8025/)**  
