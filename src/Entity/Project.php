@@ -16,7 +16,7 @@ class Project
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 60)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 100)]
@@ -25,7 +25,7 @@ class Project
     #[ORM\Column(length: 170, nullable:true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 60)]
     private ?string $telephone = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

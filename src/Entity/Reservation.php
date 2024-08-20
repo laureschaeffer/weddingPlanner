@@ -36,16 +36,16 @@ class Reservation
     private ?bool $isPicked = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
-    #[ORM\JoinColumn(nullable: false)]
+    // #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
     
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 60)]
     private ?string $firstname = null;
     
     #[ORM\Column(length: 100)]
     private ?string $surname = null;
     
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 60)]
     private ?string $telephone = null;
 
     /**

@@ -106,13 +106,54 @@ class SecurityController extends AbstractController
 
     }
 
-    //anonymisation des données du profil
+    //anonymisation des données du profil avec l'algorithme sha256
     #[Route('/delete', name: 'delete_profil')]
-    public function delete(UserInterface $user, EntityManagerInterface $entityManager){
+    public function delete(EntityManagerInterface $entityManager){
+        $user = $this->getUser();
 
-        $entityManager->remove($user); //prepare
+        //----------------entité USER----------------
+        $user->setPseudo(hash('sha224', $user->getPseudo()));
+        // $user->setEmail(hash('sha224', $user->getEmail()));
+        $user->setRoles([""]);
+        $user->setGoogleUser(false);
+
+        $entityManager->persist($user);
+
+        //----------------entité PROJECT----------------
+        $userProjects = $user->getProjects();
+
+        
+        if($userProjects){
+            foreach($userProjects as $project){
+                $project->setUser(NULL);
+                $project->setFirstname(hash('sha224', $project->getFirstname()));
+                $project->setSurname(hash('sha224', $project->getSurname()));
+                //l'email est optionnel dans l'entité Project
+                $projectEmail = $project->getEmail() ? $project->getEmail() : "";
+                $project->setEmail(hash('sha224', $projectEmail));
+                $project->setTelephone(hash('sha224', $project->getTelephone()));
+                
+                $entityManager->persist($project);
+            }
+        }
+
+
+        //----------------entité RESERVATION----------------
+        $userReservations = $user->getReservations();
+
+        if($userReservations){
+            foreach($userReservations as $reservation){
+                $reservation->setUser(NULL);
+                $reservation->setFirstname(hash('sha224', $reservation->getFirstname()));
+                $reservation->setSurname(hash('sha224', $reservation->getSurname()));
+                $reservation->setTelephone(hash('sha224', $reservation->getTelephone()));
+                
+                $entityManager->persist($reservation);
+            }
+        }
+        
+
         $entityManager->flush(); //execute
-
 
         $this->addFlash('success', 'Profil supprimé');
         return $this->redirectToRoute('app_home');
