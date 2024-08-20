@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\StateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,8 +89,8 @@ class SecurityController extends AbstractController
 
         //si le token de la session et du formulaire n'est pas le meme, déconnecte
         if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
-            // throw new InvalidCsrfTokenException('Token CSRF invalide.');
-            return $this->redirectToRoute('app_logout');
+            $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
+            return $this->redirectToRoute('app_profil');
         }
     
         if(!$pseudo) {
@@ -108,7 +109,7 @@ class SecurityController extends AbstractController
 
     //anonymisation des données du profil avec l'algorithme sha256
     #[Route('/delete', name: 'delete_profil')]
-    public function delete(EntityManagerInterface $entityManager){
+    public function delete(EntityManagerInterface $entityManager, StateRepository $stateRepository){
         $user = $this->getUser();
 
         //----------------entité USER----------------
@@ -132,6 +133,11 @@ class SecurityController extends AbstractController
                 $projectEmail = $project->getEmail() ? $project->getEmail() : "";
                 $project->setEmail(hash('sha224', $projectEmail));
                 $project->setTelephone(hash('sha224', $project->getTelephone()));
+
+                $stateRefuse = $stateRepository->findOneBy(['id' => 4]);
+                $project->setState($stateRefuse);
+
+                $project->setContacted(true);
                 
                 $entityManager->persist($project);
             }
@@ -147,6 +153,8 @@ class SecurityController extends AbstractController
                 $reservation->setFirstname(hash('sha224', $reservation->getFirstname()));
                 $reservation->setSurname(hash('sha224', $reservation->getSurname()));
                 $reservation->setTelephone(hash('sha224', $reservation->getTelephone()));
+                $reservation->setPrepared(true);
+                $reservation->setPicked(true);
                 
                 $entityManager->persist($reservation);
             }

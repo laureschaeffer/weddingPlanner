@@ -14,12 +14,21 @@
 
 {% for rap in reservationsAPreparer %}
 
-    <p> {{rap.user}} (retire le {{rap.datePicking |date("d/m/Y")}}) </p>
+    {% if rap.user %}
+        <p> {{rap.user}} (retire le {{rap.datePicking |date("d/m/Y")}}) </p>
+        {% else %}
+        <p> anonyme (retire le {{rap.datePicking |date("d/m/Y")}}) </p>
+    {% endif %}
     <p>A passé commande le {{rap.dateOrder |date("d/m/Y")}} </p>
 
     {# contact  #}
     {# <p>{{rap.user.telephone}}</p> #}
-    <p> {{rap.user.email}} </p>
+    {% if rap.user %}
+        <p> {{rap.user.email}} </p>
+        {% else %}
+        <p> anonyme </p>
+    {% endif %}
+    
 
     {# produits  #}
     {% if rap.bookings |length >1  %}
@@ -43,12 +52,22 @@
 
 {% for reservation in reservationsPassees %}
 
-    <p> {{reservation.user}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+    {% if reservation.user %}
+        <p> {{reservation.user}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+        {% else %}
+        <p> anonyme (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+    {% endif %}
+    
     <p>A passé commande le {{reservation.dateOrder |date("d/m/Y")}} </p>
 
     {# contact  #}
     {# <p>{{reservation.user.phone}}</p> #}
-    <p> {{reservation.user.email}} </p>
+    {% if reservation.user %}
+        <p> {{reservation.user.email}} </p>
+        {% else %}
+        <p>anonyme</p>
+    {% endif %}
+    
 
     {# produits  #}
     {% if reservation.bookings |length >1  %}

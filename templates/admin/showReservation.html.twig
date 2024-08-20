@@ -27,8 +27,14 @@
 
     {# contact  #}
     <p><b>Contact</b></p>
-    <p>{{reservation.telephone}}</p>
-    <p> {{reservation.user.email}} </p>
+    {% if reservation.user %}
+        <p>{{reservation.telephone}}</p>
+        <p> {{reservation.user.email}} </p>
+        {% else %}
+        <p>anonyme</p>
+        <p>anonyme</p>
+    {% endif %}
+    
 
     {# produits  #}
     {% if reservation.bookings |length >1  %}

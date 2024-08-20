@@ -26,7 +26,12 @@
     {% endif %}
     {{project.state}} </p>
     <div class="projet">
-        <h2>{{project}}</h2>
+        {# si l'user n'a pas supprimé son compte  #}
+        {% if project.user %}
+            <h2>{{project}}</h2>
+            {% else %}
+            <h2>Anonyme</h2>
+        {% endif %}
         <div class="projet-entete">
             <div class="projet-entete-flex">
                 <p>Reçu le {{project.dateReceipt | date("d.m.Y")}} </p>
@@ -34,13 +39,27 @@
                 <p> <small>{{project.nbGuest}} invités</small></p>
             </div>
             <div class="projet-entete-flex">
-                <p> {{project.telephone }} </p>
-                {# s'il y a email c'est que l'user prefere etre contacté par celui donné dans le form plutot que celui du compte utilisateur #}
-                {% if project.email %}
-                    <p> {{project.email}} </p>
+                {# si l'user n'a pas supprimé son compte  #}
+                {% if project.user %}
+                    <p> {{project.telephone }} </p>
                     {% else %}
-                    <p>{{project.user.email}}</p>
+                    <p>anonyme</p>
                 {% endif %}
+                
+                {# si l'user n'a pas supprimé son compte  #}
+                {% if project.user %}
+                    {# s'il y a email c'est que l'user prefere etre contacté par celui donné dans le form plutot que celui du compte utilisateur #}    
+                    {% if project.email %}
+                        <p> {{project.email}} </p>
+                        {% elseif project.user %}
+                        <p>{{project.user.email}}</p>
+                        {% else %}
+                        <p>anonyme</p>
+                    {% endif %}
+                    {% else %}
+                    <p>anonyme</p>
+                {% endif %}
+
             </div>
         </div>
 
