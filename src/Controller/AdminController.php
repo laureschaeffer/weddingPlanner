@@ -22,10 +22,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
     #[Route('/coiffe', name: 'app_admin')]
-    public function index(ProjectRepository $projectRepo): Response
+    public function index(): Response
     {
-        $projects = $projectRepo->findOldProjects();
-        return $this->render('admin/index.html.twig', ['projects' => $projects]);
+
+        return $this->render('admin/index.html.twig');
     }
 
 
