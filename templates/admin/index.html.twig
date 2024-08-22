@@ -9,8 +9,15 @@
     
     <div id="diag-container">
         <h2>Etats des projets</h2>
-        {# renvoie un tableau json avec data-attribute pour chartjs  #}
-        <canvas id="diag-etat-projet" data-etat-projet="{{ etatProjets|json_encode|e('html_attr') }}"></canvas>
+        <div>
+          {# renvoie un tableau json avec data-attribute pour chartjs  #}
+          <canvas id="diag-etat-projet" data-etat-projet="{{ etatProjets|json_encode|e('html_attr') }}"></canvas>
+        </div>
+
+        <h2>Projets par mois</h2>
+        <div>
+          <canvas id="diag-projet-mois" data-projet-mois="{{ projetMois|json_encode|e('html_attr') }}"></canvas>
+        </div>
     </div>
 
 </section>

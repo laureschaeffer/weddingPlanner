@@ -134,14 +134,13 @@ textarea{
     font-size: var(--nav-font-size);
 }
 
-/* page d'accueil  */
+/* ============================================================================INDEX===========================================================  */
 #accueil-admin{
     padding: 0 var(--big-padding);
 }
 
-#diag-etat-projet{
-    width: 40vw !important;
-    height: auto !important;
+#diag-container div{
+    width: 500px;
 }
 
 /* ============================================================================DEMANDES DE CONTACT =========================================================== */

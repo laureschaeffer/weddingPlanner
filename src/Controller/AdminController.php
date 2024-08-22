@@ -33,8 +33,12 @@ class AdminController extends AbstractController
 
         $etatProjets = [$nbProjectEnCours, $nbProjectEnAttente, $nbProjectAccepte, $nbProjectRefuse];
 
+        //tableau json du nb de projets par mois
+        $projetMois = $projectRepository->findProjectByMonth();
+
         new JsonResponse($etatProjets);
-        return $this->render('admin/index.html.twig', ['etatProjets' => $etatProjets]);
+        new JsonResponse($projetMois);
+        return $this->render('admin/index.html.twig', ['etatProjets' => $etatProjets, 'projetMois' => $projetMois]);
     }
 
 
