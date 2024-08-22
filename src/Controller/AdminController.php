@@ -16,16 +16,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
     #[Route('/coiffe', name: 'app_admin')]
-    public function index(): Response
+    public function index(ProjectRepository $projectRepository): Response
     {
+        //tableau JSON des differents etats de projets pour le diagramme
+        $nbProjectEnCours = count($projectRepository->findBy(['state' => 1]));
+        $nbProjectEnAttente = count($projectRepository->findBy(['state' => 2]));
+        $nbProjectAccepte = count($projectRepository->findBy(['state' => 3]));
+        $nbProjectRefuse = count($projectRepository->findBy(['state' => 4]));
 
-        return $this->render('admin/index.html.twig');
+        $etatProjets = [$nbProjectEnCours, $nbProjectEnAttente, $nbProjectAccepte, $nbProjectRefuse];
+
+        new JsonResponse($etatProjets);
+        return $this->render('admin/index.html.twig', ['etatProjets' => $etatProjets]);
     }
 
 

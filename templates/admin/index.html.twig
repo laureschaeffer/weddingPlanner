@@ -4,6 +4,17 @@
 
 {% block body %}
 
-<h1>Bienvenue sur le pannel admin</h1>
+<section id="accueil-admin">
+    <h1>Bienvenue sur le pannel admin</h1>
+    
+    <div id="diag-container">
+        <h2>Etats des projets</h2>
+        {# renvoie un tableau json avec data-attribute pour chartjs  #}
+        <canvas id="diag-etat-projet" data-etat-projet="{{ etatProjets|json_encode|e('html_attr') }}"></canvas>
+    </div>
 
+</section>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 {% endblock %}

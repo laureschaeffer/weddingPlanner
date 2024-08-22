@@ -134,6 +134,16 @@ textarea{
     font-size: var(--nav-font-size);
 }
 
+/* page d'accueil  */
+#accueil-admin{
+    padding: 0 var(--big-padding);
+}
+
+#diag-etat-projet{
+    width: 40vw !important;
+    height: auto !important;
+}
+
 /* ============================================================================DEMANDES DE CONTACT =========================================================== */
 
 .projet-card{
