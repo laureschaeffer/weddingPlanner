@@ -16,6 +16,24 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
+    //trouve les reservations dont la date pour récupérer était il y a plus de deux ans
+    // SELECT * FROM reservation r WHERE r.date_picking < DATE_SUB(CURDATE(), INTERVAL 2 YEAR);
+    public function findOldReservations(){
+        $dateExp = new \DateTime();
+        //enleve 2 ans à la date d'ajd afin
+        $dateExp->modify('-2 years');
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r')
+            ->from('App\Entity\Reservation', 'r')
+            ->where('r.datePicking < :dateExp')
+            ->setParameter('dateExp', $dateExp)
+            ;
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Reservation[] Returns an array of Reservation objects
     //     */
