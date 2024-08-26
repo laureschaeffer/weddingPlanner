@@ -1,14 +1,16 @@
 //----------------------------------diagramme chartjs
 
 //constantes des éléments
-const ctx = document.getElementById('diag-etat-projet');
+const canvasEP = document.getElementById('diag-etat-projet');
 const canvasPM = document.getElementById('diag-projet-mois')
+const canvasCA = document.getElementById('diag-chiffre-affaire')
 
 //tableaux donnés dans les data-attribute
-let etatProjets = JSON.parse(ctx.dataset.etatProjet);
+let etatProjets = JSON.parse(canvasEP.dataset.etatProjet);
 let projetMois = JSON.parse(canvasPM.dataset.projetMois);
+let chiffreAffaires = JSON.parse(canvasCA.dataset.chiffreAffaire);
 
-//initialise tableaux
+//tableaux pour "projets par mois"
 let months = []
 let counts = []
 
@@ -18,8 +20,17 @@ projetMois.forEach(element => {
   });
 
 
+//tableaux pour "chiffre d'affaire mensuel moyen"
+let caMonths = []
+let caAvg = []
+
+chiffreAffaires.forEach(element => {
+    caMonths.push(element.month); //month du tableau associatif
+    caAvg.push(element.averageRevenue); //count
+  });
+
 // diagramme etats projet
-new Chart(ctx, {
+new Chart(canvasEP, {
   type: 'doughnut',
   data: {
     labels: ['en cours', 'en attente', 'accepté', 'refusé'],
@@ -66,6 +77,22 @@ new Chart(canvasPM, {
             'rgb(201, 203, 207)'
           ],
         borderWidth: 1
+    }]
+  }
+  
+});
+
+// diagramme chiffre affaire mensuel
+new Chart(canvasCA, {
+  type: 'line',
+  data: {
+    labels: caMonths,
+    datasets: [{
+      label: 'Mensuel en euro',
+      data: caAvg,
+      fill: false,
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
     }]
   }
   

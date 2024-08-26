@@ -25,7 +25,7 @@ class AdminController extends AbstractController
     #[Route('/coiffe', name: 'app_admin')]
     public function index(ProjectRepository $projectRepository): Response
     {
-        //tableau JSON des differents etats de projets pour le diagramme
+        //tableau des differents etats de projets pour le diagramme
         $nbProjectEnCours = count($projectRepository->findBy(['state' => 1]));
         $nbProjectEnAttente = count($projectRepository->findBy(['state' => 2]));
         $nbProjectAccepte = count($projectRepository->findBy(['state' => 3]));
@@ -33,12 +33,21 @@ class AdminController extends AbstractController
 
         $etatProjets = [$nbProjectEnCours, $nbProjectEnAttente, $nbProjectAccepte, $nbProjectRefuse];
 
-        //tableau json du nb de projets par mois
+        //tableau du nb de projets par mois
         $projetMois = $projectRepository->findProjectByMonth();
+
+        //tableau de la moyenne du chiffre d'affaire par mois
+        $caMois = $projectRepository->findAvgMonthlyPrice();
+
 
         new JsonResponse($etatProjets);
         new JsonResponse($projetMois);
-        return $this->render('admin/index.html.twig', ['etatProjets' => $etatProjets, 'projetMois' => $projetMois]);
+        new JsonResponse($caMois);
+        return $this->render('admin/index.html.twig', [
+            'etatProjets' => $etatProjets, 
+            'projetMois' => $projetMois,
+            'caMois' => $caMois
+        ]);
     }
 
 

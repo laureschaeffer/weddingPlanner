@@ -33,10 +33,10 @@ class ProjectRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    //SELECT DATE_FORMAT(date_receipt, "%c") AS month, COUNT(*) AS count
-    // FROM project
-    // GROUP BY month
-    // ORDER BY MONTH
+    //SELECT DATE_FORMAT(p.date_receipt, "%c") AS month, COUNT(*) AS count
+    // FROM project p
+    // GROUP BY p.dateReceipt
+    // ORDER BY p.dateReceipt
 
     //trouve les projets groupés par date de reception en mois
     public function findProjectByMonth(){
@@ -45,8 +45,29 @@ class ProjectRepository extends ServiceEntityRepository
 
         ->select("DATE_FORMAT(p.dateReceipt, '%M') AS month, COUNT(p) AS count")
         ->from('App\Entity\Project', 'p')
-        ->groupBy('month')
-        ->orderBy('month', 'ASC');
+        ->groupBy('p.dateReceipt')
+        ->orderBy('p.dateReceipt', 'ASC');
+        
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+    
+    // SELECT DATE_FORMAT(p.date_receipt, "%c") AS MONTH, 
+    // AVG(final_price) AS chiffre_affaire
+    // FROM project
+    // GROUP BY p.dateReceipt
+    // ORDER BY p.dateReceipt;
+
+    //trouve les projets groupés par date de reception en mois
+    public function findAvgMonthlyPrice(){
+        $qb = $this->getEntityManager()
+        ->createQueryBuilder()
+
+        ->select("DATE_FORMAT(p.dateReceipt, '%M') AS month, AVG(p.finalPrice) AS averageRevenue")
+        ->from('App\Entity\Project', 'p')
+        ->groupBy('p.dateReceipt')
+        ->orderBy('p.dateReceipt', 'ASC');
         
 
         $query = $qb->getQuery();
