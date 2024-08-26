@@ -139,6 +139,9 @@ textarea{
     padding: 0 var(--big-padding);
 }
 
+#diag-container{
+    margin: var(--big-padding) 0;
+}
 #diag-container div{
     width: 500px;
 }
@@ -149,6 +152,27 @@ textarea{
     align-items: center;
     position: relative;
     max-width: 190px;
+
+    padding: var(--big-padding) 0;
+
+    button{
+        border: 1px #424242 solid;
+        color: #424242;
+        background: transparent;
+        height: 30px;
+        border-radius: 8px;
+        padding: 0 8px;
+        
+        position: absolute;
+        right: 0;
+
+        cursor: pointer;
+        transition: var(--hover-transition);
+
+        &hover{
+            opacity: var(--hover-opacity);
+        }
+    }
   }
   
   .search {
