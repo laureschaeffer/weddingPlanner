@@ -177,6 +177,7 @@
             {# si le devis a été accepté  #}
             {% if quot.isAccepted %}
                 <p><a href="{{path('show_facture', {'id': project.id})}}" target="_blank">Afficher la facture</a></p>
+                <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
             {% else %}
                 <p>Un devis a été généré par l'entreprise!</p>
                 <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank">
@@ -184,6 +185,7 @@
                         Afficher le devis
                     </button>
                 </a>
+                <p>Si vous ne pouvez pas visualiser le devis en pdf, ouvrez le document html <a href="{{path('show_devis_html', {'id': quot.id})}}" target="_blank">ici</a></p>
 
                 {# accepter ou refuser le devis #}
                 <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>

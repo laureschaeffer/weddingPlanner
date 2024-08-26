@@ -67,6 +67,8 @@
     <h3>Commentaires</h3>
     {% for comment in project.comments %}
         <p>{{comment}}</p>
+        {% else %}
+        <p>Aucun commentaire ajouté</p>
     {% endfor %}
 
     {% if project.finalPrice %}

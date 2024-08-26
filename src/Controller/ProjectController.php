@@ -219,7 +219,7 @@ class ProjectController extends AbstractController
         }
     }
 
-    //sur le profil utilisateur, montre le devis finalisé
+    //sur le profil utilisateur, montre le devis finalisé (PDF)
     #[Route('/devisFinal/{id}', name: 'show_devis')]
     public function showDevis(Quotation $quotation = null, PdfService $pdfService){
         if($quotation){
@@ -249,6 +249,33 @@ class ProjectController extends AbstractController
             return new Response('', 200, [
                     'Content-Type' => 'application/pdf',
             ]);
+        }  
+    }
+    
+    //sur le profil utilisateur, montre le devis finalisé (HTML)
+    #[Route('/devisFinalHtml/{id}', name: 'show_devis_html')]
+    public function showDevisHtml(Quotation $quotation = null, PdfService $pdfService){
+        if($quotation){
+
+            //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
+            if($this->getUser()!== $quotation->getProject()->getUser()){
+                $this->addFlash('error', 'Vous n\'avez pas le droit de voir ce devis');
+                return $this->redirectToRoute('app_home');
+            }
+
+            //gere l'image
+            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
+            $imageData = base64_encode(file_get_contents($imagePath)); //encode
+
+            //projet associé au devis
+            $project = $quotation->getProject();
+
+            return $this->render('/pdf/devis.html.twig', [
+                'quotation' => $quotation,
+                'project' => $project,
+                'imageData' => $imageData
+            ]);
+
         }  
     }
 
@@ -423,7 +450,7 @@ class ProjectController extends AbstractController
     #[Route('/facture/{id}', name: 'show_facture')]
     public function showFacture(Project $project = null, PdfService $pdfService, BillRepository $billRepository, QuotationRepository $quotationRepository){
         //si l'utilisateur connecté n'est pas le propriétaire du projet/devis ou admin
-        if($this->getUser()!== $project->getUser() || !$this->isGranted('ROLE_ADMIN')){
+        if($this->getUser()!== $project->getUser() && !$this->isGranted('ROLE_ADMIN')){
             $this->addFlash('error', 'Vous n\'avez pas le droit de voir cette facture');
             return $this->redirectToRoute('app_home');
         }
@@ -447,6 +474,33 @@ class ProjectController extends AbstractController
             return new Response('', 200, [
                     'Content-Type' => 'application/pdf',
             ]);
+
+    }
+    
+    //affiche la facture en html: pour l'utilisateur ou l'admin
+    #[Route('/factureHtml/{id}', name: 'show_facture_html')]
+    public function showFactureHtml(Project $project = null, BillRepository $billRepository, QuotationRepository $quotationRepository){
+
+        //si l'utilisateur connecté n'est pas le propriétaire du projet/devis ou admin
+        if($this->getUser()!== $project->getUser() && !$this->isGranted('ROLE_ADMIN')){
+            $this->addFlash('error', 'Vous n\'avez pas le droit de voir cette facture');
+            return $this->redirectToRoute('app_home');
+        }
+        $quotation = $quotationRepository->findOneBy(['project' => $project->getId()]); //devis associé au projet
+        $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
+
+        // gère l'image
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imageData = base64_encode(file_get_contents($imagePath));
+
+        
+        return $this->render('pdf/facture.html.twig', [
+            'bill' => $bill,
+            "project" => $project,
+            "imageData" => $imageData
+        ]);
+        
+        
 
     }
 
