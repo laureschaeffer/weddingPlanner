@@ -53,6 +53,23 @@ class ProjectRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    //recherche en fonction d'un mot clé dans les enregistrements dans la bdd
+    public function findByWord($word) {
+        $em = $this->getEntityManager();
+
+        $sub = $em->createQueryBuilder();
+
+        $qb = $sub;
+
+        $qb->select('p')
+            ->from('App\Entity\Project', 'p')
+            ->where('p.firstname LIKE :word OR p.surname LIKE :word OR p.email LIKE :word OR p.telephone LIKE :word')
+            ->setParameter('word', '%'.$word.'%');
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Project[] Returns an array of Project objects
     //     */

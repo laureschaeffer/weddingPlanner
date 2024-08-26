@@ -34,6 +34,23 @@ class ReservationRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    //recherche en fonction d'un mot clé dans les enregistrements dans la bdd
+    public function findByWord($word) {
+        $em = $this->getEntityManager();
+
+        $sub = $em->createQueryBuilder();
+
+        $qb = $sub;
+
+        $qb->select('r')
+            ->from('App\Entity\Reservation', 'r')
+            ->where('r.referenceOrder LIKE :word OR r.firstname LIKE :word OR r.surname LIKE :word OR r.telephone LIKE :word')
+            ->setParameter('word', '%'.$word.'%');
+
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Reservation[] Returns an array of Reservation objects
     //     */

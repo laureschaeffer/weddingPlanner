@@ -16,22 +16,6 @@ class PrestationRepository extends ServiceEntityRepository
         parent::__construct($registry, Prestation::class);
     }
 
-    //recherche en fonction d'un mot clé dans les enregistrements dans la bdd
-    public function findByWord($word) {
-        $em = $this->getEntityManager();
-
-        $sub = $em->createQueryBuilder();
-
-        $qb = $sub;
-
-        $qb->select('a')
-            ->from('App\Entity\Prestation', 'a')
-            ->where('a.description LIKE :word')
-            ->setParameter('word', '%'.$word.'%');
-
-        $query = $sub->getQuery();
-        return $query->getResult();
-    }
     //    /**
     //     * @return Prestation[] Returns an array of Prestation objects
     //     */

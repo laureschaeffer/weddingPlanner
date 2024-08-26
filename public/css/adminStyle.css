@@ -143,6 +143,40 @@ textarea{
     width: 500px;
 }
 
+/* ****************barre de recherche dans le footer************ */
+#search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    max-width: 190px;
+  }
+  
+  .search {
+    height: 30px;
+    padding: 0 10px;
+    width: 100%;
+    padding-left: 40px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    background-color: #D9E8D8;
+    color: #0d0c22;
+    box-shadow: 0 0 5px #C1D9BF, 0 0 0 10px #f5f5f5eb;
+    transition: .3s ease;
+  }
+  
+  .search::placeholder {
+    color: #777;
+  }
+  
+  .icon {
+    position: absolute;
+    left: 1rem;
+    fill: #777;
+    width: 1rem;
+    height: 1rem;
+  }
+
 /* ============================================================================DEMANDES DE CONTACT =========================================================== */
 
 .projet-card{

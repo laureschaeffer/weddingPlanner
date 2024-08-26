@@ -1,0 +1,47 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Recherche{% endblock %}
+{% block meta %}Cérémonie Couture, wedding planner à Strasbourg. Organisation de mariage, boutique avec création de faire parts de mariage personnalisés et autres.{% endblock %}
+
+{% block body %}
+
+<h1>Résultat de votre recherche "{{word}}" </h1>
+
+{# -------------------projets------------------- #}
+{% if projects %}
+
+    <h2>Dans les projets</h2>
+
+    {% for projet in projects %}
+        {% if projet.user %}
+            <p>{{projet}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
+        {% else %}
+            <p>Anonyme, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
+        {% endif %}
+
+        <p><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
+    {% endfor %}
+    
+{% endif %}
+
+{# -------------------reservations-------------------  #}
+{% if reservations %}
+    <h2>Dans les réservations de la boutique</h2>
+
+    {% for reservation in reservations %}
+
+        {% if reservation.user %}
+            <p> {{reservation.firstname}} {{reservation.surname}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+            {% else %}
+            <p> anonyme (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
+        {% endif %}
+        <p>A passé commande le {{reservation.dateOrder |date("d/m/Y")}} </p>
+
+    {% endfor %}
+{% endif %}
+
+{# {% if batchs == null and creations == null and prestations == null and products == null and workers == null %}
+    <p>Aucun résultat</p>
+{% endif %} #}
+
+{% endblock %}
