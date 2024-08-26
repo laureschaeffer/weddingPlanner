@@ -60,7 +60,7 @@ class ProjectRepository extends ServiceEntityRepository
     // ORDER BY p.date_receipt;
 
     //chiffre d'affaire mensuel sur les projets
-    public function findAvgMonthlyPrice(){
+    public function findMonthlyRevenue(){
         $qb = $this->getEntityManager()
         ->createQueryBuilder()
 

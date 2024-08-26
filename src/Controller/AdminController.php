@@ -37,7 +37,7 @@ class AdminController extends AbstractController
         $projetMois = $projectRepository->findProjectByMonth();
 
         //tableau de la moyenne du chiffre d'affaire par mois
-        $caMois = $projectRepository->findAvgMonthlyPrice();
+        $caMois = $projectRepository->findMonthlyRevenue();
 
 
         new JsonResponse($etatProjets);
