@@ -247,6 +247,8 @@ class ShopController extends AbstractController
                     
                     //-----------------------------------------envoie d'un email de confirmation
                     $this->sendConfirmationMail($user, $reservation, $mailer);
+
+                    $basketService->deleteBasket(); //supprime le panier en session
         
                     $this->addFlash('success', 'Réservation effectuée');
                     return $this->redirectToRoute('app_home');

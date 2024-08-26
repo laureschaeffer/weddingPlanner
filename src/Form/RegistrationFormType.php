@@ -23,14 +23,22 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class)
-            ->add('pseudo', TextType::class)
+            ->add('email', EmailType::class, [
+                'row_attr' => [
+                    'class' => 'login-row'
+                ]
+            ])
+            ->add('pseudo', TextType::class, [
+                'row_attr' => [
+                    'class' => 'login-row'
+                ]
+            ])
             //RepeatedType: affiche deux fois mais 'fusionne' les deux champs lorsqu'ils sont identiques pour en enregistrer un dans la bdd
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false, //pas enregistré dans la bdd
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passes ne correspondent pas.',
-                // 'options' => ['attr' => ['class' => 'password-field']],
+                'options' => ['row_attr' => ['class' => 'login-row']],
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Vérification du mot de passe'],
@@ -52,6 +60,9 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'agree-terms-row'
+                ],
                 'mapped' => false,
                 'label' => 'Conditions d\'utilisation',
                 'constraints' => [
@@ -60,7 +71,11 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('Valider', SubmitType::class)
+            ->add('Valider', SubmitType::class, [
+                'attr' => [
+                    'class' => 'contact-btn'
+                ],
+            ])
         ;
     }
 

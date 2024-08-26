@@ -7,7 +7,7 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %} #}
 
-    <section id="login-form">
+    <section id="register-form">
 
         <h1>S'inscrire</h1>
     
@@ -23,6 +23,15 @@
             {{ form_row(registrationForm.Valider) }}
     
         {{ form_end(registrationForm) }}
+
+        {# google #}
+        <p>
+            <a href="{{ path('connect_google') }}" class="login-with-google-btn">
+                <button type="button" >
+                    Continuer avec Google
+                </button>
+            </a>
+        </p>
 
     </section>
 

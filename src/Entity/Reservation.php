@@ -237,7 +237,7 @@ class Reservation
         $dateMax->modify('+3 months');
 
         if($this->datePicking < $ajd || $this->datePicking > $dateMax){
-            return $ajd; 
+            return false; 
         } else {
             return true ;
         }
