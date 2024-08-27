@@ -146,7 +146,7 @@ textarea{
     padding: 10px 30px;
     text-align: center;
     letter-spacing: 1px;
-    color: var(--burgundy-color);
+    color: black;
     background: transparent;
     cursor: pointer;
     transition: ease-out 0.5s;
@@ -173,6 +173,26 @@ textarea{
 /* ---------padding sur le coté----- */
 #home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, #login, #temoignage{
     padding: 0 var(--big-padding);
+}
+
+/* msg d'erreur  */
+.alert{
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    font-size: 1.2rem;
+}
+
+.alert-danger{
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
 }
 
 /* ==================================================================================template=================================================================== */
