@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Project;
+use App\Form\EditProjectType;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -72,5 +73,39 @@ class SuperAdminController extends AbstractController
             return $this->redirectToRoute('app_utilisateur');
 
         }
+    }
+
+    //modifie un projet
+    #[Route('/super-coiffe/editProjet/{id}', name: 'edit_projet')]
+    public function editProjet(Project $project = null, EntityManagerInterface $entityManager, Request $request){
+
+        //si le projet n'existe pas ou qu'il ne peut plus etre modifié
+        if(!$project || !$project->isEditable()){
+            $this->addFlash('error', 'Le projet n\'existe pas ou ne peut plus être modifié');
+            return $this->redirectToRoute('app_projet');
+        }
+
+        //crée le formulaire
+        $form = $this->createForm(EditProjectType::class, $project);
+        $form->handleRequest($request); 
+    
+        if($form->isSubmitted() && $form->isValid()){
+
+            $project=$form->getData();
+            
+            $entityManager->persist($project); //prepare
+            $entityManager->flush(); //execute
+
+            $this->addFlash('success', 'Projet modifié');
+            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+
+        }
+        
+        //vue du formulaire
+        return $this->render('super_admin/editProject.html.twig', [
+            'form'=>$form
+        ]);
+
+        
     }
 }

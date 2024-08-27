@@ -1,6 +1,6 @@
 {% extends 'adminBase.html.twig' %}
 
-{% block title %}Demande de contact{% endblock %}
+{% block title %}Demande de projet{% endblock %}
 
 {% block body %}
 
@@ -81,6 +81,11 @@
 
         {# description  #}
         <p> {{project.description}} </p>
+
+        {% if app.user and "ROLE_SUPERADMIN" in app.user.roles %}
+        <p><a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a></p>
+                            
+        {% endif %}
 
     </div>
 

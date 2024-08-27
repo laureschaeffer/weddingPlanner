@@ -1,0 +1,40 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Modifier un projet{% endblock %}
+
+{% block body %}
+
+<h1>Modifier le projet</h1>
+
+
+
+    <div id="contact-form">
+
+        {{ form_start(form) }}
+        
+        <div class="form-flex">
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.surname) }}
+        </div>
+        <p>Remplir l'email de contact si différent du compte utilisateur</p>
+        <div class="form-flex">
+            {{ form_row(form.email) }}
+            {{ form_row(form.telephone) }}
+        </div>
+        <div class="form-flex">
+            {{ form_row(form.dateEvent) }}
+            {{ form_row(form.nbGuest) }}
+        </div>
+        <div class="form-flex">
+            {{ form_row(form.destination) }}
+            {{ form_row(form.budget) }}
+        </div>
+        {{ form_row(form.prestations) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.Modifier) }}
+    
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}
