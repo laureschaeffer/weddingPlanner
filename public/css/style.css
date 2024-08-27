@@ -50,7 +50,6 @@
     --big-padding: 50px;
     --main-padding: 20px;
     --small-padding: 5px;
-    --footer-padding: 250px;
 
     /* version mobile  */
     --padding-tel: 10px;
@@ -101,9 +100,6 @@ h3{
     color: var(--burgundy-color);
 }
 
-#page-container{
-    padding-bottom: var(--footer-padding);
-}
 
 
 .logo{
@@ -256,10 +252,9 @@ nav{
 footer{
     background-color: var(--footer-color);
     width: 100%;
-    height: var(--footer-padding); 
 
     /* position: fixed; */
-    bottom: 0;
+    /* bottom: 0; */
 
     li{
         list-style: none;

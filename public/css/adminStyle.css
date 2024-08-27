@@ -13,19 +13,25 @@
     --pastel-green-color: #B3CBB9;
     --burgundy-color: #5D2B42;
     --grey-color: #D9D9D9;
+    /* --pink-color: #e3787c; */
     --pink-color: #c4979942;
-    /* --pink-color: #C49799; */
 
     /* polices d'ecriture  */
     --main-font: "Cormorant Garamond", sans-serif;
     --title-font: "Cormorant SC", sans-serif;
 
     /* tailles  */
-    --p-font-size: 1.2rem;
-    --nav-font-size: 1.4rem;
+    --p-font-size: 1.3rem;
+    --nav-font-size: 1.5rem;
     --medium-font-size: 1.7rem;
     --subtitle-font-size: 1.8rem;
     --title-font-size: 2rem;
+
+    /* tailles tel */
+    --title-mb: 1.8rem;
+    --subtitle-mb: 1.6rem;
+    --medium-mb: 1.4rem;
+    --p-mb: 1.2rem;
 
     --title-font-weight: 500;
     --semi-bold: 600;
@@ -42,7 +48,10 @@
     --big-padding: 50px;
     --main-padding: 20px;
     --small-padding: 5px;
-    --footer-padding: 130px;
+    --footer-padding: 250px;
+
+    /* version mobile  */
+    --padding-tel: 10px;
 
     /* hover  */
     --hover-opacity: 0.7;
@@ -62,6 +71,7 @@
     font-family: var(--main-font);
     background-color: #F1F0F0;
     min-height: 100vh;
+    padding-bottom: 1.5rem;
     /* position: relative; */
 }
 
@@ -132,6 +142,12 @@ textarea{
     border-color: #c3e6cb;
 }
 
+/* padding sur le cote  */
+
+#projets, #temoignages, #reservations{
+    padding: 0 1rem;
+}
+
 /* -----------bouton de contact et sign-in */
 .contact-btn{
     position: relative;
@@ -163,11 +179,23 @@ textarea{
 
 /* ----------------------------------------------------------------------template------------------------------------------------------------------- */
 
-#admin-nav{
+header{
     background-color: var(--burgundy-color);
+    padding: var(--main-padding) 0;
+}
+
+#admin-nav{
     display: flex;
     justify-content: space-around;
-    padding: var(--main-padding) 0;
+}
+
+#nav-icon, header label{
+    display: none;
+}
+
+#burgerIcon {
+    width: 25px;
+    margin: 35px;
 }
 
 #admin-nav>div{
@@ -179,6 +207,8 @@ textarea{
 #admin-nav a{
     color: white;
     font-size: var(--nav-font-size);
+    text-decoration: none;
+    font-weight: var(--semi-bold);
 }
 
 /* ============================================================================INDEX===========================================================  */
@@ -188,12 +218,15 @@ textarea{
 
 #diag-container{
     margin: var(--big-padding) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 #diag-container div{
     width: 500px;
 }
 
-/* ****************barre de recherche dans le footer************ */
+/* ****************barre de recherche************ */
 #search-bar {
     display: flex;
     align-items: center;
@@ -248,7 +281,46 @@ textarea{
     height: 1rem;
   }
 
-/* ============================================================================DEMANDES DE CONTACT =========================================================== */
+/* ============================================================================BOUTIQUE=========================================================== */
+
+#reservations h2{
+    margin: 2rem 0;
+}
+#reservations ul {
+    padding: 1.2rem 0;
+}
+
+#reservations ul{
+    padding: 0 1rem;
+}
+#reservations li{
+    list-style: none;
+    font-size: var(--p-font-size);
+}
+
+.reservation-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.reservation-card{
+    border: 1px solid;
+    padding: 1rem;
+}
+
+.reservation-card p{
+    display: flex;
+    align-items: center;
+}
+
+
+/* ============================================================================TEMOIGNAGE=========================================================== */
+.avis-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
 .projet-card{
     background-color: #D9D9D9;
@@ -379,3 +451,79 @@ textarea{
 /* .change-form{
     display: none;
 } */
+/* ======================================================================================================================================================================================================================================================REPONSIVE==================================================================================================================================================================================================================================== */
+@media screen and (max-width: 768px) {
+    /* ****************general**************  */
+    h1{
+        font-size: var(--title-mb);
+        margin: 0 var(--padding-tel);
+    }
+
+    h2{
+        font-size: var(--subtitle-mb);
+        padding: 1rem 0;
+    }
+
+    h3{
+        font-size: var(--medium-mb);
+    }
+
+    p{
+        font-size: var(--p-mb);
+    }
+
+    #page-container{
+        padding: 0;
+    }
+
+    /* padding sur le cote  */
+    #accueil-admin{
+        padding: 15px;
+    }
+    
+    /* *********navbar/header*********  */
+
+    #admin-nav{
+        display: none;
+    }
+
+    header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header label {
+        display: initial;
+    }
+    /* ouvre la navbar responsive  */
+    #nav-icon:checked ~ nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    #admin-nav>div {
+        gap: 5px;
+    }
+
+    /* **************index*********************** */
+    #diag-container div {
+        width: 80vw;
+    }
+
+    /* ********************************************detail projet ********************************** */
+    #detail-projet{
+        padding: 0 1rem;
+    }
+
+    .projet-entete{
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .projet p{
+        padding: 5px 0;
+    }
+
+}

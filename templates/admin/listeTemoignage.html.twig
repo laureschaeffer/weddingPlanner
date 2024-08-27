@@ -3,27 +3,39 @@
 {% block title %}Pannel admin{% endblock %}
 
 {% block body %}
-{% dump(avisPublies) %}
-<h1>Vérifier les avis</h1>
 
-<p>Vous pouvez choisir maximum 5 avis qui seront publiés</p>
+<section id="temoignages">
 
-<h2>Avis publiés</h2>
+    <h1>Vérifier les avis</h1>
+    
+    <p>Vous pouvez choisir maximum 5 avis qui seront publiés</p>
+    
+    <h2>Avis publiés</h2>
+    
+    <div class="avis-container">
+        {% for ap in avisPublies %}
+            <div class="avis-card">
+                <p>{{ap}} <a href="{{path('change_avis', {'id': ap.id})}}"><i class="fa-solid fa-minus"></i></a> </p>
+                <p> {{ap.dateReceipt | date("d-m-Y")}} </p>
+                <p>{{ap.description}}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <hr>
+    <h2>Avis non publiés</h2>
+    
+    <div class="avis-container">
+        {% for anp in avisNonPublies %}
+            <div class="avis-card">
+                <p>{{anp}}  <a href="{{path('change_avis', {'id': anp.id})}}"><i class="fa-solid fa-plus"></i></a> </p>
+                <p> {{anp.dateReceipt | date("d-m-Y")}} </p>
+                <p>{{anp.description}}</p>
+                <p><a href="{{path('remove_avis', {'id': anp.id})}}">Supprimer définitivement</a></p>
+            </div>
+        {% endfor %}
+    </div>
 
-{% for ap in avisPublies %}
-    <p>{{ap}} <a href="{{path('change_avis', {'id': ap.id})}}"><i class="fa-solid fa-minus"></i></a> </p>
-    <p> {{ap.dateReceipt | date("d-m-Y")}} </p>
-    <p>{{ap.description}}</p>
-{% endfor %}
-
-<hr>
-<h2>Avis non publiés</h2>
-
-{% for anp in avisNonPublies %}
-    <p>{{anp}}  <a href="{{path('change_avis', {'id': anp.id})}}"><i class="fa-solid fa-plus"></i></a> </p>
-    <p> {{anp.dateReceipt | date("d-m-Y")}} </p>
-    <p>{{anp.description}}</p>
-    <p><a href="{{path('remove_avis', {'id': anp.id})}}">Supprimer définitivement</a></p>
-{% endfor %}
+</section>
 
 {% endblock %}

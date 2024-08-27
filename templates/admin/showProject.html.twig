@@ -67,6 +67,8 @@
         <h4>Prestation(s) envisagée(s):</h4>
         {% for presta in project.prestations %}
             <p>{{presta}}</p>
+            {% else %}
+            <p>Aucune choisie</p>
         {% endfor %}
 
         {# budget  #}
@@ -82,8 +84,8 @@
         {# description  #}
         <p> {{project.description}} </p>
 
-        {% if app.user and "ROLE_SUPERADMIN" in app.user.roles %}
-        <p><a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a></p>
+        {% if "ROLE_SUPERADMIN" in app.user.roles and project.isEditable %}
+            <p><a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a></p>
                             
         {% endif %}
 
