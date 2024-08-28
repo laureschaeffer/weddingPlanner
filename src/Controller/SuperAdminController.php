@@ -74,7 +74,7 @@ class SuperAdminController extends AbstractController
 
         }
     }
-
+    //----------------------------------------------partie projet--------------------------------
     //modifie un projet
     #[Route('/super-coiffe/editProjet/{id}', name: 'edit_projet')]
     public function editProjet(Project $project = null, EntityManagerInterface $entityManager, Request $request){

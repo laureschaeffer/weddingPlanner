@@ -9,14 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class SecurityController extends AbstractController
 {
@@ -87,7 +82,7 @@ class SecurityController extends AbstractController
 
         $csrfTokenId = 'authenticate';
 
-        //si le token de la session et du formulaire n'est pas le meme, déconnecte
+        //si le token de la session et du formulaire n'est pas le meme, redirige
         if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
             $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
             return $this->redirectToRoute('app_profil');
