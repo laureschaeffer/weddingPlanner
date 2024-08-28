@@ -4,72 +4,84 @@
 
 {% block body %}
 
-<style>
-    img{
-        width: 200px;
-    }
-</style>
 <h1>Détail de la commande</h1>
 
 
-{# en fonction de si la commande a été préparée  #}
-{% if reservation.isPrepared %}
-    <p><i class="fa-solid fa-circle-check"></i></p>
-    {% else %}
-    <p><i class="fa-solid fa-hourglass-start"></i></p>
-{% endif %}
-
-
-<p>Commande n° {{reservation}}, passée le  {{reservation.dateOrder |date("d/m/Y")}}</p>
-<p> {{reservation.firstname}} {{reservation.surname}} </p>
-<p><i class="fa-solid fa-arrow-right"></i> retire le {{reservation.datePicking |date("d/m/Y")}}</p>
-
-
-    {# contact  #}
-    <p><b>Contact</b></p>
-    {% if reservation.user %}
-        <p>{{reservation.telephone}}</p>
-        <p> {{reservation.user.email}} </p>
+<div class="detail-reservation-card">
+    
+    {# en fonction de si la commande a été préparée  #}
+    {% if reservation.isPrepared %}
+        <p><i class="fa-solid fa-circle-check"></i> préparée</p>
         {% else %}
-        <p>anonyme</p>
-        <p>anonyme</p>
+        <p><i class="fa-solid fa-hourglass-start"></i> à préparer</p>
     {% endif %}
     
+    <h2>Commande n° {{reservation}}</h2>
 
-    {# produits  #}
-    {% if reservation.bookings |length >1  %}
-        <p><b>{{ reservation.bookings |length }} produits</b></p>
-    {% else %}
-        <p><b>{{ reservation.bookings |length }} produit</b></p>
-    {% endif %}
+    <div class="detail-reservation-head">
+        <div class="reservation-head-flex">
+            <p>Reçue le {{reservation.dateOrder |date("d/m/Y")}}</p>
+            <p><i class="fa-solid fa-arrow-right"></i> retire le {{reservation.datePicking |date("d/m/Y")}}</p>
+            <p>{{reservation.firstname}} {{reservation.surname}}</p>
+        </div>
+        <div class="reservation-head-flex">
+            {# contact  #}
+            {% if reservation.user %}
+                <p>{{reservation.telephone}}</p>
+                <p> {{reservation.user.email}} </p>
+            {% else %}
+                <p>anonyme</p>
+                <p>anonyme</p>
+            {% endif %}
+
+        </div>
+    </div>
     
-    {% for produit in reservation.bookings %}
-        <figure>
-            <img src="{{ asset(produit.product.urlPicture) }}" alt="{{produit.product.altPicture}}">
-            <legend>{{produit.quantite}}x {{produit.product}}</legend>
-        </figure>
+    <div class="detail-reservation-body">
+        {# nb produit  #}
+        {% if reservation.bookings |length >1  %}
+            <p><b>{{ reservation.bookings |length }} produits</b></p>
+        {% else %}
+            <p><b>{{ reservation.bookings |length }} produit</b></p>
+        {% endif %}
+
+        {# produits  #}
+        <div class="reservation-produit">
+            {% for produit in reservation.bookings %}
+                <figure>
+                    <a href="{{path('show_product', {'id': produit.product.id})}}">
+                        <img src="{{ asset(produit.product.urlPicture) }}" alt="{{produit.product.altPicture}}">
+                        <legend>{{produit.quantite}}x {{produit.product}}</legend>
+                    </a>
+                </figure>
+            {% endfor %}
+        </div>
+
+    </div> 
+    
+    <hr>
+    <h2>Actions</h2>
+    <div class="detail-reservation-action">
+        {# commande préparée #}
+        {% if reservation.isPrepared %}
+            <p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande à préparer</a></p>
         
+        {% else %}
+            <p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande préparée</a></p>
+        {% endif %}
+        
+        {# commande récupérée  #}
+        {% if reservation.isPicked %}
+            <p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande à récupérer</a></p>
+        
+        {% else %}
+        
+            <p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande récupérée</a></p>
+        {% endif %}
+        
+        <p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
 
-    {% endfor %}
+    </div>
 
-    <br><br><hr>
-{# commande préparée #}
-{% if reservation.isPrepared %}
-<p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande à préparer</a></p>
-
-{% else %}
-
-<p><a href="{{path('change_commande_prepared', {'id': reservation.id})}}">Commande préparée</a></p>
-{% endif %}
-
-{# commande récupérée  #}
-{% if reservation.isPicked %}
-<p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande à récupérer</a></p>
-
-{% else %}
-
-<p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande récupérée</a></p>
-{% endif %}
-
-<p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
+</div>
 {% endblock %}
