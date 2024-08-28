@@ -6,30 +6,37 @@
 
 <h1>Modifier la commande</h1>
 
+<div id="contact-form">
 
-{{ form_start(form) }}
+    {{ form_start(form) }}
     
-    {{ form_row(form.datePicking) }}
-    {{ form_row(form.firstname) }}
-    {{ form_row(form.surname) }}
-    {{ form_row(form.telephone) }}
-    <p>Partie produit</p>
-
-    {# {{ form_label(form.bookings) }} #}
-    {# {{ form_errors(form.bookings) }} #}
-
-
-    {# pour chaque entité Booking contenue dans la collection bookings dans l'entité Reservation #}
-    {% for booking in form.bookings %}
+        <div class="form-flex">
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.surname) }}
+        </div>
+        <div class="form-flex">
+            {{ form_row(form.datePicking) }}
+            {{ form_row(form.telephone) }}
+        </div>
+        <p>Partie produit</p>
     
-        {# {{ form_errors(booking) }} #}
-        {{ form_widget(booking) }}
+        {{ form_label(form.bookings) }}
+        {{ form_errors(form.bookings) }}
+    
+    
+        {# pour chaque entité Booking contenue dans la collection bookings dans l'entité Reservation #}
+        {% for booking in form.bookings %}
+        
+            {{ form_errors(booking) }}
+            {{ form_widget(booking) }}
+    
+        {% endfor %}
+    
+    
+        {{ form_row(form.Envoyer) }}
+    
+    {{ form_end(form) }}
 
-    {% endfor %}
-
-
-    {{ form_row(form.Envoyer) }}
-
-{{ form_end(form) }}
+</div>
 
 {% endblock %}

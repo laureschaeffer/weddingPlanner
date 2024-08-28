@@ -707,11 +707,12 @@ small{
 }
 
 /* -----------------------------------panier----------------------- */
-
+#panier{
+    padding: var(--main-padding);
+}
 .panier-head, .panier{
     display: flex;
     justify-content: space-between;
-    padding: var(--main-padding);
     align-items: center;
 }
 

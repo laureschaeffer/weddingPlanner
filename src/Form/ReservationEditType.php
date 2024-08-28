@@ -19,25 +19,44 @@ class ReservationEditType extends AbstractType
     {
         $builder
             ->add('datePicking', DateType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'widget' => 'single_text',
                 'label' => 'Date pour récupérer la commande'
             ])
             ->add('firstname', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Prénom'
             ])
             ->add('surname', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Nom'
             ])
             ->add('telephone', TelType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Téléphone'
             ])
             ->add('bookings', CollectionType::class, [
                 'entry_type' => BookingType::class,
+                'entry_options' => [
+                    'attr' => ['class' => 'reservation-booking'],
+                ],
                 'label' => false,
                 'by_reference' => false //pour éviter un mapping false, obligatoire car Reservation n'a pas de SetBooking, mais Booking a setReservation
                 // Reservation est propriétaire de la relation
             ])
-            ->add('Envoyer', SubmitType::class)
+            ->add('Envoyer', SubmitType::class, [
+                'attr' => [
+                    'class' => 'contact-btn'
+                ]
+            ])
         ;
     }
 

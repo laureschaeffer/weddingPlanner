@@ -361,6 +361,14 @@ header{
     padding: 1.5rem 0;
 }
 
+/* ************modifier reservation********** */
+.reservation-booking{
+    padding: 1.2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
 /* ============================================================================TEMOIGNAGE=========================================================== */
 .avis-container{
     display: flex;
