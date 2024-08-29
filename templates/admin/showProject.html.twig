@@ -63,31 +63,46 @@
             </div>
         </div>
 
-        {# prestations  #}
-        <h4>Prestation(s) envisagée(s):</h4>
-        {% for presta in project.prestations %}
-            <p>{{presta}}</p>
-            {% else %}
-            <p>Aucune choisie</p>
-        {% endfor %}
+        <div class="projet-body">
+            {# prestations  #}
+            <h4>Prestation(s) envisagée(s):</h4>
+            {% for presta in project.prestations %}
+                <p>{{presta}}</p>
+                {% else %}
+                <p>Aucune choisie</p>
+            {% endfor %}
+    
+            {# budget  #}
+            <h4>Budget: </h4>
+            <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
+    
+            {# prix fixé  #}
+            {% if project.finalPrice %}
+                <h4>Prix fixé: </h4>
+                <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
+            {% endif %}
+    
+            {# description  #}
+            <p> {{project.description}} </p>
 
-        {# budget  #}
-        <h4>Budget: </h4>
-        <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
+            
+        </div>
+        <div class="projet-action">
+            {# passe le projet en "la personne a été contacté" ou inversement #}
+           {% if project.isContacted %}
+               <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a>
+               {% else %}
+               <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a>
+           {% endif %}
 
-        {# prix fixé  #}
-        {% if project.finalPrice %}
-            <h4>Prix fixé: </h4>
-            <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
-        {% endif %}
+           {# modifier si superadmin  #}
+           {% if "ROLE_SUPERADMIN" in app.user.roles and project.isEditable %}
+               <a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a>
+                               
+           {% endif %}
 
-        {# description  #}
-        <p> {{project.description}} </p>
+        </div>
 
-        {% if "ROLE_SUPERADMIN" in app.user.roles and project.isEditable %}
-            <p><a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a></p>
-                            
-        {% endif %}
 
     </div>
 
@@ -114,13 +129,14 @@
 
         {# formulaire pour modifier un commentaire, s'ouvre au clic du bouton plus haut #}
         <form action="{{path('edit_comment', {'id': comment.id})}}" method="post" id="form{{comment.id}}" style="display: none;">
-            <input type="text" name="comment" value="{{comment.content}}" style="width: 100%;">
+            <input type="text" name="comment" value="{{comment.content}}" class="edit-comment">
             
             <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
             >
             {# honeypot #}
 		    <input name="firstname" type="text" id="firstname" class="hide-robot">
+            <button type="submit" class="small-btn">Modifier</button>
         </form>
     {% endfor %}
     {# ---------------------------------interactions suivi de projet----------------------------------- #}
@@ -136,16 +152,16 @@
     
             {{ form_errors(form.content) }}
             {{ form_label(form.content) }}
-            <br>
+            
             {{ form_widget(form.content) }}
     
-            <br>
-            {{ form_row(form.Envoyer, {'attr': {'class': 'add-btn'}}) }}
+            
+            {{ form_row(form.Envoyer, {'attr': {'class': 'small-btn'}}) }}
     
     
         {{ form_end(form) }}
-        <br><br>
-        <h4>Fixer le prix final</h4>
+        <hr>
+        <h3>Fixer le prix final</h3>
         {# fixe le prix final  #}
         {% if project.finalPrice %}
             {% set price = project.finalPrice %}
@@ -154,29 +170,24 @@
         {% endif %}
         <form action="{{ path('fixe_prix', {'id': project.id})}}" method="post">
             <p>
-                <label>Prix final</label> <br>
+                <label>Prix final</label> 
                 <input type="number" name="price" value="{{price}}"/>
                 {# honeypot #}
                 <input name="firstname" type="text" id="firstname" class="hide-robot">
             </p>
-            <button type="submit" name="submit">Valider</button>
+            <button type="submit" name="submit" class="small-btn">Valider</button>
         </form>
-    
-        
-        {# passe le projet en "la personne a été contacté" #}
-        <h4>Changer le statut du projet</h4>
-        {% if project.isContacted %}
-            <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a></button>
-            {% else %}
-            <button><a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a></button>
-        {% endif %}
-        <br><br>
 
-        <h4>Générer un dévis pour vous</h4>
-        {# genere un pdf  #}
-        <button><a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">Devis</a></button>
-        <br>
-        <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
+        <hr>
+        <div class="projet-devis">
+            
+            <h4>Générer un dévis pour vous</h4>
+            {# genere un pdf  #}
+            <button><a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">Devis</a></button>
+            
+            <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
+
+        </div>
     
         {# <h4>Prendre rendez-vous avec le client</h4>
         <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p> #}

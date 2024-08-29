@@ -115,6 +115,9 @@ textarea{
     min-height: 200px;
     font-size: var(--p-font-size);
     font-family: var(--main-font);
+    outline: none;
+    border: var(--grey-color) solid 3px;
+    background: none;
 }
 
 /* honeypot */
@@ -389,11 +392,13 @@ header{
     padding: var(--escape-padding);
 }
 
-
 .projet{
     background-color: var(--grey-color);
     padding: var(--main-padding);
     margin-bottom: var(--big-padding);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
 }
 
 .projet-state{
@@ -405,6 +410,42 @@ header{
     justify-content: space-between;
     padding: var(--main-padding) 0;
 }
+
+.projet-action{
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--p-font-size)
+}
+
+
+#detail-projet form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+.small-btn{
+    width: 12rem;
+    height: 2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    
+    transition: var(--hover-transition);
+
+    &:hover{
+        opacity: var(--hover-opacity);
+    }
+}
+
+.edit-comment{
+    width: 100%;
+    font-size: var(--p-font-size);
+    font-family: var(--main-font);
+    border: var(--grey-color) solid 3px;
+    background: none;
+}
+
 
 .projet-suivi{
     border: var(--grey-color) solid 3px;
@@ -419,6 +460,40 @@ header{
 
 .projet-suivi p{
     padding: var(--small-padding);
+}
+
+.projet-devis{
+    padding: 1.2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: flex-start;
+
+    button{
+        height: 50px;
+        margin: 5px;
+        width: 120px;
+        background: #333;
+        justify-content: center;
+        cursor: pointer;
+        align-items: center;
+        border: solid #404c5d 1px;
+        color: rgb(161, 161, 161);
+        border-radius: 5px;
+        background: linear-gradient(145deg, #2e2d2d, #212121);
+
+        a{
+            color: white;
+            text-decoration: none;
+        }
+    }
+
+    button:hover {
+        box-shadow: 1px 1px 13px #5d2b42, -1px -1px 13px #5d2b42;
+        color: #d6d6d6;
+        -webkit-transition: 500ms;
+        transition: 500ms;
+    }
 }
 
 /* ===================================================================modifier projet formulaire ===================================================== */
