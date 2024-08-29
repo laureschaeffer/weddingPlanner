@@ -8,9 +8,9 @@ use App\Entity\Comment;
 use App\Entity\Project;
 use App\Entity\Quotation;
 use App\Form\CommentType;
-use App\Repository\BillRepository;
 use App\Service\PdfService;
 use App\Service\UniqueIdService;
+use App\Repository\BillRepository;
 use App\Repository\StateRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
@@ -21,8 +21,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProjectController extends AbstractController
@@ -81,10 +83,19 @@ class ProjectController extends AbstractController
 
     //modifie un commentaire du suivi
     #[Route('/coiffe/editComment/{id}', name: 'edit_comment')]
-    public function editComment(Comment $comment =null, EntityManagerInterface $entityManager){
+    public function editComment(Comment $comment =null, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager){
         if($comment){
 
             $idProjet = $comment->getProject()->getId(); //recupere l'id du projet pour la redirection
+            $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+            $csrfTokenId = 'authenticate';
+
+            //si le token de la session et du formulaire n'est pas le meme, redirige
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
+                $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
+                return $this->redirectToRoute('app_profil');
+            }
 
             //si le projet n'est pas modifiable
             if(!$comment->getProject()->isEditable()){

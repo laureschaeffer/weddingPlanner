@@ -115,6 +115,10 @@
         {# formulaire pour modifier un commentaire, s'ouvre au clic du bouton plus haut #}
         <form action="{{path('edit_comment', {'id': comment.id})}}" method="post" id="form{{comment.id}}" style="display: none;">
             <input type="text" name="comment" value="{{comment.content}}" style="width: 100%;">
+            
+            <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+            >
             {# honeypot #}
 		    <input name="firstname" type="text" id="firstname" class="hide-robot">
         </form>

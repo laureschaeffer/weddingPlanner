@@ -27,6 +27,8 @@
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
         >
+        {# honeypot #}
+        <input name="firstname" type="text" id="firstname" class="hide-robot">
     
         <button class="contact-btn" type="submit">
             Enregistrer

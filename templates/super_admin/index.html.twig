@@ -40,6 +40,9 @@
                 <input type="checkbox" id="superadmin{{user.id}}" name="role_supera" value="ROLE_SUPERADMIN" {{checkSuperAdm}}/>
                 <label for="superadmin{{user.id}}">Super admin</label>
             </p>
+            <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+            >
             {# honeypot #}
                 <input name="firstname" type="text" id="firstname" class="hide-robot">
             <div class="btn-container">

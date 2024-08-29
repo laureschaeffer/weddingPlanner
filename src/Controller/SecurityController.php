@@ -79,6 +79,13 @@ class SecurityController extends AbstractController
         //filtre
         $pseudo = filter_input(INPUT_POST, 'pseudo', FILTER_SANITIZE_SPECIAL_CHARS); 
         $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+        //honey pot field
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        //si je recois "firstname" c'est un robot, je redirige
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        } 
 
         $csrfTokenId = 'authenticate';
 
