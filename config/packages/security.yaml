@@ -22,6 +22,9 @@ security:
                 - App\Security\AppAuthenticator
                 - App\Security\GoogleAuthenticator
             entry_point: App\Security\AppAuthenticator
+            
+            # by default, the feature allows 5 login attempts per minute
+            login_throttling: null
             logout:
                 path: app_logout
                 # where to redirect after logout
