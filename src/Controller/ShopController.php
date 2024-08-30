@@ -29,11 +29,9 @@ class ShopController extends AbstractController
     #[Route('/shop', name: 'app_shop')]
     public function index(BatchRepository $batchRepository): Response
     {
-        $collections = $batchRepository->findBy([]);
-        $troisProduits = $batchRepository->find3Product();        
+        $collections = $batchRepository->findBy([]);        
         return $this->render('shop/index.html.twig', [
-            'collections' => $collections,
-            'troisProduits' => $troisProduits
+            'collections' => $collections
         ]);
     }
 

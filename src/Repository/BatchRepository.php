@@ -18,18 +18,17 @@ class BatchRepository extends ServiceEntityRepository
 
     //renvoie 3 premiers produits d'une collection
     //SELECT * FROM product p inner JOIN batch b ON p.batch_id = b.id WHERE p.batch_id = :nb ORDER BY title LIMIT 3
-    public function find3Product(){
-    // public function find3Product($id){
-        $em = $this->getEntityManager(); //em=EntityManager
+    public function find3Product($id){
+        $em = $this->getEntityManager();
         $sub = $em->createQueryBuilder();
 
         $qb = $sub;
         $qb->select('p')
             ->from('App\Entity\Product', 'p')
             ->innerJoin('p.batch', 'b')
-            // ->andWhere('p.batch = :id')
+            ->andWhere('p.batch = :id')
             ->orderBy('b.title', 'ASC')
-            // ->setParameter('id', $id)
+            ->setParameter('id', $id)
             ->setMaxResults(3);
 
         //renvoie le resultat
