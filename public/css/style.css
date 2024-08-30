@@ -162,7 +162,7 @@ textarea{
 }
 
 /* --------separation des sections  */
-#home-intro, #home-presentation, #home-contact, #home-prestation, #home-service{
+#home-intro, #home-presentation, #home-contact, #home-prestation, #home-service, .stat-container{
     margin-bottom: var(--escape-padding);
 }
 
@@ -338,6 +338,33 @@ footer p, footer a{
     text-align: center;
 }
 
+/* -------3 chiffres---------- */
+.stat-container{
+    display: flex;
+    padding: 50px;
+    gap: 1rem;
+}
+
+.info-stat{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    p{
+        text-align: center;
+    }
+    a{
+        color: black;
+    }
+}
+
+.stat-nb{
+    font-size: 2.5rem;
+    color: var(--burgundy-color);
+}
+
+
 
 /* ------3 cards proposition, evjf, organisation----------- */
 
@@ -436,7 +463,7 @@ footer p, footer a{
     background-color: #D2DDD2;
     padding: 50px;
     border: 1px solid;
-    margin: 20px;
+    margin: 30px;
 }
 
 #home-contact svg{
@@ -1134,8 +1161,8 @@ small{
     /* =======================================================================landing page======================================================================= */
 
     /* padding  */
-    #home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, .home-prestation-card-content, #login{
-        padding: 5px;
+    #home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, .home-prestation-card-content, #login, .stat-container{
+        padding: 5px 10px;
     }
 
     #home-intro p{
@@ -1149,6 +1176,10 @@ small{
 
     .home-prestation-card{
         gap: 1rem;
+    }
+
+    .stat-container{
+        flex-wrap: wrap;
     }
 
     /* ----contact---- */
