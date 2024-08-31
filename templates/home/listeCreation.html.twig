@@ -5,34 +5,30 @@
 {% block body %}
 
 <section id="creation">
-    
     <h1>Nos créations</h1>
+    
     {% for categorie in categories %}
-        <h2>{{categorie}}</h2>
-
-        <div class="creation-container">
-            {# chaque categorie contient une collection de creations #}
-            {% for crea in categorie.creations %}
-                {# tableau de photos #}
-                {% for picture in crea.pictures %}
-    
-                    {% for p in picture %}
-                        <div class="creation-card">
-                            <figure>
-                                <a href="{{path('show_creation', {'id': crea.id}) }}"><img src="{{ asset(p.url) }}" alt="{{p.alt}}"></a>
-                                <a href="{{path('show_creation', {'id': crea.id}) }}"><figcaption> {{crea}} </figcaption></a>
-                            </figure>
-                        </div>
-                
-                    {% endfor %}
-    
-                {% endfor %} 
-            {% endfor %}
-        </div>
-    
         
+    <h2>{{categorie}}</h2>
+
+    <div class="creation-container">
+
+        {# chaque categorie contient un tableau creations  #}
+        {% for creation in categorie.creations %}
+
+        <div class="creation-card">
+            <figure>
+                <a href="{{path('show_creation', {'id': creation.id}) }}"><img src="{{ asset(creation.pictures[0].url) }}" alt="{{creation.pictures[0].alt}}"></a>
+                <a href="{{path('show_creation', {'id': creation.id}) }}"><figcaption> {{creation}} </figcaption></a>
+            </figure>
+        </div>
+        {% endfor %}
+
+    </div>
     
+
     {% endfor %}
+    </div>
 
 </section>
 
