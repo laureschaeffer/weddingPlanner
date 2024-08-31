@@ -982,18 +982,33 @@ small{
 
 /* -------------------detail---------------  */
 #detail-creation{
-    
-    img{
-        width: var(--big-img-size);
-        padding: var(--main-padding);
-        padding-left: 0;
-    }
+    margin-bottom: 2rem;
+}
+#detail-creation h2{
+    text-align: start;
+    margin-bottom: var(--main-padding);
+        
+}
 
-    h2{
-        text-align: start;
-        margin-bottom: var(--main-padding);
+.detail-creation{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    figure{
+        max-width: var(--big-img-size);
+        overflow: hidden;
+    }
+    img{
+        padding: 1.2rem 0;
+        height: 300px;
+
+    }
+    figcaption{
+        font-size: var(--p-font-size);
     }
 }
+
 /* ================================================================================PROFIL================================================================ */
 #profil{
     padding: var(--escape-padding);
