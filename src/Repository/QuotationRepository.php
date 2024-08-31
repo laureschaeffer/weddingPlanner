@@ -16,6 +16,25 @@ class QuotationRepository extends ServiceEntityRepository
         parent::__construct($registry, Quotation::class);
     }
 
+    // SELECT * FROM quotation q WHERE q.is_accepted = 0 AND q.date_creation <= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+    //trouve les devis qui ont été refusé et qui ont au moins 3 mois
+    public function findOldQuotations(){
+        $dateExp = new \DateTime();
+        //enleve 3 mois à la date d'ajd
+        $dateExp->modify('-3 months');
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->where('q.dateCreation < :dateExp')
+            ->andWhere('q.isAccepted = 0')
+            ->setParameter('dateExp', $dateExp)
+            ;
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return Quotation[] Returns an array of Quotation objects
     //     */
