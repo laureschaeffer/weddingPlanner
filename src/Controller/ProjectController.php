@@ -210,7 +210,7 @@ class ProjectController extends AbstractController
     public function createDevisPdf(Project $project = null, PdfService $pdfService){
         if($project){
             //gere l'image
-            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
+            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo.png';
             $imageData = base64_encode(file_get_contents($imagePath)); //encode
             
             $html = $this->renderView('pdf/devis.html.twig', [
@@ -242,7 +242,7 @@ class ProjectController extends AbstractController
             }
 
             //gere l'image
-            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
+            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo.png';
             $imageData = base64_encode(file_get_contents($imagePath)); //encode
 
             //projet associé au devis
@@ -275,7 +275,7 @@ class ProjectController extends AbstractController
             }
 
             //gere l'image
-            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo-noncropped.png';
+            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo.png';
             $imageData = base64_encode(file_get_contents($imagePath)); //encode
 
             //projet associé au devis
@@ -306,7 +306,7 @@ class ProjectController extends AbstractController
     //télécharge dans le dossier upload/devis le devis, factorisation de la fonction createDevis
     public function downloadDevis($quotation, $project, $pdfService, $uniqueIdService){
         // gère l'image
-        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
 
         
@@ -387,7 +387,7 @@ class ProjectController extends AbstractController
     //télécharge dans le dossier upload/facture le facture, factorisation de la fonction accepteDevis (qui crée la facture)
     public function downloadFacture($bill, $project, $pdfService, $uniqueIdService){
         // gère l'image
-        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
 
         
@@ -469,7 +469,7 @@ class ProjectController extends AbstractController
         $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
 
         // gère l'image
-        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
 
         
@@ -501,7 +501,7 @@ class ProjectController extends AbstractController
         $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
 
         // gère l'image
-        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo-noncropped.png';
+        $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
 
         

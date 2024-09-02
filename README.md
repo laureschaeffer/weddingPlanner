@@ -1,6 +1,6 @@
 # Ceremonie Couture
 
-![logo](public/img/logo/logo-noncropped.png)
+![logo](public/img/logo/logo.png)
 
 Application pour une entreprise qui organise des mariages
 
