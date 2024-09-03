@@ -35,11 +35,6 @@
         </button>
     </form>
     
-    <br><br>
-    <p>
-        Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.
-        <a href="{{ path('delete_profil') }}"><button>Supprimer son compte</button></a>
-    </p>
     
     {# --------------------------------historique de réservation-------------------------------- #}
     
@@ -95,122 +90,129 @@
     
     {% if app.user.projects is empty %}
     {% else %}
-    
-        <h2>Rappel de votre projet</h2>
-    
-        {% for project in app.user.projects %}
-    
-            {# en fonction de l'état du projet  #}
-            <p class="projet-state">
-                {# en cours ou en attente #}
-                {% if project.state.id == 1 or project.state.id == 2 %}
-                    <i class="fa-solid fa-hourglass-start"></i>
+        <div id="profil-projet">
 
-                {# accepté  #}
-                {% elseif project.state.id == 3 %}
-                <i class="fa-solid fa-circle-check"></i>
-
-                {# refusé  #}
-                {% elseif project.state.id == 4 %}
-                <i class="fa-regular fa-circle-xmark"></i>
-                
-                {% endif %}
-             {{project.state}} 
-            </p>
-        <div class="projet">
-            <h2>{{project}}</h2>
-            <div class="projet-entete">
-                <div class="projet-entete-flex">
-                    <p>Envoyé le {{project.dateReceipt | date("d.m.Y")}} </p>
-                    <p>Evenement le <b>{{project.dateEvent | date("d.m.Y")}}</b></p>
-                    <p> <small>{{project.nbGuest}} invités</small></p>
-                </div>
-                <div class="projet-entete-flex">
-                    <p>Coordonées renseignées</p>
-                    <p> {{project.telephone }} </p>
-                    {# s'il y a email c'est que l'user prefere etre contacté par celui donné dans le form plutot que celui du compte utilisateur #}
-                    {% if project.email %}
-                        <p> {{project.email}} </p>
-                        {% else %}
-                        <p>{{project.user.email}}</p>
-                    {% endif %}
-                </div>
-            </div>
-    
-            {# prestations  #}
-            <h4>Prestation(s) envisagée(s):</h4>
-            {% for presta in project.prestations %}
-                <p>{{presta}}</p>
-            {% endfor %}
-    
-            {# budget  #}
-            <h4>Budget: </h4>
-            <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
-    
-            {# prix fixé  #}
-            {% if project.finalPrice %}
-                <h4>Prix fixé: </h4>
-                <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
-            {% endif %}
-    
-            {# description  #}
-            <p> {{project.description}} </p>
-    
-        </div>
-    
-        {# suivi du projet, commentaires des personnes présentes sur le pannel admin  #}
-        <h3>Suivi du projet</h3>
-        
-        {% for comment in project.comments %}
-
-            <div class="projet-suivi">
-                <div class="projet-suivi-content">
-                    <p>Ajouté le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
-                    {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
-                    <p>{{comment.content}} </p>
-                </div>
-            </div>
-
-            {% else %}
-            <p>Aucun commentaire ajouté pour l'instant</p>
-        {% endfor %}
-
-        {# devis  #}
-        {% for quot in project.quotations %}
-            {# si le devis a été accepté  #}
-            {% if quot.isAccepted %}
-                <p><a href="{{path('show_facture', {'id': project.id})}}" target="_blank">Afficher la facture</a></p>
-                <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
-            {% else %}
-                <p>Un devis a été généré par l'entreprise!</p>
-                <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank">
-                    <button>
-                        Afficher le devis
-                    </button>
-                </a>
-                <p>Si vous ne pouvez pas visualiser le devis en pdf, ouvrez le document html <a href="{{path('show_devis_html', {'id': quot.id})}}" target="_blank">ici</a></p>
-
-                {# accepter ou refuser le devis #}
-                <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
-                <div>
-                    <a href="#">
-                        <button>
-                            Refuser le devis
-                        </button>
-                    </a>
-                    <a href="{{path('accepte_devis', {id: quot.id})}}">
-                        <button>
-                            Accepter le devis
-                        </button>
-                    </a>
-                </div>
-            {% endif %}
-            {% else %}
-        {% endfor %}
+            <h2>Rappel de votre projet</h2>
             
-        {% endfor %}
+            {% for project in app.user.projects %}
+            
+                {# en fonction de l'état du projet  #}
+                <p class="projet-state">
+                    {# en cours ou en attente #}
+                    {% if project.state.id == 1 or project.state.id == 2 %}
+                        <i class="fa-solid fa-hourglass-start"></i>
     
-    {% endif %}
+                    {# accepté  #}
+                    {% elseif project.state.id == 3 %}
+                    <i class="fa-solid fa-circle-check"></i>
+    
+                    {# refusé  #}
+                    {% elseif project.state.id == 4 %}
+                    <i class="fa-regular fa-circle-xmark"></i>
+                    
+                    {% endif %}
+                {{project.state}} 
+                </p>
+                <div class="projet">
+                    <h2>{{project}}</h2>
+                    <div class="projet-entete">
+                        <div class="projet-entete-flex">
+                            <p>Envoyé le {{project.dateReceipt | date("d.m.Y")}} </p>
+                            <p>Evenement le <b>{{project.dateEvent | date("d.m.Y")}}</b></p>
+                            <p> <small>{{project.nbGuest}} invités</small></p>
+                        </div>
+                        <div class="projet-entete-flex">
+                            <p>Coordonées renseignées</p>
+                            <p> {{project.telephone }} </p>
+                            {# s'il y a email c'est que l'user prefere etre contacté par celui donné dans le form plutot que celui du compte utilisateur #}
+                            {% if project.email %}
+                                <p> {{project.email}} </p>
+                                {% else %}
+                                <p>{{project.user.email}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+            
+                    {# prestations  #}
+                    <h4>Prestation(s) envisagée(s):</h4>
+                    {% for presta in project.prestations %}
+                        <p>{{presta}}</p>
+                    {% endfor %}
+            
+                    {# budget  #}
+                    <h4>Budget: </h4>
+                    <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
+            
+                    {# prix fixé  #}
+                    {% if project.finalPrice %}
+                        <h4>Prix fixé: </h4>
+                        <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
+                    {% endif %}
+            
+                    {# description  #}
+                    <p> {{project.description}} </p>
+            
+                </div>
+            
+                {# suivi du projet, commentaires des personnes présentes sur le pannel admin  #}
+                <h3>Suivi du projet</h3>
+                
+                {% for comment in project.comments %}
+        
+                    <div class="projet-suivi">
+                        <p>Ajouté le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
+                        {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
+                        <p>{{comment.content}} </p>
+                    
+                        
+                    </div>
+        
+                    {% else %}
+                    <p>Aucun commentaire ajouté pour l'instant</p>
+                {% endfor %}
+        
+                {# devis  #}
+                {% for quot in project.quotations %}
+                    {# si le devis a été accepté  #}
+                    {% if quot.isAccepted %}
+                        <a href="{{path('show_facture', {'id': project.id})}}" target="_blank">
+                            <button class="btn-devis-facture">Afficher la facture</button>
+                        </a>
+                        <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
+                    {% else %}
+                        <p>Un devis a été généré par l'entreprise!</p>
+                        <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank">
+                            <button class="btn-devis-facture">
+                                Afficher le devis
+                            </button>
+                        </a>
+                        <p>Si vous ne pouvez pas visualiser le devis en pdf, ouvrez le document html <a href="{{path('show_devis_html', {'id': quot.id})}}" target="_blank">ici</a></p>
+        
+                        {# accepter ou refuser le devis #}
+                        <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
+                        <div>
+                            <a href="#">
+                                <button>
+                                    Refuser le devis
+                                </button>
+                            </a>
+                            <a href="{{path('accepte_devis', {id: quot.id})}}">
+                                <button>
+                                    Accepter le devis
+                                </button>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% else %}
+                {% endfor %}
+                    
+                {% endfor %}
+            
+            {% endif %}
+        </div>
+        <p class="p-delete">Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.</p>
+        <a href="{{ path('delete_profil') }}"><button class="btn-delete">Supprimer son compte</button></a>
+        
 </section>
 
 <script>

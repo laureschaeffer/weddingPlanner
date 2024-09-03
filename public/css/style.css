@@ -1012,6 +1012,10 @@ small{
 /* ================================================================================PROFIL================================================================ */
 #profil{
     padding: var(--escape-padding);
+
+    hr{
+        padding: 3rem 0;
+    }
 }
 
 /* ------------------------historique de reservation------------------------ */
@@ -1038,17 +1042,23 @@ small{
     padding-right: var(--main-padding);
 }
 
-/* ------------------------suivi du projet------------------------ */
-
-.projet-card{
-    background-color: #D9D9D9;
-    padding: var(--main-padding);
-}
 
 
 /* --------------------detail d'une demande de contact -------------------- */
 
+#profil-projet{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
 
+#profil-projet:after{
+    height: 1px;
+    display: block;
+    background: #808080;
+    content: '';
+    margin: 2.5rem 0;
+}
 .projet{
     background-color: var(--grey-color);
     padding: var(--main-padding);
@@ -1067,9 +1077,7 @@ small{
 
 .projet-suivi{
     border: var(--grey-color) solid 3px;
-    margin: var(--main-padding) 0;
-    display: flex;
-    justify-content: space-between;
+    margin: var(--small-padding) 0;
 }
 
 .projet-suivi i{
@@ -1078,6 +1086,37 @@ small{
 
 .projet-suivi p{
     padding: var(--small-padding);
+}
+
+.btn-devis-facture{
+    background: radial-gradient(circle, rgba(93, 43, 66, 1) 0%, rgba(252, 70, 107, 1) 100%);
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    color: white;
+    cursor: pointer;
+    transition: var(--hover-transition);
+
+    &:hover{
+        transform: translateY(-8px);
+    }
+}
+
+.p-delete{
+    margin-bottom: 1.5rem;
+}
+
+.btn-delete{
+    padding: 0.5rem 1.5rem;
+    border-radius: 15px;
+    border-color: red;
+    color: #ff0036;
+    cursor: pointer;
+
+    transition: var(--hover-transition);
+    &:hover{
+        opacity: var(--hover-opacity);
+    }
 }
 
 /* ------------------------formulaire edit profil, s'ouvre au clic------------------------ */
@@ -1163,7 +1202,7 @@ small{
     }
 
     /* ---------padding tel---------  */
-    .home-prestation-card, .home-prestation-card h3, .home-prestation-card p, #home-contact, #prestation-intro p, .prestation-card-main, .equipe-card-main, .shop-intro, .batch-description{
+    .home-prestation-card, .home-prestation-card h3, .home-prestation-card p, #home-contact, #prestation-intro p, .prestation-card-main, .equipe-card-main, .shop-intro, .batch-description, #profil{
         padding: var(--padding-tel);
     }
 
@@ -1231,10 +1270,21 @@ small{
         gap: 10px;
     }
     
-
+    
     /* --------------------------------------------LOGIN---------------------------------------------- */
     #login-form{
         width: 90%;
+    }
+   
+    /* =======================================================================PROFIL======================================================================= */
+
+    #profil-projet{
+        margin: 1.5rem 0px;
+        gap: 1.25rem;
+    }
+
+    .projet{
+        margin-bottom: 30px;
     }
 
 }
