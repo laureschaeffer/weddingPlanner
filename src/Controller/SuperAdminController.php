@@ -33,7 +33,7 @@ class SuperAdminController extends AbstractController
     }
 
     //change le role d'un utilisateur
-    #[Route('super-coiffe/upgrade/{id}', name: 'upgrade_role')]
+    #[Route('/super-coiffe/upgrade/{id}', name: 'upgrade_role')]
     public function upgradeUser(User $user, EntityManagerInterface $entityManager, Request $request, CsrfTokenManagerInterface $csrfTokenManager)
     {
         

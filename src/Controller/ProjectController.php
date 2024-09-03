@@ -260,34 +260,40 @@ class ProjectController extends AbstractController
             return new Response('', 200, [
                     'Content-Type' => 'application/pdf',
             ]);
-        }  
+        } else {
+            $this->addFlash('error', 'Ce devis n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        } 
     }
     
     //sur le profil utilisateur, montre le devis finalisé (HTML)
     #[Route('/devisFinalHtml/{id}', name: 'show_devis_html')]
     public function showDevisHtml(Quotation $quotation = null, PdfService $pdfService){
-        if($quotation){
+        if(!$quotation){
+            $this->addFlash('error', 'Ce devis n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+        
+        //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
+        if($this->getUser()!== $quotation->getProject()->getUser()){
+            $this->addFlash('error', 'Vous n\'avez pas le droit de voir ce devis');
+            return $this->redirectToRoute('app_home');
+        }
 
-            //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
-            if($this->getUser()!== $quotation->getProject()->getUser()){
-                $this->addFlash('error', 'Vous n\'avez pas le droit de voir ce devis');
-                return $this->redirectToRoute('app_home');
-            }
+        //gere l'image
+        $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo.png';
+        $imageData = base64_encode(file_get_contents($imagePath)); //encode
 
-            //gere l'image
-            $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo.png';
-            $imageData = base64_encode(file_get_contents($imagePath)); //encode
+        //projet associé au devis
+        $project = $quotation->getProject();
 
-            //projet associé au devis
-            $project = $quotation->getProject();
+        return $this->render('/pdf/devis.html.twig', [
+            'quotation' => $quotation,
+            'project' => $project,
+            'imageData' => $imageData
+        ]);
 
-            return $this->render('/pdf/devis.html.twig', [
-                'quotation' => $quotation,
-                'project' => $project,
-                'imageData' => $imageData
-            ]);
-
-        }  
+          
     }
 
 
@@ -337,50 +343,53 @@ class ProjectController extends AbstractController
     //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
     public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer, PdfService $pdfService, UniqueIdService $uniqueIdService){
-        if($project){
-            //si le projet n'est pas modifiable
-            if(!$project->isEditable()){
-                $this->addFlash('error', 'L\'état du projet ne permet plus de le modifier');
-                return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
-            }
-            //il faut absolument avoir établi un prix final
-            if($project->getFinalPrice() == NULL){
-                
-                $this->addFlash('error', 'Veuillez fixer un prix final !');
-                return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
-            }
-            //----enregistre dans la bdd
-            $quotation = $this->createQuotationBdd($project, $entityManager, $uniqueIdService);
-
-            //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
-            $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
-            $project->setState($stateEnAttente);
-            $entityManager->persist($project);
-
-            //----envoie d'un mail
-            $emailContact = $project->getEmail()==! NULL ? $project->getEmail() : $project->getUser()->getEmail();
-            $email = (new TemplatedEmail())
-            ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
-            ->to($emailContact)
-            ->subject('Vous avez reçu un devis')
-
-            ->context([
-                'project' => $project
-            ])
-            ->htmlTemplate('email/informationDevis.html.twig')
-            ;
-
-            $mailer->send($email);
-
-            //----télécharge en local le devis pdf
-            $this->downloadDevis($quotation, $project, $pdfService, $uniqueIdService);
-
-            $entityManager->flush(); //execute
-
-            $this->addFlash('success', 'Devis créé et enregistré');
+        if(!$project){
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+        
+        //si le projet n'est pas modifiable
+        if(!$project->isEditable()){
+            $this->addFlash('error', 'L\'état du projet ne permet plus de le modifier');
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        }
+        //il faut absolument avoir établi un prix final
+        if($project->getFinalPrice() == NULL){
             
-        } 
+            $this->addFlash('error', 'Veuillez fixer un prix final !');
+            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        }
+        //----enregistre dans la bdd
+        $quotation = $this->createQuotationBdd($project, $entityManager, $uniqueIdService);
+
+        //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
+        $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
+        $project->setState($stateEnAttente);
+        $entityManager->persist($project);
+
+        //----envoie d'un mail
+        $emailContact = $project->getEmail()==! NULL ? $project->getEmail() : $project->getUser()->getEmail();
+        $email = (new TemplatedEmail())
+        ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+        ->to($emailContact)
+        ->subject('Vous avez reçu un devis')
+
+        ->context([
+            'project' => $project
+        ])
+        ->htmlTemplate('email/informationDevis.html.twig')
+        ;
+
+        $mailer->send($email);
+
+        //----télécharge en local le devis pdf
+        $this->downloadDevis($quotation, $project, $pdfService, $uniqueIdService);
+
+        $entityManager->flush(); //execute
+
+        $this->addFlash('success', 'Devis créé et enregistré');
+        return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        
     }
 
     //-----------------------------------------------------FACTURE--------------------------------------
@@ -419,52 +428,63 @@ class ProjectController extends AbstractController
     //accepte le devis (utilisateur)
     #[Route('/accepteDevis/{id}', name: 'accepte_devis')]
     public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, UniqueIdService $uniqueIdService, PdfService $pdfService){
-        if($quotation){
-            $project = $quotation->getProject();
-            //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
-            if($this->getUser()!== $project->getUser()){
-                $this->addFlash('error', 'Vous n\'avez pas le droit de valider ce devis');
-                return $this->redirectToRoute('app_home');
-            }
-            //si le projet n'est pas modifiable
-            if($project->getState()->getId()!==2){
-                $this->addFlash('error', 'L\'état du projet ne vous permet pas de faire cette action');
-                return $this->redirectToRoute('app_profil');
-            }
-            //----change le statut du projet de "en attente" à "accepté"
-            $stateAccepte = $stateRepository->findOneBy(['id' => 3]);
-            $project->setState($stateAccepte);
-            $entityManager->persist($project);
+        if(!$quotation){
+            $this->addFlash('error', 'Ce devis n\'existe pas');
+            return $this->redirectToRoute('app_projet');
 
-            //passe le statut du devis à accepté
-            $quotation->setAccepted(true);
-
-            //crée une facture
-            $bill = new Bill();
-            $bill->setQuotation($quotation);
-            $billNumber = "FACT_" . $uniqueIdService->generateUniqueId(); //genere un nom unique
-            $bill->setBillNumber($billNumber);
-            $entityManager->persist($bill);
-
-            $entityManager->flush(); //execute
-
-            //télécharge la facture dans le dossier
-            $this->downloadFacture($bill, $project, $pdfService, $uniqueIdService);
-
-            $this->addFlash('success', 'Devis accepté!');
+        }
+        
+        $project = $quotation->getProject();
+        //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
+        if($this->getUser()!== $project->getUser()){
+            $this->addFlash('error', 'Vous n\'avez pas le droit de valider ce devis');
+            return $this->redirectToRoute('app_home');
+        }
+        //si le projet n'est pas modifiable
+        if($project->getState()->getId()!==2){
+            $this->addFlash('error', 'L\'état du projet ne vous permet pas de faire cette action');
             return $this->redirectToRoute('app_profil');
         }
+        //----change le statut du projet de "en attente" à "accepté"
+        $stateAccepte = $stateRepository->findOneBy(['id' => 3]);
+        $project->setState($stateAccepte);
+        $entityManager->persist($project);
+
+        //passe le statut du devis à accepté
+        $quotation->setAccepted(true);
+
+        //crée une facture
+        $bill = new Bill();
+        $bill->setQuotation($quotation);
+        $billNumber = "FACT_" . $uniqueIdService->generateUniqueId(); //genere un nom unique
+        $bill->setBillNumber($billNumber);
+        $entityManager->persist($bill);
+
+        $entityManager->flush(); //execute
+
+        //télécharge la facture dans le dossier
+        $this->downloadFacture($bill, $project, $pdfService, $uniqueIdService);
+
+        $this->addFlash('success', 'Devis accepté!');
+        return $this->redirectToRoute('app_profil');
 
     }
 
     //affiche la facture pdf: pour l'utilisateur ou l'admin
     #[Route('/facture/{id}', name: 'show_facture')]
     public function showFacture(Project $project = null, PdfService $pdfService, BillRepository $billRepository, QuotationRepository $quotationRepository){
+
+        if(!$project){
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+
         //si l'utilisateur connecté n'est pas le propriétaire du projet/devis ou admin
         if($this->getUser()!== $project->getUser() && !$this->isGranted('ROLE_ADMIN')){
             $this->addFlash('error', 'Vous n\'avez pas le droit de voir cette facture');
             return $this->redirectToRoute('app_home');
         }
+
         $quotation = $quotationRepository->findOneBy(['project' => $project->getId()]); //devis associé au projet
         $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
 
@@ -492,6 +512,11 @@ class ProjectController extends AbstractController
     #[Route('/factureHtml/{id}', name: 'show_facture_html')]
     public function showFactureHtml(Project $project = null, BillRepository $billRepository, QuotationRepository $quotationRepository){
 
+        if(!$project){
+            $this->addFlash('error', 'Ce projet n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+        
         //si l'utilisateur connecté n'est pas le propriétaire du projet/devis ou admin
         if($this->getUser()!== $project->getUser() && !$this->isGranted('ROLE_ADMIN')){
             $this->addFlash('error', 'Vous n\'avez pas le droit de voir cette facture');
