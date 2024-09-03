@@ -29,14 +29,32 @@
     {% for projet in projetTraites %}
     
         <div class="projet-card">
-            {% if projet.user %}
-                <p>{{projet}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
-                {% else %}
-                <p>Anonyme, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
-            {% endif %}
-        
-            <p> {{projet.description}} </p>
-            <p><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
+            <div class="projet-card-content">
+                {% if projet.user %}
+                    <p>{{projet}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
+                    {% else %}
+                    <p>Anonyme, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
+                {% endif %}
+            
+                <p> {{projet.description}} </p>
+                <p><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
+            </div>
+            <div class="projet-card-state">
+                {# etat du projet  #}
+                <p>
+                    {# en attente ou en cours  #}
+                    {% if projet.state.id == 1 or projet.state.id == 2 %}
+                        <i class="fa-solid fa-hourglass-start"></i>
+                    {# accepté  #}
+                    {% elseif projet.state.id == 3 %}
+                        <i class="fa-solid fa-circle-check"></i>
+                    {# refusé  #}
+                    {% elseif projet.state.id == 4 %}
+                        <i class="fa-regular fa-circle-xmark"></i>
+                    {% endif %}
+                    {{projet.state}}
+                </p>
+            </div>
         </div>
         
         {% else %}
