@@ -53,19 +53,19 @@ class ProjectRepository extends ServiceEntityRepository
         return $query->getResult();
     }
     
-    // SELECT DATE_FORMAT(p.date_receipt, "%c") AS MONTH, 
+    // SELECT DATE_FORMAT(p.date_receipt, "%M") AS month, 
     // SUM(final_price) AS chiffre_affaire
     // FROM project p
     // WHERE p.state_id = 3
     // GROUP BY p.date_receipt
     // ORDER BY p.date_receipt;
 
-    //chiffre d'affaire mensuel sur les projets qui ont été acceptées
+    //chiffre d'affaire mensuel sur les projets qui ont été acceptés
     public function findMonthlyRevenue(){
         $qb = $this->getEntityManager()
         ->createQueryBuilder()
 
-        ->select("DATE_FORMAT(p.dateReceipt, '%M') AS month, SUM(p.finalPrice) AS averageRevenue")
+        ->select("DATE_FORMAT(p.dateReceipt, '%M') AS month, SUM(p.finalPrice) AS chiffre_affaire")
         ->from('App\Entity\Project', 'p')
         ->where('p.state = 3')
         ->groupBy('p.dateReceipt')

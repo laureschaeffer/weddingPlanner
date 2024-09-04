@@ -229,7 +229,11 @@ header{
     margin: var(--big-padding) 0;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 2.5rem;
+
+    h2{
+        text-align: start;
+    }
 }
 #diag-container div{
     width: 500px;

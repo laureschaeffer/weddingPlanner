@@ -28,7 +28,7 @@ if(canvasEP){
   
   chiffreAffaires.forEach(element => {
       caMonths.push(element.month); //month du tableau associatif
-      caAvg.push(element.averageRevenue); //count
+      caAvg.push(element.chiffre_affaire); //count
     });
   
   // diagramme etats projet

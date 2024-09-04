@@ -268,7 +268,7 @@ class ProjectController extends AbstractController
     
     //sur le profil utilisateur, montre le devis finalisé (HTML)
     #[Route('/devisFinalHtml/{id}', name: 'show_devis_html')]
-    public function showDevisHtml(Quotation $quotation = null, PdfService $pdfService){
+    public function showDevisHtml(Quotation $quotation = null){
         if(!$quotation){
             $this->addFlash('error', 'Ce devis n\'existe pas');
             return $this->redirectToRoute('app_projet');
@@ -296,6 +296,7 @@ class ProjectController extends AbstractController
           
     }
 
+    // ***************************************fonction create devis***************************************
 
     //enregistre le devis en base de donnée, factorisation de la fonction createDevis
     public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager, $uniqueIdService){
@@ -339,10 +340,26 @@ class ProjectController extends AbstractController
 
     }
 
+    public function sendMailToClient($emailContact, $project, $mailer){
+        $email = (new TemplatedEmail())
+        ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+        ->to($emailContact)
+        ->subject('Vous avez reçu un devis')
 
-    //crée le devis: l'enregistre dans la bdd, télécharge le pdf, envoie un mail au client et l'affiche sur le profil utilisateur
+        ->context([
+            'project' => $project
+        ])
+        ->htmlTemplate('email/informationDevis.html.twig')
+        ;
+
+        $mailer->send($email);
+    }
+
+
+    //crée le devis: l'enregistre dans la bdd, change le statut du projet, envoie un mail au client et télécharge le pdf
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
     public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer, PdfService $pdfService, UniqueIdService $uniqueIdService){
+        //--conditions--
         if(!$project){
             $this->addFlash('error', 'Ce projet n\'existe pas');
             return $this->redirectToRoute('app_projet');
@@ -359,7 +376,7 @@ class ProjectController extends AbstractController
             $this->addFlash('error', 'Veuillez fixer un prix final !');
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         }
-        //----enregistre dans la bdd
+        //----enregistre le devis (quotation) dans la bdd
         $quotation = $this->createQuotationBdd($project, $entityManager, $uniqueIdService);
 
         //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
@@ -369,18 +386,7 @@ class ProjectController extends AbstractController
 
         //----envoie d'un mail
         $emailContact = $project->getEmail()==! NULL ? $project->getEmail() : $project->getUser()->getEmail();
-        $email = (new TemplatedEmail())
-        ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
-        ->to($emailContact)
-        ->subject('Vous avez reçu un devis')
-
-        ->context([
-            'project' => $project
-        ])
-        ->htmlTemplate('email/informationDevis.html.twig')
-        ;
-
-        $mailer->send($email);
+        $this->sendMailToClient($emailContact, $project, $mailer);
 
         //----télécharge en local le devis pdf
         $this->downloadDevis($quotation, $project, $pdfService, $uniqueIdService);

@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -40,13 +39,10 @@ class AdminController extends AbstractController
         $caMois = $projectRepository->findMonthlyRevenue();
 
 
-        new JsonResponse($etatProjets);
-        new JsonResponse($projetMois);
-        new JsonResponse($caMois);
         return $this->render('admin/index.html.twig', [
-            'etatProjets' => $etatProjets, 
-            'projetMois' => $projetMois,
-            'caMois' => $caMois
+            'etatProjets' => json_encode($etatProjets), 
+            'projetMois' => json_encode($projetMois),
+            'caMois' => json_encode($caMois)
         ]);
     }
 
