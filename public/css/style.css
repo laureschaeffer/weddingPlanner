@@ -79,6 +79,10 @@
     /* position: relative; */
 }
 
+#page-container{
+    margin-bottom: var(--main-padding);
+}
+
 h1{
     font-family: var(--title-font);
     font-size: var(--title-font-size);
@@ -341,7 +345,7 @@ footer p, footer a{
 /* -------3 chiffres---------- */
 .stat-container{
     display: flex;
-    padding: 50px;
+    padding: 100px 50px;
     gap: 1rem;
 }
 
@@ -433,6 +437,10 @@ footer p, footer a{
     font-size: var(--subtitle-font-size);
 }
 
+.avis-card{
+    margin: 1.5rem 0;
+}
+
 .avis-card-header{
     display: flex;
     justify-content: space-between;
@@ -451,11 +459,15 @@ footer p, footer a{
 }
 
 /* bouton donner son avis  */
-.btn-avis{
-    padding: 10px 40px;
-    border: 3px solid var(--burgundy-color);
-    cursor: pointer;
+.btn-avis {
     margin: var(--big-padding) 0;
+
+    button{
+        padding: 10px 40px;
+        border: 3px solid var(--burgundy-color);
+        cursor: pointer;
+
+    }
 }
 
 /* ----------------------------acces au formulaire de contact--------------------- */
