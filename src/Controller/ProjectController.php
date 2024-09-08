@@ -29,6 +29,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProjectController extends AbstractController
 {
+    private $uniqueIdService;
+    private $pdfService;
+
+    public function __construct(UniqueIdService $uniqueIdService, PdfService $pdfService) {
+        $this->uniqueIdService = $uniqueIdService;
+        $this->pdfService = $pdfService;
+    }
 
     //liste des demandes reçues
     #[Route('/coiffe/projet', name: 'app_projet')]
@@ -45,7 +52,7 @@ class ProjectController extends AbstractController
     
     //detail d'une demande
     #[Route('/coiffe/projet/{id}', name: 'show_projet')]
-    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user, BillRepository $billRepository): Response
+    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
     {
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
         if($project){
@@ -207,7 +214,7 @@ class ProjectController extends AbstractController
 
     //aperçu du futur devis en pdf (pour l'admin)
     #[Route('/coiffe/createDevisPdf/{id}', name: 'create_devis_pdf')]
-    public function createDevisPdf(Project $project = null, PdfService $pdfService){
+    public function createDevisPdf(Project $project = null){
         if($project){
             //gere l'image
             $imagePath = $this->getParameter('kernel.project_dir') . '../public/img/logo/logo.png';
@@ -218,7 +225,7 @@ class ProjectController extends AbstractController
                 "imageData" => $imageData
             ]);
             
-            $domPdf = $pdfService->showPdf($html);
+            $domPdf = $this->pdfService->showPdf($html);
             
             $domPdf->stream("devis.pdf", array('Attachment' => 0));
             return new Response('', 200, [
@@ -232,7 +239,7 @@ class ProjectController extends AbstractController
 
     //sur le profil utilisateur, montre le devis finalisé (PDF)
     #[Route('/devisFinal/{id}', name: 'show_devis')]
-    public function showDevis(Quotation $quotation = null, PdfService $pdfService){
+    public function showDevis(Quotation $quotation = null){
         if($quotation){
 
             //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
@@ -254,7 +261,7 @@ class ProjectController extends AbstractController
                 "imageData" => $imageData
             ]);
             
-            $domPdf = $pdfService->showPdf($html);
+            $domPdf = $this->pdfService->showPdf($html);
             
             $domPdf->stream("devis.pdf", array('Attachment' => 0));
             return new Response('', 200, [
@@ -299,11 +306,11 @@ class ProjectController extends AbstractController
     // ***************************************fonction create devis***************************************
 
     //enregistre le devis en base de donnée, factorisation de la fonction createDevis
-    public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager, $uniqueIdService){
+    public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager){
 
         $quotation = new Quotation();
         $quotation->setProject($project);
-        $quotationNumber = "DEV_" . $uniqueIdService->generateUniqueId(); //crée un nom unique aléatoire
+        $quotationNumber = "DEV_" . $this->uniqueIdService->generateUniqueId(); //crée un nom unique aléatoire
         $quotation->setQuotationNumber($quotationNumber);
 
         $entityManager->persist($quotation); //prepare
@@ -311,7 +318,7 @@ class ProjectController extends AbstractController
     }
 
     //télécharge dans le dossier upload/devis le devis, factorisation de la fonction createDevis
-    public function downloadDevis($quotation, $project, $pdfService, $uniqueIdService){
+    public function downloadDevis($quotation, $project){
         // gère l'image
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
@@ -323,9 +330,9 @@ class ProjectController extends AbstractController
             "imageData" => $imageData
         ]);
         
-        $domPdf = $pdfService->showPdf($html);
+        $domPdf = $this->pdfService->showPdf($html);
         
-        $uniqueId = $uniqueIdService->generateUniqueId();
+        $uniqueId = $this->uniqueIdService->generateUniqueId();
         // génère un nom de fichier unique
         $filename = 'devis_' . $uniqueId . '.pdf';
         
@@ -358,7 +365,7 @@ class ProjectController extends AbstractController
 
     //crée le devis: l'enregistre dans la bdd, change le statut du projet, envoie un mail au client et télécharge le pdf
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer, PdfService $pdfService, UniqueIdService $uniqueIdService){
+    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer){
         //--conditions--
         if(!$project){
             $this->addFlash('error', 'Ce projet n\'existe pas');
@@ -377,7 +384,7 @@ class ProjectController extends AbstractController
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         }
         //----enregistre le devis (quotation) dans la bdd
-        $quotation = $this->createQuotationBdd($project, $entityManager, $uniqueIdService);
+        $quotation = $this->createQuotationBdd($project, $entityManager);
 
         //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
         $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
@@ -389,7 +396,7 @@ class ProjectController extends AbstractController
         $this->sendMailToClient($emailContact, $project, $mailer);
 
         //----télécharge en local le devis pdf
-        $this->downloadDevis($quotation, $project, $pdfService, $uniqueIdService);
+        $this->downloadDevis($quotation, $project);
 
         $entityManager->flush(); //execute
 
@@ -400,7 +407,7 @@ class ProjectController extends AbstractController
 
     //-----------------------------------------------------FACTURE--------------------------------------
     //télécharge dans le dossier upload/facture le facture, factorisation de la fonction accepteDevis (qui crée la facture)
-    public function downloadFacture($bill, $project, $pdfService, $uniqueIdService){
+    public function downloadFacture($bill, $project){
         // gère l'image
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
@@ -412,9 +419,9 @@ class ProjectController extends AbstractController
             "imageData" => $imageData
         ]);
         
-        $domPdf = $pdfService->showPdf($html);
+        $domPdf = $this->pdfService->showPdf($html);
         
-        $uniqueId = $uniqueIdService->generateUniqueId();
+        $uniqueId = $this->uniqueIdService->generateUniqueId();
         // génère un nom de fichier unique
         $filename = 'facture_' . $uniqueId . '.pdf';
         
@@ -433,10 +440,10 @@ class ProjectController extends AbstractController
 
     //accepte le devis (utilisateur)
     #[Route('/accepteDevis/{id}', name: 'accepte_devis')]
-    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, UniqueIdService $uniqueIdService, PdfService $pdfService){
+    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository){
         if(!$quotation){
             $this->addFlash('error', 'Ce devis n\'existe pas');
-            return $this->redirectToRoute('app_projet');
+            return $this->redirectToRoute('app_home');
 
         }
         
@@ -462,14 +469,14 @@ class ProjectController extends AbstractController
         //crée une facture
         $bill = new Bill();
         $bill->setQuotation($quotation);
-        $billNumber = "FACT_" . $uniqueIdService->generateUniqueId(); //genere un nom unique
+        $billNumber = "FACT_" . $this->uniqueIdService->generateUniqueId(); //genere un nom unique
         $bill->setBillNumber($billNumber);
         $entityManager->persist($bill);
 
         $entityManager->flush(); //execute
 
         //télécharge la facture dans le dossier
-        $this->downloadFacture($bill, $project, $pdfService, $uniqueIdService);
+        $this->downloadFacture($bill, $project);
 
         $this->addFlash('success', 'Devis accepté!');
         return $this->redirectToRoute('app_profil');
@@ -478,7 +485,7 @@ class ProjectController extends AbstractController
 
     //affiche la facture pdf: pour l'utilisateur ou l'admin
     #[Route('/facture/{id}', name: 'show_facture')]
-    public function showFacture(Project $project = null, PdfService $pdfService, BillRepository $billRepository, QuotationRepository $quotationRepository){
+    public function showFacture(Project $project = null, BillRepository $billRepository, QuotationRepository $quotationRepository){
 
         if(!$project){
             $this->addFlash('error', 'Ce projet n\'existe pas');
@@ -492,6 +499,12 @@ class ProjectController extends AbstractController
         }
 
         $quotation = $quotationRepository->findOneBy(['project' => $project->getId()]); //devis associé au projet
+        
+        if(!$quotation){
+            $this->addFlash('error', 'Aucun devis associé à ce projet');
+            return $this->redirectToRoute('app_home');
+        }
+
         $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
 
         // gère l'image
@@ -505,7 +518,7 @@ class ProjectController extends AbstractController
             "imageData" => $imageData
         ]);
         
-        $domPdf = $pdfService->showPdf($html);
+        $domPdf = $this->pdfService->showPdf($html);
 
         $domPdf->stream("facture.pdf", array('Attachment' => 0));
             return new Response('', 200, [
@@ -520,7 +533,7 @@ class ProjectController extends AbstractController
 
         if(!$project){
             $this->addFlash('error', 'Ce projet n\'existe pas');
-            return $this->redirectToRoute('app_projet');
+            return $this->redirectToRoute('app_home');
         }
         
         //si l'utilisateur connecté n'est pas le propriétaire du projet/devis ou admin
@@ -529,6 +542,12 @@ class ProjectController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
         $quotation = $quotationRepository->findOneBy(['project' => $project->getId()]); //devis associé au projet
+
+        if(!$quotation){
+            $this->addFlash('error', 'Aucun devis associé à ce projet');
+            return $this->redirectToRoute('app_home');
+        }
+
         $bill = $billRepository->findOneBy(['quotation' => $quotation->getId()]); //facture associée au devis
 
         // gère l'image
