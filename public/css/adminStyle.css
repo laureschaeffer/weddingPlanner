@@ -1,5 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@300;400;500;600;700&family=Cormorant:ital,wght@0,500;1,500&display=swap');
+@font-face {
+    font-family: "Cormorant SC";
+    font-style: normal;
+    font-display: swap;
+    src: url("../fonts/Cormorant_SC/CormorantSC-Medium.ttf");
+  }
+@font-face {
+    font-family: "Cormorant Garamond";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300;
+    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Light.ttf");
+  }
+@font-face {
+    font-family: "Cormorant Garamond";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Regular.ttf");
+  }
+@font-face {
+    font-family: "Cormorant Garamond";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Medium.ttf");
+  }
+@font-face {
+    font-family: "Cormorant Garamond";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 600;
+    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-SemiBold.ttf");
+  }
+@font-face {
+    font-family: "Cormorant Garamond";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Bold.ttf");
+  }
 
 /* ------------------------------variables  */
 :root{
@@ -17,8 +56,8 @@
     --pink-color: #c4979942;
 
     /* polices d'ecriture  */
-    --main-font: "Cormorant Garamond", sans-serif;
-    --title-font: "Cormorant SC", sans-serif;
+    --main-font: "Cormorant Garamond";
+    --title-font: "Cormorant SC";
 
     /* tailles  */
     --p-font-size: 1.3rem;
