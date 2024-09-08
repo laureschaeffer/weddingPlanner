@@ -14,8 +14,8 @@
     <p>Pseudo : {{app.user }} </p>
 
     {# modifier son pseudo  #}
-    <a href="#" id="openFormProfil">Modifier son pseudo</a>
-    <p><a href="{{path('app_forgot_password_request')}}">Réinitialiser son mot de passe</a></p>
+    <p id="openFormProfil">Modifier son pseudo</p>
+    
     <form action="{{path('edit_profil')}}" method="post" class="editProfil">
 
     
@@ -34,6 +34,7 @@
             Enregistrer
         </button>
     </form>
+    <p><a href="{{path('app_forgot_password_request')}}">Réinitialiser son mot de passe</a></p>
     
     
     {# --------------------------------historique de réservation-------------------------------- #}
@@ -155,63 +156,62 @@
                 </div>
             
                 {# suivi du projet, commentaires des personnes présentes sur le pannel admin  #}
-                <h3>Suivi du projet</h3>
-                
-                {% for comment in project.comments %}
-        
-                    <div class="projet-suivi">
-                        <p>Ajouté le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
-                        {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
-                        <p>{{comment.content}} </p>
+                <section id="projet-suivis">
+
+                    <h3>Suivi du projet</h3>
                     
+                    {% for comment in project.comments %}
+            
+                        <div class="projet-suivi">
+                            <p>Ajouté le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
+                            {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
+                            <p>{{comment.content}} </p>
                         
-                    </div>
-        
-                    {% else %}
-                    <p>Aucun commentaire ajouté pour l'instant</p>
-                {% endfor %}
+                            
+                        </div>
+            
+                        {% else %}
+                        <p>Aucun commentaire ajouté pour l'instant</p>
+                    {% endfor %}
+
+                </section>
         
                 {# devis  #}
                 {% for quot in project.quotations %}
-                    {# si le devis a été accepté  #}
-                    {% if quot.isAccepted %}
-                        <a href="{{path('show_facture', {'id': project.id})}}" target="_blank">
-                            <button class="btn-devis-facture">Afficher la facture</button>
+                    {# si le devis a été refusé  #}
+                    {% if quot.isAccepted == false %}
+
+                        {# si le devis a été accepté  #}
+                      {% elseif quot.isAccepted %}
+                        <a href="{{path('show_facture', {'id': project.id})}}" target="_blank" class="btn-devis-facture"></a>
+                            Afficher la facture
                         </a>
                         <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
-                    {% else %}
+
+                        {# si l'état n'a pas encore été défini  #}
+
                         <p>Un devis a été généré par l'entreprise!</p>
-                        <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank">
-                            <button class="btn-devis-facture">
-                                Afficher le devis
-                            </button>
+                        <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank" class="btn-devis-facture">
+                            Afficher le devis
                         </a>
                         <p>Si vous ne pouvez pas visualiser le devis en pdf, ouvrez le document html <a href="{{path('show_devis_html', {'id': quot.id})}}" target="_blank">ici</a></p>
-        
+    
                         {# accepter ou refuser le devis #}
                         <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
-                        <div>
-                            <a href="#">
-                                <button>
-                                    Refuser le devis
-                                </button>
-                            </a>
-                            <a href="{{path('accepte_devis', {id: quot.id})}}">
-                                <button>
-                                    Accepter le devis
-                                </button>
-                            </a>
-                        </div>
+                        <p id="devis-action">
+                            <a href="{{path('refuse_devis', {id: quot.id})}}" class="refuse-devis">Refuser le devis</a>
+                            <a href="{{path('accepte_devis', {id: quot.id})}}" class="accepte-devis">Accepter le devis</a>
+                        </p>
                     {% endif %}
-                    {% else %}
-                {% endfor %}
                     
-                {% endfor %}
+                {% endfor %}            
+                    
+            {% endfor %}
             
-            {% endif %}
         </div>
+    {% endif %}
         <p class="p-delete">Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.</p>
-        <a href="{{ path('delete_profil') }}"><button class="btn-delete">Supprimer son compte</button></a>
+        <a href="{{ path('delete_profil') }}" class="btn-delete">Supprimer son compte</a>
         
 </section>
 
