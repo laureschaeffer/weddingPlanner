@@ -41,8 +41,8 @@ class ProjectController extends AbstractController
     #[Route('/coiffe/projet', name: 'app_projet')]
     public function index(ProjectRepository $projectRepository): Response
     {
-        $projetNonTraites = $projectRepository->findBy(['isContacted' => 0], ['dateEvent' => 'ASC']);
-        $projetTraites = $projectRepository->findBy(['isContacted' => 1], ['dateEvent' => 'ASC']);
+        $projetNonTraites = $projectRepository->findBy(['isContacted' => 0], ['dateReceipt' => 'DESC']);
+        $projetTraites = $projectRepository->findBy(['isContacted' => 1], ['dateReceipt' => 'DESC']);
 
         return $this->render('admin/listeProject.html.twig', [
             'projetNonTraites' => $projetNonTraites,
@@ -403,6 +403,41 @@ class ProjectController extends AbstractController
         $this->addFlash('success', 'Devis créé et enregistré');
         return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         
+    }
+
+    //refuse le devis (utilisateur)
+    #[Route('/refuseDevis/{id}', name: 'refuse_devis')]
+    public function refuseDevis(Quotation $quotation = null, StateRepository $stateRepository, EntityManagerInterface $entityManager){
+        // ----conditions----
+        if(!$quotation){
+            $this->addFlash('error', 'Ce devis n\'existe pas');
+            return $this->redirectToRoute('app_home');
+        }
+
+        $project = $quotation->getProject();
+
+        //si l'utilisateur connecté n'est pas le propriétaire du projet/devis
+        if($this->getUser()!== $project->getUser()){
+            $this->addFlash('error', 'Vous n\'avez pas le droit de refuser ce devis');
+            return $this->redirectToRoute('app_home');
+        }
+
+        //si le projet n'est pas "en attente"
+        if($project->getState()->getId()!==2){
+            $this->addFlash('error', 'L\'état du projet ne vous permet pas de faire cette action');
+            return $this->redirectToRoute('app_home');
+        }
+
+        // passe le devis et le projet en refusé
+        $quotation->setAccepted(false);
+        $entityManager->persist($quotation);
+
+        $stateRefuse = $stateRepository->findOneBy(['id' => 4]);
+        $project->setState($stateRefuse);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Devis refusé, le projet est cloturé');
+        return $this->redirectToRoute('app_profil');
     }
 
     //-----------------------------------------------------FACTURE--------------------------------------
