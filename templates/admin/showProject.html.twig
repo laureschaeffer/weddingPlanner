@@ -89,17 +89,20 @@
         </div>
         <div class="projet-action">
             {# passe le projet en "la personne a été contacté" ou inversement #}
-           {% if project.isContacted %}
-               <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a>
-               {% else %}
-               <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a>
-           {% endif %}
+            {% if project.isEditable %}
+                {% if project.isContacted %}
+                    <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a>
+                    {% else %}
+                    <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a>
+                {% endif %}
+                
+                {# modifier si superadmin  #}
+                {% if "ROLE_SUPERADMIN" in app.user.roles %}
+                    <a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a>
+                                    
+                {% endif %}
+            {% endif %}
 
-           {# modifier si superadmin  #}
-           {% if "ROLE_SUPERADMIN" in app.user.roles and project.isEditable %}
-               <a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a>
-                               
-           {% endif %}
 
         </div>
 
@@ -183,7 +186,7 @@
             
             <h4>Générer un dévis pour vous</h4>
             {# genere un pdf  #}
-            <button><a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">Devis</a></button>
+            <a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank" role="button">Devis</a>
             
             <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
 

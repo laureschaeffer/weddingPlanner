@@ -525,7 +525,7 @@ header{
     gap: 1.2rem;
     align-items: flex-start;
 
-    button{
+    a{
         height: 50px;
         margin: 5px;
         width: 120px;
@@ -537,14 +537,15 @@ header{
         color: rgb(161, 161, 161);
         border-radius: 5px;
         background: linear-gradient(145deg, #2e2d2d, #212121);
+        
+        color: white;
+        text-decoration: none;
 
-        a{
-            color: white;
-            text-decoration: none;
-        }
     }
+        
 
-    button:hover {
+
+    a:hover {
         box-shadow: 1px 1px 13px #5d2b42, -1px -1px 13px #5d2b42;
         color: #d6d6d6;
         -webkit-transition: 500ms;

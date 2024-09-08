@@ -500,13 +500,12 @@ footer p, footer a{
 /* bouton donner son avis  */
 .btn-avis {
     margin: var(--big-padding) 0;
+    padding: 10px 40px;
+    border: 3px solid var(--burgundy-color);
+    cursor: pointer;
 
-    button{
-        padding: 10px 40px;
-        border: 3px solid var(--burgundy-color);
-        cursor: pointer;
-
-    }
+    text-decoration: none;
+    color: black;
 }
 
 /* ----------------------------acces au formulaire de contact--------------------- */
@@ -1062,7 +1061,7 @@ small{
 
 /* ================================================================================PROFIL================================================================ */
 #profil{
-    padding: var(--escape-padding);
+    padding: 0 var(--escape-padding);
 
     hr{
         padding: 3rem 0;
@@ -1108,7 +1107,7 @@ small{
     display: block;
     background: #808080;
     content: '';
-    margin: 2.5rem 0;
+    margin-bottom: 2.5rem;
 }
 .projet{
     background-color: var(--grey-color);
@@ -1126,6 +1125,10 @@ small{
     padding: var(--main-padding) 0;
 }
 
+#projet-suivis{
+    margin: var(--big-padding) 0;
+}
+
 .projet-suivi{
     border: var(--grey-color) solid 3px;
     margin: var(--small-padding) 0;
@@ -1140,19 +1143,50 @@ small{
 }
 
 .btn-devis-facture{
-    background: radial-gradient(circle, rgba(93, 43, 66, 1) 0%, rgba(252, 70, 107, 1) 100%);
+    background: #b0203e;
     border: none;
     padding: 0.5rem 1.5rem;
     border-radius: var(--border-radius);
     color: white;
     cursor: pointer;
     transition: var(--hover-transition);
+    width: 12rem;
+    text-decoration: none;
+    font-size: var(--p-font-size);
+    text-align: center;
 
     &:hover{
         transform: translateY(-8px);
     }
 }
 
+#devis-action{
+    display: flex;
+    gap: 1rem;
+}
+
+#devis-action a{
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius);
+
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--hover-transition);
+    
+    &:hover{
+        transform: translateY(-8px);
+    }
+}
+
+.refuse-devis{
+    border: 2px solid;
+    color: black;
+}
+
+.accepte-devis{
+    background-color: #000;
+    color: white;
+}
 .p-delete{
     margin-bottom: 1.5rem;
 }
@@ -1160,7 +1194,7 @@ small{
 .btn-delete{
     padding: 0.5rem 1.5rem;
     border-radius: 15px;
-    border-color: red;
+    border: red 2px solid;
     color: #ff0036;
     cursor: pointer;
 
