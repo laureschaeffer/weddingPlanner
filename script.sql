@@ -25,14 +25,16 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `user_id` int NOT NULL,
   `date_start` datetime NOT NULL,
   `date_end` datetime DEFAULT NULL,
+  `title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_FE38F844A76ED395` (`user_id`),
   CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.appointment : ~0 rows (environ)
-INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`) VALUES
-	(1, 4, '2024-07-25 15:00:00', '2024-07-25 16:00:00');
+-- Listage des données de la table weddingplanner.appointment : ~2 rows (environ)
+INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) VALUES
+	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'lorem ipsum'),
+	(2, 3, '2024-09-11 11:00:00', '2024-09-11 13:00:00', 'test');
 
 -- Listage de la structure de table weddingplanner. batch
 CREATE TABLE IF NOT EXISTS `batch` (
