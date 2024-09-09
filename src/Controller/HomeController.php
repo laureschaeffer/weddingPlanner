@@ -7,17 +7,21 @@ use App\Entity\Project;
 use App\Entity\Creation;
 use App\Entity\Testimony;
 use App\Form\ProjectType;
+use App\Entity\Appointment;
+use App\Form\AppointmentType;
 use App\Form\TestimonyType;
-use App\Repository\CategoryRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AppointmentRepository;
+use App\Repository\StateRepository;
 use App\Repository\WorkerRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\TestimonyRepository;
 use App\Repository\PrestationRepository;
-use App\Repository\StateRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class HomeController extends AbstractController
 {
@@ -167,11 +171,69 @@ class HomeController extends AbstractController
     #[Route('/prestation', name: 'app_prestation')]
     public function listPrestation(PrestationRepository $prestationRepository) : Response 
     {
-
+        
         $prestations = $prestationRepository->findBy([]);
         return $this->render('home/listePrestation.html.twig', [
             'prestations' => $prestations
         ]);
     }
     
+    //-------------------------------------------------------------------------partie RENDEZ-VOUS------------------------------------------------------------------------
+    
+    //nouveau le rendez-vous
+    #[Route('/rendez-vous/new', name: 'create_appointment')]
+    public function newAppointment(EntityManagerInterface $entityManager, Request $request, AppointmentRepository $appointmentRepository): Response
+    {
+        //----conditions----
+        $user = $this->getUser();
+        if(!$user){
+            $this->addFlash('error', 'Veuillez vous connecter pour prendre un nouveau rendez-vous');
+            return $this->redirectToRoute('app_login');
+        }
+        //filtre
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS); //honey pot field
+    
+        //si ce champ est rempli c'est un robot
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        } 
+
+        //--------
+        $appointment = new Appointment();
+        
+        //crée le formulaire
+        $form = $this->createForm(AppointmentType::class, $appointment);
+        $form->handleRequest($request); 
+    
+        if($form->isSubmitted() && $form->isValid()){
+
+            $appointment = $form->getData();
+            
+            //crée une copie indépendante de dateStart pour ne pas la modifier directement, partant du principe qu'un rdv dure une heure
+            $dateEnd = clone $appointment->getDateStart();
+            $dateEnd = \DateTime::createFromInterface($dateEnd); //modifie en DateTime pour avoir accès à la methode modify
+            $dateEnd->modify('+1 hour');
+
+            //si la date est déjà prise
+            if($appointmentRepository->isDateTaken($appointment->getDateStart(), $dateEnd)){
+                $this->addFlash('error', 'Le créneau est déjà pris');
+                return $this->redirectToRoute('create_appointment');
+            }
+
+            $appointment->setUser($user); //user en session
+            $appointment->setDateEnd($dateEnd);
+            $entityManager->persist($appointment); //prepare
+            $entityManager->flush(); //execute
+
+            $this->addFlash('success', 'Le rendez-vous a été confirmé');
+            return $this->redirectToRoute('app_profil');
+        }
+        
+
+        return $this->render('home/newAppointment.html.twig', [
+            'form' => $form
+        ]);
+       
+        
+    }
 }

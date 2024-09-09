@@ -19,7 +19,7 @@ class AppointmentRepository extends ServiceEntityRepository
 
     //verifie si la date de rendez-vous est déjà prise ; retourne true si le créneau est pris
     //SELECT * FROM appointment WHERE date_start < :end AND date_end > :start 
-    public function isDateAvailable($dateStart, $dateEnd): bool
+    public function isDateTaken($dateStart, $dateEnd): bool
     {
         $qb = $this->createQueryBuilder('a')
             ->where('a.dateStart < :end AND a.dateEnd > :start')

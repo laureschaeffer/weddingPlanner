@@ -210,7 +210,7 @@ textarea{
 }
 
 /* ---------padding sur le coté----- */
-#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, #login, #temoignage{
+#home-presentation, #home-avis, #equipe, #prestation, #home-contact figure, #commerce-produit, #creation, #detail-creation, #contact, #login, #temoignage, #prise-rendez-vous{
     padding: 0 var(--big-padding);
 }
 
@@ -1064,7 +1064,7 @@ small{
     padding: 0 var(--escape-padding);
 
     hr{
-        padding: 3rem 0;
+        margin: 3rem 0;
     }
 }
 

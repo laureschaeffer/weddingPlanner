@@ -256,38 +256,5 @@ class AdminController extends AbstractController
         return $this->render('admin/appointment.html.twig');
     }
 
-    //crée le rendez-vous
-    #[Route('/coiffe/rendez-vous/new', name: 'create_appointment')]
-    public function newAppointment(EntityManagerInterface $entityManager, UserInterface $user){
-            
-        //filtre
-        $dateChoisie = filter_input(INPUT_POST, "appointment", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS); //honey pot field
     
-        //s'il y a une erreur on redirige
-        if($honeypot){
-            return $this->redirectToRoute('app_home');
-        } else {
-            //crée le rendez-vous
-            $appointment = new Appointment();
-            //convertit en DateTime puis DateTimeInterface
-            $dateChoisie = new \DateTime();
-            $dateChoisie = \DateTime::createFromInterface($dateChoisie);
-
-            //crée une copie indépendante de dateStart pour ne pas la modifier directement, partant du principe qu'un rdv dure une heure
-            $dateEnd = clone $dateChoisie;
-            $dateEnd->modify('+1 hour');
-            $appointment->setDateStart($dateChoisie);
-            $appointment->setDateEnd($dateEnd);
-            $appointment->setUser($user);
-
-            $entityManager->persist($appointment); //prepare
-            $entityManager->flush(); //execute
-
-            $this->addFlash('success', 'Le rendez-vous a été confirmé');
-            return $this->redirectToRoute('app_home');
-
-        }
-        
-    }
 }
