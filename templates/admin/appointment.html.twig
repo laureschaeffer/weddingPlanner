@@ -4,7 +4,7 @@
 
 {% block body %}
 
-
+<button id="calendar-btn">Ajouter un évènement</button>
 <div id="calendrier" data-calendar="{{data}}">
 
 </div>
@@ -13,55 +13,7 @@
 <script src="
 https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
 "></script>
+<script src="{{asset('js/calendar.js')}}"></script>
 
 
 {% endblock %}
-
-{% block javascript %}
-    
-    <script>
-
-    window.onload = () => {
-        let calendarEl = document.querySelector('#calendrier')
-        let data = JSON.parse(calendarEl.dataset.calendar);
-
-        //initilalisation du calendrier avec ses options et le tableau data
-        let calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek',
-            locale: 'fr',
-            timeZone: 'Europe/Paris',
-            headerToolbar: {
-                start: 'prev,next today',
-                center: 'title',
-                end: 'timeGridWeek,dayGridMonth'
-            },
-            slotMinTime: '08:00:00', 
-            slotMaxTime: '19:00:00',
-            hiddenDays: [ 0 ], //ne pas afficher le dimanche
-
-            events: data,
-            editable: true,
-            eventResizableFromStart: true
-        })
-
-        //ecouteur d'evenement "au changement", requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd
-        calendar.on('eventChange', (e) => {
-            // console.log(e)
-            let url = `/api/edit/${e.event.id}`
-            let donnees = {
-                "title": e.event.title,
-                "start": e.event.start,
-                "end": e.event.end
-            };
-            // console.log(donnees);
-            let xhr = new XMLHttpRequest
-            xhr.open("PUT", url)
-            xhr.send(JSON.stringify(donnees))
-        })
-
-        calendar.render()
-    }
-
-
-    </script>
-{% endblock javascript %}
