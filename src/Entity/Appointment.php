@@ -35,7 +35,7 @@ class Appointment
 
     #[ORM\Column(type: Types::TEXT)]
     
-    private ?string $subject = null;
+    private ?string $title = null;
 
     public function __construct()
     {
@@ -83,14 +83,14 @@ class Appointment
         return $this;
     }
 
-    public function getSubject(): ?string
+    public function getTitle(): ?string
     {
-        return $this->subject;
+        return $this->title;
     }
 
-    public function setSubject(string $subject): static
+    public function setTitle(string $title): static
     {
-        $this->subject = $subject;
+        $this->title = $title;
 
         return $this;
     }

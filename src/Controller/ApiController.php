@@ -3,10 +3,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Appointment;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class ApiController extends AbstractController
 {
@@ -32,5 +36,37 @@ class ApiController extends AbstractController
         // $limiter->reset();
 
         // ...
+    }
+
+    //met à jour les rendez-vous dynamiquement avec fullcalendar
+    #[Route('/api/edit/{id}', name: 'edit_event')]
+    public function majEvent(?Appointment $appointment, Request $request, EntityManagerInterface $entityManager){
+        
+        $donnees = json_decode($request->getContent()); //tableau renvoye dans la requete xml
+        // si le tableau a bien tous les éléments dont l'objet Appointment a besoin
+        if(
+            isset($donnees->title) && !empty($donnees->title) &&
+            isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->end) && !empty($donnees->end)
+            ){
+                //si le rdv n'existait pas on le crée
+                if(!$appointment){
+                    $appointment = new Appointment;
+                    
+                }
+
+                $appointment->setTitle($donnees->title);
+                $appointment->setDateStart(new \DateTime($donnees->start));
+                $appointment->setDateEnd(new \DateTime($donnees->end));
+
+                $entityManager->persist($appointment);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Rendez-vous mis à jour');
+                return $this->redirectToRoute('app_rendezvous');
+            } else {
+                return new Response('Données incomplètes', 404);
+            }
+
     }
 }

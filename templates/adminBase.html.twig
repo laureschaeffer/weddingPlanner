@@ -58,8 +58,9 @@
             {% endfor %}
             {% block body %}{% endblock %}
         </div>
-
+        
         <script src="{{ asset('js/adminApp.js') }}"></script>
+        {% block javascript %}{% endblock %}
     </body>
 </html>
     

@@ -6,6 +6,7 @@ use App\Entity\Testimony;
 use App\Entity\Appointment;
 use App\Entity\Reservation;
 use App\Form\ReservationEditType;
+use App\Repository\AppointmentRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\ProjectRepository;
 use App\Repository\TestimonyRepository;
@@ -249,11 +250,28 @@ class AdminController extends AbstractController
 
     //-------------------------------------------------------------------------partie RENDEZ-VOUS ------------------------------------------------------------------------
 
-    // affiche formulaire prise de rendez-vous
+    // affiche les rendez-vous
     #[Route('/coiffe/rendez-vous', name: 'app_rendezvous')]
-    public function showAppointment(){
+    public function showAppointment(AppointmentRepository $appointmentRepository){
+        $appointments = $appointmentRepository->findAll();
 
-        return $this->render('admin/appointment.html.twig');
+        foreach($appointments as $appointment){
+            $rdvs[] = [
+                'id' => $appointment->getId(),
+                'start' => $appointment->getDateStart()->format('Y-m-d H:i:s'),
+                'end' => $appointment->getDateEnd()->format('Y-m-d H:i:s'),
+                'title' => $appointment->getTitle(),
+                'backgroundColor' => '#2c3e50',
+                'borderColor' => '#ffffff',
+                'textColor' => '#ffffff',
+                'allDay' => false
+            ];
+        }
+
+        $data = json_encode($rdvs);
+        return $this->render('admin/appointment.html.twig', [
+            'data' => $data
+        ]);
     }
 
     
