@@ -86,9 +86,8 @@ class Project
         $this->comments = new ArrayCollection();
         //initialise
         $timezone = new \DateTimeZone('Europe/Paris');
-        $dateAjd = new \DateTime('now', $timezone);
-        $this->dateReceipt = \DateTime::createFromInterface($dateAjd);
-        $this->setContacted(false);
+        $this->dateReceipt = new \DateTime('now', $timezone);
+        $this->isContacted = false;
         $this->quotations = new ArrayCollection();
     }
 

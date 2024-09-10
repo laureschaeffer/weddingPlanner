@@ -43,6 +43,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
     }
 
+    //trouve tous les utilisateurs qui n'ont pas le role supprimé
+    public function findAllExceptRoleSupprime(){
+        $qb = $this->createQueryBuilder('u')
+            ->where('NOT u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_SUPPRIME%')
+        ;
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

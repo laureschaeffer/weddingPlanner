@@ -4,10 +4,6 @@
 
 {% block body %}
 
-{# ouvre le modal  #}
-<button id="calendar-btn">Ajouter un évènement</button>
-{# <button id="myBtn">Open Modal</button> #}
-
 {# modal  #}
 <div id="modal">
 
@@ -23,6 +19,14 @@
     
         <label for="end">Date de fin</label>
         <input type="datetime-local" name="end" class="end" value="2024-09-12T13:30:00" required>
+
+        <label for="user-select"></label>
+        <select name="users" id="user-select" class="users">
+          <option value="">----user----</option>
+          {% for user in activeUsers %}
+            <option value="{{user.email}}">{{user.email}}</option>
+          {% endfor %}
+        </select>
 
         <button type="submit">Valider</button>
     </form>

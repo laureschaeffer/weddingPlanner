@@ -12,6 +12,7 @@ use App\Repository\ProjectRepository;
 use App\Repository\TestimonyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationRepository;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -252,8 +253,9 @@ class AdminController extends AbstractController
 
     // affiche les rendez-vous
     #[Route('/coiffe/rendez-vous', name: 'app_rendezvous')]
-    public function showAppointment(AppointmentRepository $appointmentRepository){
+    public function showAppointment(AppointmentRepository $appointmentRepository, UserRepository $userRepository){
         $appointments = $appointmentRepository->findAll();
+        $activeUsers = $userRepository->findAllExceptRoleSupprime();
 
         foreach($appointments as $appointment){
             $rdvs[] = [
@@ -270,7 +272,8 @@ class AdminController extends AbstractController
 
         $data = json_encode($rdvs);
         return $this->render('admin/appointment.html.twig', [
-            'data' => $data
+            'data' => $data,
+            'activeUsers' => $activeUsers
         ]);
     }
 
