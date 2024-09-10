@@ -2,15 +2,15 @@ window.onload = () => {
     let calendarEl = document.querySelector('#calendrier') //element dom calendrier
     let data = JSON.parse(calendarEl.dataset.calendar) //données dans les data-attribute
 
-    let calendarBtn = document.querySelector('#calendar-btn') //bouton qui ouvre le modal
     let modal = document.querySelector("#modal"); //modal
     let closeModal = document.querySelector('.close') //ferme le modal
     
-    //form et ses 3 input 
+    //form et ses 4 input 
     let formEvent = document.querySelector('#new-event')
     let inputTitle = document.querySelector(".title");
     let inputStart = document.querySelector(".start");
     let inputEnd = document.querySelector(".end");
+    let inputUser = document.querySelector(".users");
         
 
     //----------------initilalisation du calendrier avec ses options et le tableau data----------------
@@ -19,9 +19,18 @@ window.onload = () => {
         initialView: 'timeGridWeek',
         locale: 'fr',
         timeZone: 'Europe/Paris',
+        //boutons custom qui ouvre le modal
+        customButtons: {
+            customAddEvent: {
+                text: 'Créer un rendez-vous',
+                click: function() {
+                    modal.style.display = "block"; 
+                }
+            }
+        },
         headerToolbar: {
             start: 'prev,next today',
-            center: 'title',
+            center: 'customAddEvent',
             end: 'timeGridWeek,dayGridMonth'
         },
         buttonText: {
@@ -40,9 +49,18 @@ window.onload = () => {
             if(!confirm("Êtes-vous sûr de vouloir modifier cet évènement?")){
                 infos.revert()
             }
+        },
+        eventClick: (infos) => {
+            if(!confirm("Êtes-vous sûr de vouloir supprimer cet évènement?")){
+                infos.revert()
+            } else {
+                infos.event.remove()
+                deleteEvent(infos)
+            }
         }
     })
 
+    // ----------------modifie un evenement----------------  
     //ecouteur d'evenement "au changement", requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd
     calendar.on('eventChange', (e) => {
         // console.log(e)
@@ -59,11 +77,7 @@ window.onload = () => {
     });
 
 
-    // ----------------ajoute un nouvel evenement----------------
-    calendarBtn.onclick =  () => {
-        modal.style.display = "block";  
-    }
-    
+    // ----------------ajoute un nouvel evenement----------------   
     // ferme le modal avec le bouton ou en cliquant ailleurs
     closeModal.onclick = () => {
         modal.style.display = "none"; 
@@ -79,26 +93,54 @@ window.onload = () => {
     formEvent.onsubmit = (e) => {
         e.preventDefault(); //empeche la page de recharger
 
-        // valeurs des 3 input
+        // valeurs des 4 input
         let titleValue = inputTitle.value;
         let startValue = inputStart.value;
         let endValue = inputEnd.value;
+        let userValue = inputUser.value;
 
-        let donnees = {
-            title: titleValue,
-            start: startValue,
-            end: endValue
-        };
+        if(
+            titleValue && titleValue !== "" &&
+            startValue && startValue !== "" &&
+            endValue && endValue !== "" &&
+            userValue && userValue !== ""
+        ){
+            if(startValue < endValue){
+                let donnees = {
+                    title: titleValue,
+                    start: startValue,
+                    end: endValue,
+                    user: userValue
+                };
+                
+                let url = '/api/post';
         
-        let url = '/api/post';
-
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-    
-
-        xhr.send(JSON.stringify(donnees));
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", url);
+            
+        
+                xhr.send(JSON.stringify(donnees));
+                modal.style.display = "none";
+                
+            } else {
+                alert("Veuillez sélectionner une date valide!")
+            }
+        } else {
+            alert("Veuillez remplir tous les champs!")
+        }
 
     }    
+
+    // ----------------supprime un evenement---------------- 
+    function deleteEvent(infos) {
+       
+        let url = `/api/delete/${infos.event.id}`;
+
+        let xhr = new XMLHttpRequest()
+        xhr.open("DELETE", url)
+
+        xhr.send(null)
+    }
 
     calendar.render()
 

@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Appointment;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +42,7 @@ class ApiController extends AbstractController
     //met à jour les rendez-vous dynamiquement avec fullcalendar
     #[Route('/api/edit/{id}', name: 'edit_event')] //modifie
     #[Route('/api/post', name: 'post_event')] //ajoute
-    public function majEvent(?Appointment $appointment, Request $request, EntityManagerInterface $entityManager){
+    public function majEvent(?Appointment $appointment, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository){
         
         $donnees = json_decode($request->getContent()); //tableau renvoye dans la requete xml
         // si le tableau a bien tous les éléments dont l'objet Appointment a besoin
@@ -54,7 +55,8 @@ class ApiController extends AbstractController
                 //si le rdv n'existait pas on le crée
                 if(!$appointment){
                     $appointment = new Appointment;
-                    $appointment->setUser($this->getUser()); //user en session
+                    $userSelected = $userRepository->findOneBy(['email' => $donnees->user]);
+                    $appointment->setUser($userSelected);
                 }
 
                 $appointment->setTitle($donnees->title);
@@ -69,6 +71,21 @@ class ApiController extends AbstractController
             } else {
                 return new Response('Données incomplètes', 404);
             }
+
+    }
+
+    //supprime un rdv
+    #[Route('/api/delete/{id}', name: 'delete_event')]
+    public function deleteEvent(Appointment $appointment, EntityManagerInterface $entityManager){
+        
+        if($appointment){
+            
+            $entityManager->remove($appointment);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Rendez-vous supprimé');
+            return $this->redirectToRoute('app_rendezvous');
+        }
 
     }
 }
