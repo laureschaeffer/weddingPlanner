@@ -407,7 +407,25 @@ class ProjectController extends AbstractController
 
     //refuse le devis (utilisateur)
     #[Route('/refuseDevis/{id}', name: 'refuse_devis')]
-    public function refuseDevis(Quotation $quotation = null, StateRepository $stateRepository, EntityManagerInterface $entityManager){
+    public function refuseDevis(Quotation $quotation = null, StateRepository $stateRepository, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager){
+        //-----securité honeypot et faille csrf-----
+        //honey pot field
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
+        $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        $csrfTokenId = 'authenticate';
+
+        //si le token de la session et du formulaire n'est pas le meme, redirige
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
+            $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
+            return $this->redirectToRoute('app_admin');
+        }
+        
+        //si je recois "firstname" c'est un robot, je redirige
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        }
+
         // ----conditions----
         if(!$quotation){
             $this->addFlash('error', 'Ce devis n\'existe pas');
@@ -475,7 +493,26 @@ class ProjectController extends AbstractController
 
     //accepte le devis (utilisateur)
     #[Route('/accepteDevis/{id}', name: 'accepte_devis')]
-    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository){
+    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
+        //-----securité honeypot et faille csrf-----
+        //honey pot field
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
+        $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        $csrfTokenId = 'authenticate';
+
+        //si le token de la session et du formulaire n'est pas le meme, redirige
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
+            $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
+            return $this->redirectToRoute('app_admin');
+        }
+        
+        //si je recois "firstname" c'est un robot, je redirige
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        }
+
+        //-----conditions-----
         if(!$quotation){
             $this->addFlash('error', 'Ce devis n\'existe pas');
             return $this->redirectToRoute('app_home');
@@ -493,6 +530,8 @@ class ProjectController extends AbstractController
             $this->addFlash('error', 'L\'état du projet ne vous permet pas de faire cette action');
             return $this->redirectToRoute('app_profil');
         }
+        //-----fin conditions-----
+
         //----change le statut du projet de "en attente" à "accepté"
         $stateAccepte = $stateRepository->findOneBy(['id' => 3]);
         $project->setState($stateAccepte);

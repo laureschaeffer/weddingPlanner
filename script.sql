@@ -28,13 +28,16 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_FE38F844A76ED395` (`user_id`),
-  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.appointment : ~2 rows (environ)
+-- Listage des données de la table weddingplanner.appointment : ~5 rows (environ)
 INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) VALUES
 	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'lorem ipsum'),
-	(2, 3, '2024-09-11 11:00:00', '2024-09-11 13:00:00', 'test');
+	(3, 2, '2024-09-12 12:30:00', '2024-09-12 15:00:00', 'nouvel evenement'),
+	(9, 1, '2024-09-13 12:30:00', '2024-09-13 14:00:00', 'nouvel evenement'),
+	(10, 2, '2024-09-13 16:00:00', '2024-09-13 17:00:00', 'Prise de contact'),
+	(11, 2, '2024-09-13 14:00:00', '2024-09-13 15:00:00', 'contact');
 
 -- Listage de la structure de table weddingplanner. batch
 CREATE TABLE IF NOT EXISTS `batch` (
@@ -271,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE5D83CC1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`),
   CONSTRAINT `FK_2FB3D0EEA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.project : ~6 rows (environ)
 INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
@@ -280,7 +283,8 @@ INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id
 	(4, 7, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-08-13 16:52:05', 1, 75000),
 	(5, 7, 2, 3, 3, 'Maria', 'Nomdef', NULL, '0611223344', '2025-07-30 10:00:00', 200, 'projet', '2024-01-30 11:23:53', 1, 40000),
 	(6, 7, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 75000),
-	(7, 4, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 15000);
+	(7, 4, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 15000),
+	(8, 2, 1, 1, 1, 'Cynthia', 'Nomdef', NULL, '061122334455', '2024-09-11 11:00:00', 10, 'lorem ipsum', '2024-09-10 14:14:51', 0, NULL);
 
 -- Listage de la structure de table weddingplanner. project_prestation
 CREATE TABLE IF NOT EXISTS `project_prestation` (
@@ -297,7 +301,8 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
 INSERT INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1),
 	(3, 1),
-	(4, 1);
+	(4, 1),
+	(8, 2);
 
 -- Listage de la structure de table weddingplanner. quotation
 CREATE TABLE IF NOT EXISTS `quotation` (

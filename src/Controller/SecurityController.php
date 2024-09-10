@@ -111,7 +111,25 @@ class SecurityController extends AbstractController
 
     //anonymisation des données du profil avec l'algorithme sha256
     #[Route('/delete', name: 'delete_profil')]
-    public function delete(EntityManagerInterface $entityManager, StateRepository $stateRepository){
+    public function delete(EntityManagerInterface $entityManager, StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
+        //-----securité honeypot et faille csrf-----
+        //honey pot field
+        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
+        $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        $csrfTokenId = 'authenticate';
+
+        //si le token de la session et du formulaire n'est pas le meme, redirige
+        if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
+            $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
+            return $this->redirectToRoute('app_admin');
+        }
+        
+        //si je recois "firstname" c'est un robot, je redirige
+        if($honeypot){
+            return $this->redirectToRoute('app_home');
+        }
+        
         $user = $this->getUser();
 
         //----------------entité USER----------------
