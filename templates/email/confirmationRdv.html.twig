@@ -1,0 +1,14 @@
+<h1>Bonjour</h1>
+
+<p>Votre rendez-vous est confirmé au {{start |format_datetime('short', 'short', locale='fr')}} - {{end |format_datetime('short', 'short', locale='fr')}} </p>
+<p>Sujet renseigné: </p>
+<p>{{title}}</p>
+
+<p>
+    Cordialement,
+    <br>
+    <small>L'équipe Cérémonie Couture</small><br>
+    <small>01 97 59 96 00</small><br>
+    <small>diane@ceremonie-couture.fr</small>
+</p>
+<img src="{{ email.image('@images/logo/cc.png') }}" width="150px" height="150px">

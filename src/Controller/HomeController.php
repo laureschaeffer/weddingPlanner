@@ -8,20 +8,23 @@ use App\Entity\Creation;
 use App\Entity\Testimony;
 use App\Form\ProjectType;
 use App\Entity\Appointment;
-use App\Form\AppointmentType;
 use App\Form\TestimonyType;
-use App\Repository\AppointmentRepository;
+use App\Form\AppointmentType;
 use App\Repository\StateRepository;
+use Symfony\Component\Mime\Address;
 use App\Repository\WorkerRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\TestimonyRepository;
 use App\Repository\PrestationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\AppointmentRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
 
 class HomeController extends AbstractController
 {
@@ -182,7 +185,7 @@ class HomeController extends AbstractController
     
     //nouveau le rendez-vous
     #[Route('/rendez-vous/new', name: 'create_appointment')]
-    public function newAppointment(EntityManagerInterface $entityManager, Request $request, AppointmentRepository $appointmentRepository): Response
+    public function newAppointment(EntityManagerInterface $entityManager, Request $request, AppointmentRepository $appointmentRepository, MailerInterface $mailer): Response
     {
         //----conditions----
         $user = $this->getUser();
@@ -222,6 +225,24 @@ class HomeController extends AbstractController
 
             $appointment->setUser($user); //user en session
             $appointment->setDateEnd($dateEnd);
+
+            //envoie email confirmation
+            $email = (new TemplatedEmail())
+                    ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                    ->to($appointment->getUser()->getEmail())
+                    ->subject('Prise de rendez-vous')
+
+                    ->context([
+                        'title' => $appointment->getTitle(),
+                        'start' => $appointment->getDateStart(),
+                        'end' => $appointment->getDateEnd(),
+                    ])
+                    ->htmlTemplate('email/confirmationRdv.html.twig')
+                    ;
+
+                $mailer->send($email);
+
+
             $entityManager->persist($appointment); //prepare
             $entityManager->flush(); //execute
 
