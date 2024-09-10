@@ -39,11 +39,13 @@ class ApiController extends AbstractController
     }
 
     //met à jour les rendez-vous dynamiquement avec fullcalendar
-    #[Route('/api/edit/{id}', name: 'edit_event')]
+    #[Route('/api/edit/{id}', name: 'edit_event')] //modifie
+    #[Route('/api/post', name: 'post_event')] //ajoute
     public function majEvent(?Appointment $appointment, Request $request, EntityManagerInterface $entityManager){
         
         $donnees = json_decode($request->getContent()); //tableau renvoye dans la requete xml
         // si le tableau a bien tous les éléments dont l'objet Appointment a besoin
+
         if(
             isset($donnees->title) && !empty($donnees->title) &&
             isset($donnees->start) && !empty($donnees->start) &&
@@ -52,7 +54,7 @@ class ApiController extends AbstractController
                 //si le rdv n'existait pas on le crée
                 if(!$appointment){
                     $appointment = new Appointment;
-                    
+                    $appointment->setUser($this->getUser()); //user en session
                 }
 
                 $appointment->setTitle($donnees->title);

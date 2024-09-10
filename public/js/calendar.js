@@ -1,9 +1,20 @@
 window.onload = () => {
-    let calendarEl = document.querySelector('#calendrier')
-    let data = JSON.parse(calendarEl.dataset.calendar)
-    let calendarBtn = document.querySelector('#calendar-btn')
+    let calendarEl = document.querySelector('#calendrier') //element dom calendrier
+    let data = JSON.parse(calendarEl.dataset.calendar) //données dans les data-attribute
 
-    //initilalisation du calendrier avec ses options et le tableau data
+    let calendarBtn = document.querySelector('#calendar-btn') //bouton qui ouvre le modal
+    let modal = document.querySelector("#modal"); //modal
+    let closeModal = document.querySelector('.close') //ferme le modal
+    
+    //form et ses 3 input 
+    let formEvent = document.querySelector('#new-event')
+    let inputTitle = document.querySelector(".title");
+    let inputStart = document.querySelector(".start");
+    let inputEnd = document.querySelector(".end");
+        
+
+    //----------------initilalisation du calendrier avec ses options et le tableau data----------------
+    // requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd
     let calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
         locale: 'fr',
@@ -45,11 +56,49 @@ window.onload = () => {
         let xhr = new XMLHttpRequest
         xhr.open("PUT", url)
         xhr.send(JSON.stringify(donnees))
-    })
+    });
 
-    calendarBtn.addEventListener('onClick', () => {
-        console.log("")
-    })
+
+    // ----------------ajoute un nouvel evenement----------------
+    calendarBtn.onclick =  () => {
+        modal.style.display = "block";  
+    }
+    
+    // ferme le modal avec le bouton ou en cliquant ailleurs
+    closeModal.onclick = () => {
+        modal.style.display = "none"; 
+    }
+
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    //validation du formulaire
+    formEvent.onsubmit = (e) => {
+        e.preventDefault(); //empeche la page de recharger
+
+        // valeurs des 3 input
+        let titleValue = inputTitle.value;
+        let startValue = inputStart.value;
+        let endValue = inputEnd.value;
+
+        let donnees = {
+            title: titleValue,
+            start: startValue,
+            end: endValue
+        };
+        
+        let url = '/api/post';
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+    
+
+        xhr.send(JSON.stringify(donnees));
+
+    }    
 
     calendar.render()
 
