@@ -8,13 +8,14 @@
 <section id="profil">
 
     <h1>Ton profil</h1>
-    <p><a href="{{path('create_appointment')}}">Prendre rendez-vous</a></p>
     
     <p>Email : {{ app.user.email}} </p>
-    <p>Pseudo : {{app.user }} </p>
-
-    {# modifier son pseudo  #}
-    <p id="openFormProfil">Modifier son pseudo</p>
+    <p>Pseudo : {{app.user }} 
+        {# bouton modifier son pseudo qui ouvre le formulaire #}
+        <button aria-label="modifier son pseudo" id="openFormProfil">
+            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M18.3282 8.32837L15.8939 5.89405C14.7058 4.706 14.1118 4.11198 13.4268 3.88941C12.8243 3.69364 12.1752 3.69364 11.5727 3.88941C10.8877 4.11198 10.2937 4.706 9.10564 5.89405L7.49975 7.49994M3 20.9997L3.04745 20.6675C3.21536 19.4922 3.29932 18.9045 3.49029 18.3558C3.65975 17.8689 3.89124 17.4059 4.17906 16.9783C4.50341 16.4963 4.92319 16.0765 5.76274 15.237L17.4107 3.58896C18.1918 2.80791 19.4581 2.80791 20.2392 3.58896C21.0202 4.37001 21.0202 5.63634 20.2392 6.41739L8.37744 18.2791C7.61579 19.0408 7.23497 19.4216 6.8012 19.7244C6.41618 19.9932 6.00093 20.2159 5.56398 20.3879C5.07171 20.5817 4.54375 20.6882 3.48793 20.9012L3 20.9997Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        </button>
+    </p>
     
     <form action="{{path('edit_profil')}}" method="post" class="editProfil">
 
@@ -34,10 +35,9 @@
             Enregistrer
         </button>
     </form>
-    <p><a href="{{path('app_forgot_password_request')}}">Réinitialiser son mot de passe</a></p>
+        
     
-    
-    {# --------------------------------historique de réservation-------------------------------- #}
+    {# *****************************************************historique de réservation***************************************************** #}
     
     {% if app.user.reservations is empty %}
     
@@ -87,7 +87,7 @@
         </div>
     {% endif %}
     
-    {# --------------------------------historique du suivi de projet-------------------------------- #}
+    {# *****************************************************historique du suivi de projet***************************************************** #}
     
     {% if app.user.projects is empty %}
     {% else %}
@@ -134,28 +134,28 @@
                         </div>
                     </div>
             
-                    {# prestations  #}
+                    {# -----prestations-----  #}
                     <h4>Prestation(s) envisagée(s):</h4>
                     {% for presta in project.prestations %}
                         <p>{{presta}}</p>
                     {% endfor %}
             
-                    {# budget  #}
+                    {# -----budget-----  #}
                     <h4>Budget: </h4>
                     <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
             
-                    {# prix fixé  #}
+                    {# -----prix fixé-----  #}
                     {% if project.finalPrice %}
                         <h4>Prix fixé: </h4>
                         <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
                     {% endif %}
             
-                    {# description  #}
+                    {# -----description-----  #}
                     <p> {{project.description}} </p>
             
                 </div>
             
-                {# suivi du projet, commentaires des personnes présentes sur le pannel admin  #}
+                {# ----------commentaires admin suivi de projet----------  #}
                 <section id="projet-suivis">
 
                     <h3>Suivi du projet</h3>
@@ -176,7 +176,7 @@
 
                 </section>
         
-                {# devis  #}
+                {# ----------devis----------  #}
                 {% for quot in project.quotations %}
                     {# si le devis a été refusé  #}
                     {% if quot.isAccepted == false %}
@@ -199,8 +199,27 @@
                         {# accepter ou refuser le devis #}
                         <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
                         <p id="devis-action">
-                            <a href="{{path('refuse_devis', {id: quot.id})}}" class="refuse-devis">Refuser le devis</a>
-                            <a href="{{path('accepte_devis', {id: quot.id})}}" class="accepte-devis">Accepter le devis</a>
+
+                            <form action="{{path('refuse_devis', {id: quot.id})}}">
+                                <input type="hidden" name="_csrf_token"
+                                    value="{{ csrf_token('authenticate') }}"
+                                >
+                                {# honeypot #}
+                                <input name="firstname" type="text" id="firstname" class="hide-robot">
+                                <button type="submit" name="submit" class="refuse-devis">Refuser le devis</button>
+                            </form>
+                            
+                            <form action="{{path('accepte_devis', {id: quot.id})}}">
+                                <input type="hidden" name="_csrf_token"
+                                    value="{{ csrf_token('authenticate') }}"
+                                >
+                                {# honeypot #}
+                                <input name="firstname" type="text" id="firstname" class="hide-robot">
+                                <button type="submit" name="submit" class="accepte-devis">Accepter le devis</button>
+                            </form>
+
+                            {# <a href="{{path('refuse_devis', {id: quot.id})}}" class="refuse-devis">Refuser le devis</a> #}
+                            {# <a href="{{path('accepte_devis', {id: quot.id})}}" class="accepte-devis">Accepter le devis</a> #}
                         </p>
                     {% endif %}
                     
@@ -210,8 +229,83 @@
             
         </div>
     {% endif %}
-        <p class="p-delete">Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.</p>
-        <a href="{{ path('delete_profil') }}" class="btn-delete">Supprimer son compte</a>
+
+    {# *****************************************************rendez-vous***************************************************** #}
+    {% if app.user.appointments is empty %}
+    {% else %}
+
+        <div id="profil-rdv">
+            <h3>Rendez-vous avec nous</h3>
+            <p><b>A venir</b></p>
+            {% for appointment in app.user.appointments %}
+                {# rdv a venir  #}
+                {% if appointment.dateEnd > "now" %}
+
+                    <div class="rdv-card">
+                        <div class="rdv-card-svg">
+                            <svg width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="8" cy="8" r="8" fill="#D2DDD2"></circle> </g></svg>
+                        </div>
+                        <div class="rdv-card-header">
+                            <p>{{appointment.dateStart |format_datetime('short', 'short', locale='fr')}}</p>
+                            <p>{{appointment.dateEnd |format_datetime('short', 'short', locale='fr')}}</p>
+                        </div>
+                        <div class="rdv-card-content">
+                            <p>{{appointment.title}}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <p><b>Passés</b></p>
+            {% for appointment in app.user.appointments %}
+                {# rdv passés  #}
+                {% if appointment.dateEnd > "now" %}
+
+                    <div class="rdv-card">
+                        <div class="rdv-card-svg">
+                            <svg width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="8" cy="8" r="8" fill="#D2DDD2"></circle> </g></svg>
+                        </div>
+                        <div class="rdv-card-header">
+                            <p>{{appointment.dateStart |format_datetime('short', 'short', locale='fr')}}</p>
+                            <p>{{appointment.dateEnd |format_datetime('short', 'short', locale='fr')}}</p>
+                        </div>
+                        <div class="rdv-card-content">
+                            <p>{{appointment.title}}</p>
+                        </div>
+                    </div>
+
+                    {# rdv passés  #}
+                {% endif %}
+            {% endfor %}
+
+            
+        </div>
+    {% endif %}
+    <div class="rdv-btn">
+        <span class="rdv-icon">
+            <svg fill="#f5f5f5" width="40px" height="40px" viewBox="0 0 32 32" id="Outlined" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Fill"> <path d="M26,4V2H24V4H8V2H6V4H2V25a3,3,0,0,0,3,3H27a3,3,0,0,0,3-3V4Zm2,21a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V6H6V9H8V6H24V9h2V6h2Z"></path> <path d="M6,17h6V11H6Zm2-4h2v2H8Z"></path> <path d="M13,17h6V11H13Zm2-4h2v2H15Z"></path> <path d="M20,17h6V11H20Zm2-4h2v2H22Z"></path> <path d="M6,24h6V18H6Zm2-4h2v2H8Z"></path> <path d="M13,24h6V18H13Zm2-4h2v2H15Z"></path> </g> </g></svg>
+        </span>
+        <span class="rdv-text">
+            <a href="{{path('create_appointment')}}">Rendez-vous</a>
+        </span>
+    </div>
+
+    {# *****************************************************paramètres***************************************************** #}
+    <h3>Paramètres</h3>
+    <p>Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.</p>
+
+    {# ----suppression compte---- #}
+    <form action="{{ path('delete_profil') }}" class="form-delete">
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+      >
+      {# honeypot #}
+      <input name="firstname" type="text" id="firstname" class="hide-robot">
+
+      <button type="submit" name="submit" class="btn-delete">Supprimer son compte</button>
+    </form>
+
+    {# -----réinitialiser mdp----- #}
+    <p><a href="{{path('app_forgot_password_request')}}">Réinitialiser son mot de passe</a></p>
         
 </section>
 
