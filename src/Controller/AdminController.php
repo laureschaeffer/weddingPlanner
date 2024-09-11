@@ -23,6 +23,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
+    public function __construct(private EntityManagerInterface $entityManager) {
+    }
+
     #[Route('/coiffe', name: 'app_admin')]
     public function index(ProjectRepository $projectRepository): Response
     {
@@ -67,7 +70,7 @@ class AdminController extends AbstractController
 
     //change l'avis en publié ou non publié
     #[Route('/coiffe/changeAvis/{id}', name: 'change_avis')]
-    public function changeTestimonyState(EntityManagerInterface $entityManager, Testimony $testimony = null, TestimonyRepository $testimonyRepository){
+    public function changeTestimonyState(Testimony $testimony = null, TestimonyRepository $testimonyRepository){
 
         //trouve le nb de témoignages publiés
         $nbAvisPublies = count($testimonyRepository->findBy(['isPublished' => 1]));
@@ -86,8 +89,8 @@ class AdminController extends AbstractController
             }
         }
 
-        $entityManager->persist($testimony);
-        $entityManager->flush();
+        $this->entityManager->persist($testimony);
+        $this->entityManager->flush();
 
         $this->addFlash('success', 'Statut de l\'avis du couple ' . $testimony->getCoupleName() . ' modifié');
         return $this->redirectToRoute('app_avis');
@@ -96,12 +99,12 @@ class AdminController extends AbstractController
 
     //supprimer un avis de la bdd (non publiés)
     #[Route('/coiffe/supprAvis/{id}', name: 'remove_avis')] 
-    public function deleteTestimony(Testimony $testimony = null, EntityManagerInterface $entityManager){
+    public function deleteTestimony(Testimony $testimony = null){
         
         //si le temoignage existe et qu'il n'est pas publié
         if($testimony && $testimony->isPublished() == false){
-            $entityManager->remove($testimony); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->remove($testimony); //prepare
+            $this->entityManager->flush(); //execute
             
             // notif et redirection
             $this->addFlash('success', 'Avis supprimé');
@@ -134,7 +137,7 @@ class AdminController extends AbstractController
 
     //modifie la commande
     #[Route('coiffe/editCommande/{id<\d+>}', name: 'edit_commande')]
-    public function editCommande(Request $request, EntityManagerInterface $entityManager, Reservation $reservation): Response
+    public function editCommande(Request $request, Reservation $reservation): Response
     {
         if($reservation){
 
@@ -145,8 +148,8 @@ class AdminController extends AbstractController
             if($form->isSubmitted() && $form->isValid()){
                 $reservation=$form->getData();
     
-                $entityManager->persist($reservation); //prepare
-                $entityManager->flush(); //execute
+                $this->entityManager->persist($reservation); //prepare
+                $this->entityManager->flush(); //execute
     
                 $this->addFlash('success', 'Commande modifiée');
                 return $this->redirectToRoute('show_commande', ['id' => $reservation->getId()]);
@@ -182,7 +185,7 @@ class AdminController extends AbstractController
 
     //passer une commande en préparée ou non préparée
     #[Route('coiffe/changeCommandePrepared/{id<\d+>}', name: 'change_commande_prepared')]
-    public function changeCommandePrepared(Reservation $reservation =null, EntityManagerInterface $entityManager, MailerInterface $mailer){
+    public function changeCommandePrepared(Reservation $reservation =null, MailerInterface $mailer){
 
         //si la commande existe
         if($reservation){
@@ -208,8 +211,8 @@ class AdminController extends AbstractController
                 $mailer->send($email);
             }
 
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'Statut de la commande changé');
             return $this->redirectToRoute('show_commande', ['id' => $reservation->getId()]);
@@ -224,7 +227,7 @@ class AdminController extends AbstractController
 
     //passer une commande en récupérée ou non récupérée
     #[Route('coiffe/changeCommandePicked/{id<\d+>}', name: 'change_commande_picked')]
-    public function changeCommandePicked(Reservation $reservation =null, EntityManagerInterface $entityManager){
+    public function changeCommandePicked(Reservation $reservation =null){
 
         //si la commande existe
         if($reservation){
@@ -236,8 +239,8 @@ class AdminController extends AbstractController
                 $reservation->setPicked(true);
             }
 
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+            $this->entityManager->persist($reservation);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'Statut de la commande changé');
             return $this->redirectToRoute('show_commande', ['id' => $reservation->getId()]);

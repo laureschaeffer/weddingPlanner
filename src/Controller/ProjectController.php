@@ -29,13 +29,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProjectController extends AbstractController
 {
-    private $uniqueIdService;
-    private $pdfService;
 
-    public function __construct(UniqueIdService $uniqueIdService, PdfService $pdfService) {
-        $this->uniqueIdService = $uniqueIdService;
-        $this->pdfService = $pdfService;
-    }
+
+    public function __construct(private UniqueIdService $uniqueIdService, private PdfService $pdfService, private EntityManagerInterface $entityManager) 
+    {    }
 
     //liste des demandes reçues
     #[Route('/coiffe/projet', name: 'app_projet')]
@@ -52,7 +49,7 @@ class ProjectController extends AbstractController
     
     //detail d'une demande
     #[Route('/coiffe/projet/{id}', name: 'show_projet')]
-    public function showProject(Project $project = null, Request $request, EntityManagerInterface $entityManager, UserInterface $user): Response
+    public function showProject(Project $project = null, Request $request, UserInterface $user): Response
     {
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
         if($project){
@@ -70,8 +67,8 @@ class ProjectController extends AbstractController
                 $comment->setProject($project); //remplit par le projet où se trouve l'utilisateur
                 $comment->setUser($user); //remplit par l'utilisateur connecté
     
-                $entityManager->persist($comment); //prepare
-                $entityManager->flush(); //execute
+                $this->entityManager->persist($comment); //prepare
+                $this->entityManager->flush(); //execute
 
                 $this->addFlash('success', 'Commentaire ajouté');
                 return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
@@ -90,7 +87,7 @@ class ProjectController extends AbstractController
 
     //modifie un commentaire du suivi
     #[Route('/coiffe/editComment/{id}', name: 'edit_comment')]
-    public function editComment(Comment $comment =null, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager){
+    public function editComment(Comment $comment =null, CsrfTokenManagerInterface $csrfTokenManager){
         if($comment){
 
             $idProjet = $comment->getProject()->getId(); //recupere l'id du projet pour la redirection
@@ -120,7 +117,7 @@ class ProjectController extends AbstractController
                 return $this->redirectToRoute('app_home');
             } else {
                 $comment->setContent($content);
-                $entityManager->flush();
+                $this->entityManager->flush();
     
                 $this->addFlash('success', 'Commentaire modifié');
                 return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
@@ -132,7 +129,7 @@ class ProjectController extends AbstractController
 
     //supprime un commentaire du suivi
     #[Route('/coiffe/deleteComment/{id}', name: 'delete_comment')]
-    public function deleteComment(Comment $comment = null, EntityManagerInterface $entityManager){
+    public function deleteComment(Comment $comment = null){
         //si le temoignage existe et qu'il n'est pas publié
         if($comment){
             $idProjet = $comment->getProject()->getId(); //recupere l'id du projet pour la redirection
@@ -143,8 +140,8 @@ class ProjectController extends AbstractController
                 return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
             }
 
-            $entityManager->remove($comment); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->remove($comment); //prepare
+            $this->entityManager->flush(); //execute
             
             // notif et redirection
             $this->addFlash('success', 'Commentaire supprimé');
@@ -158,7 +155,7 @@ class ProjectController extends AbstractController
 
     //passe le projet en "a été contacté" ou "à contacter"
     #[Route('/coiffe/changeContactedProjet/{id}', name: 'change_contacted_projet')]
-    public function changeContactedProjet(EntityManagerInterface $entityManager, Project $project = null){
+    public function changeContactedProjet(Project $project = null){
 
         if($project){
 
@@ -169,8 +166,8 @@ class ProjectController extends AbstractController
                 $project->setContacted(true);
             }
     
-            $entityManager->persist($project);
-            $entityManager->flush();
+            $this->entityManager->persist($project);
+            $this->entityManager->flush();
     
             $this->addFlash('success', 'Statut de la demande changé');
             return $this->redirectToRoute('show_projet', ['id'=>$project->getId()]);
@@ -183,7 +180,7 @@ class ProjectController extends AbstractController
 
     //ajoute/modifie le prix final
     #[Route('/coiffe/fixePrix/{id}', name: 'fixe_prix')]
-    public function setPrice(Project $project = null, EntityManagerInterface $entityManager, Request $request){
+    public function setPrice(Project $project = null){
 
         if($project){
             //si le projet n'est pas modifiable
@@ -198,8 +195,8 @@ class ProjectController extends AbstractController
 
             $project->setFinalPrice($price);
 
-            $entityManager->persist($project); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->persist($project); //prepare
+            $this->entityManager->flush(); //execute
 
             $this->addFlash('success', 'Prix final fixé');
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
@@ -306,14 +303,14 @@ class ProjectController extends AbstractController
     // ***************************************fonction create devis***************************************
 
     //enregistre le devis en base de donnée, factorisation de la fonction createDevis
-    public function createQuotationBdd(Project $project, EntityManagerInterface $entityManager){
+    public function createQuotationBdd(Project $project){
 
         $quotation = new Quotation();
         $quotation->setProject($project);
         $quotationNumber = "DEV_" . $this->uniqueIdService->generateUniqueId(); //crée un nom unique aléatoire
         $quotation->setQuotationNumber($quotationNumber);
 
-        $entityManager->persist($quotation); //prepare
+        $this->entityManager->persist($quotation); //prepare
         return $quotation;
     }
 
@@ -365,7 +362,7 @@ class ProjectController extends AbstractController
 
     //crée le devis: l'enregistre dans la bdd, change le statut du projet, envoie un mail au client et télécharge le pdf
     #[Route('/coiffe/createDevis/{id}', name: 'create_devis')]
-    public function createDevis(Project $project = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, MailerInterface $mailer){
+    public function createDevis(Project $project = null, StateRepository $stateRepository, MailerInterface $mailer){
         //--conditions--
         if(!$project){
             $this->addFlash('error', 'Ce projet n\'existe pas');
@@ -384,12 +381,12 @@ class ProjectController extends AbstractController
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         }
         //----enregistre le devis (quotation) dans la bdd
-        $quotation = $this->createQuotationBdd($project, $entityManager);
+        $quotation = $this->createQuotationBdd($project, $this->entityManager);
 
         //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
         $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
         $project->setState($stateEnAttente);
-        $entityManager->persist($project);
+        $this->entityManager->persist($project);
 
         //----envoie d'un mail
         $emailContact = $project->getEmail()==! NULL ? $project->getEmail() : $project->getUser()->getEmail();
@@ -398,7 +395,7 @@ class ProjectController extends AbstractController
         //----télécharge en local le devis pdf
         $this->downloadDevis($quotation, $project);
 
-        $entityManager->flush(); //execute
+        $this->entityManager->flush(); //execute
 
         $this->addFlash('success', 'Devis créé et enregistré');
         return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
@@ -407,7 +404,7 @@ class ProjectController extends AbstractController
 
     //refuse le devis (utilisateur)
     #[Route('/refuseDevis/{id}', name: 'refuse_devis')]
-    public function refuseDevis(Quotation $quotation = null, StateRepository $stateRepository, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager){
+    public function refuseDevis(Quotation $quotation = null, StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
         //-----securité honeypot et faille csrf-----
         //honey pot field
         $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -448,11 +445,11 @@ class ProjectController extends AbstractController
 
         // passe le devis et le projet en refusé
         $quotation->setAccepted(false);
-        $entityManager->persist($quotation);
+        $this->entityManager->persist($quotation);
 
         $stateRefuse = $stateRepository->findOneBy(['id' => 4]);
         $project->setState($stateRefuse);
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         $this->addFlash('success', 'Devis refusé, le projet est cloturé');
         return $this->redirectToRoute('app_profil');
@@ -493,7 +490,7 @@ class ProjectController extends AbstractController
 
     //accepte le devis (utilisateur)
     #[Route('/accepteDevis/{id}', name: 'accepte_devis')]
-    public function accepteDevis(Quotation $quotation = null, EntityManagerInterface $entityManager, StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
+    public function accepteDevis(Quotation $quotation = null, StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
         //-----securité honeypot et faille csrf-----
         //honey pot field
         $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -535,7 +532,7 @@ class ProjectController extends AbstractController
         //----change le statut du projet de "en attente" à "accepté"
         $stateAccepte = $stateRepository->findOneBy(['id' => 3]);
         $project->setState($stateAccepte);
-        $entityManager->persist($project);
+        $this->entityManager->persist($project);
 
         //passe le statut du devis à accepté
         $quotation->setAccepted(true);
@@ -545,9 +542,9 @@ class ProjectController extends AbstractController
         $bill->setQuotation($quotation);
         $billNumber = "FACT_" . $this->uniqueIdService->generateUniqueId(); //genere un nom unique
         $bill->setBillNumber($billNumber);
-        $entityManager->persist($bill);
+        $this->entityManager->persist($bill);
 
-        $entityManager->flush(); //execute
+        $this->entityManager->flush(); //execute
 
         //télécharge la facture dans le dossier
         $this->downloadFacture($bill, $project);

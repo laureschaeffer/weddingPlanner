@@ -17,7 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SuperAdminController extends AbstractController
 {
-
+    public function __construct(private EntityManagerInterface $entityManager) {
+    }
 
     //----------------------------------------------partie utilisateurs--------------------------------
     
@@ -34,7 +35,7 @@ class SuperAdminController extends AbstractController
 
     //change le role d'un utilisateur
     #[Route('/super-coiffe/upgrade/{id}', name: 'upgrade_role')]
-    public function upgradeUser(User $user, EntityManagerInterface $entityManager, Request $request, CsrfTokenManagerInterface $csrfTokenManager)
+    public function upgradeUser(User $user, CsrfTokenManagerInterface $csrfTokenManager)
     {
         
         //utilise la methode post pour récupérer les elements cochés
@@ -75,8 +76,8 @@ class SuperAdminController extends AbstractController
             
             $user->setRoles($resultArray); //setter dans la classe User attend un tableau json format ["ROLE_USER", "ROLE_ADMIN"]
     
-            $entityManager->persist($user); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->persist($user); //prepare
+            $this->entityManager->flush(); //execute
             
             
             // redirection
@@ -88,7 +89,7 @@ class SuperAdminController extends AbstractController
     //----------------------------------------------partie projet--------------------------------
     //modifie un projet
     #[Route('/super-coiffe/editProjet/{id}', name: 'edit_projet')]
-    public function editProjet(Project $project = null, EntityManagerInterface $entityManager, Request $request){
+    public function editProjet(Project $project = null, Request $request){
 
         //si le projet n'existe pas ou qu'il ne peut plus etre modifié
         if(!$project || !$project->isEditable()){
@@ -104,8 +105,8 @@ class SuperAdminController extends AbstractController
 
             $project=$form->getData();
             
-            $entityManager->persist($project); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->persist($project); //prepare
+            $this->entityManager->flush(); //execute
 
             $this->addFlash('success', 'Projet modifié');
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);

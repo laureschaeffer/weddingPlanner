@@ -29,6 +29,8 @@ use Symfony\Component\Mailer\MailerInterface;
 class HomeController extends AbstractController
 {
 
+    public function __construct(private EntityManagerInterface $entityManager) {
+    }
     //--------------------------------------------------------page d'accueil------------------------------------------------------------
 
     //accueil
@@ -46,7 +48,7 @@ class HomeController extends AbstractController
 
     //gère le formulaire de contact pour parler d'un projet
     #[Route('/contact', name: 'app_contact')]
-    public function newProject(EntityManagerInterface $entityManager, Request $request, StateRepository $stateRepository)
+    public function newProject(Request $request, StateRepository $stateRepository)
     {
         $user = $this->getUser();
                 
@@ -70,8 +72,8 @@ class HomeController extends AbstractController
     
                 //si la date de l'evenement n'est pas dépassée
                 if($project->isDateValid()){
-                    $entityManager->persist($project); //prepare
-                    $entityManager->flush(); //execute
+                    $this->entityManager->persist($project); //prepare
+                    $this->entityManager->flush(); //execute
         
                     $this->addFlash('success', 'Demande envoyée');
                     return $this->redirectToRoute('app_profil');
@@ -96,7 +98,7 @@ class HomeController extends AbstractController
 
     //gère le formulaire d'un utilisateur qui donne son avis
     #[Route('/temoignage', name: 'app_temoignage')]
-    public function newTestimony(EntityManagerInterface $entityManager, Request $request){
+    public function newTestimony(Request $request){
 
         $testimony = new Testimony();
 
@@ -107,8 +109,8 @@ class HomeController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $testimony = $form->getData();
 
-            $entityManager->persist($testimony); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->persist($testimony); //prepare
+            $this->entityManager->flush(); //execute
 
             $this->addFlash('success', 'Témoignage envoyé');
             return $this->redirectToRoute('app_home');
@@ -185,7 +187,7 @@ class HomeController extends AbstractController
     
     //nouveau le rendez-vous
     #[Route('/rendez-vous/new', name: 'create_appointment')]
-    public function newAppointment(EntityManagerInterface $entityManager, Request $request, AppointmentRepository $appointmentRepository, MailerInterface $mailer): Response
+    public function newAppointment(Request $request, AppointmentRepository $appointmentRepository, MailerInterface $mailer): Response
     {
         //----conditions----
         $user = $this->getUser();
@@ -243,8 +245,8 @@ class HomeController extends AbstractController
                 $mailer->send($email);
 
 
-            $entityManager->persist($appointment); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->persist($appointment); //prepare
+            $this->entityManager->flush(); //execute
 
             $this->addFlash('success', 'Le rendez-vous a été confirmé');
             return $this->redirectToRoute('app_profil');

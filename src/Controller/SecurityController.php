@@ -16,6 +16,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
 
+    public function __construct(private EntityManagerInterface $entityManager) {
+    }
     //--------------------------------------------------propre à google authentification-------------------------------------------
     public const SCOPES = [
         'google' => []
@@ -74,8 +76,12 @@ class SecurityController extends AbstractController
 
     //traite le formulaire
     #[Route('/modifieProfil', name: 'edit_profil')]
-    public function editProfil(Request $request, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager)
+    public function editProfil(CsrfTokenManagerInterface $csrfTokenManager)
     {
+        if(!$this->getUser()){
+            $this->addFlash('error', 'Veuillez vous connecter');
+            return $this->redirectToRoute('app_login');
+        }
         //filtre
         $pseudo = filter_input(INPUT_POST, 'pseudo', FILTER_SANITIZE_SPECIAL_CHARS); 
         $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -103,7 +109,7 @@ class SecurityController extends AbstractController
         $newPseudo = str_replace(" ", "", $pseudo); //supprime les espaces
         $this->getUser()->setPseudo($newPseudo);
 
-        $entityManager->flush();
+        $this->entityManager->flush();
         $this->addFlash('success', 'Informations modifiées');
         return $this->redirectToRoute('app_profil');
 
@@ -111,7 +117,7 @@ class SecurityController extends AbstractController
 
     //anonymisation des données du profil avec l'algorithme sha256
     #[Route('/delete', name: 'delete_profil')]
-    public function delete(EntityManagerInterface $entityManager, StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
+    public function delete(StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
         //-----securité honeypot et faille csrf-----
         //honey pot field
         $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -138,7 +144,7 @@ class SecurityController extends AbstractController
         $user->setRoles(["ROLE_SUPPRIME"]);
         $user->setGoogleUser(false);
 
-        $entityManager->persist($user);
+        $this->entityManager->persist($user);
 
         //----------------entité PROJECT----------------
         $userProjects = $user->getProjects();
@@ -159,7 +165,7 @@ class SecurityController extends AbstractController
 
                 $project->setContacted(true);
                 
-                $entityManager->persist($project);
+                $this->entityManager->persist($project);
             }
         }
 
@@ -176,12 +182,12 @@ class SecurityController extends AbstractController
                 $reservation->setPrepared(true);
                 $reservation->setPicked(true);
                 
-                $entityManager->persist($reservation);
+                $this->entityManager->persist($reservation);
             }
         }
         
 
-        $entityManager->flush(); //execute
+        $this->entityManager->flush(); //execute
 
         $this->addFlash('success', 'Profil supprimé');
         return $this->redirectToRoute('app_home');

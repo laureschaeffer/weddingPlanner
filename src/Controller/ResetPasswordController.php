@@ -37,6 +37,14 @@ class ResetPasswordController extends AbstractController
     #[Route('', name: 'app_forgot_password_request')]
     public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
+        if(!$this->getUser()){
+            $this->addFlash('error', 'Veuillez vous connecter');
+            return $this->redirectToRoute('app_login');
+        }
+        if($this->getUser()->getGoogleUser()){
+            $this->addFlash('error', 'Vous ne pouvez pas effectuer cette action !');
+            return $this->redirectToRoute('app_profil');
+        }
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 

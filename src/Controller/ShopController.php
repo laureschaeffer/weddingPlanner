@@ -25,6 +25,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ShopController extends AbstractController
 {
+    public function __construct(private EntityManagerInterface $entityManager) {
+    }
     //liste des collections avec quelques produits, "batch"= collection 
     #[Route('/shop', name: 'app_shop')]
     public function index(BatchRepository $batchRepository): Response
@@ -168,7 +170,7 @@ class ShopController extends AbstractController
     }
 
     //traite la création booking avec le formulaire, factorisation de la fonction makeReservation
-    public function createBooking($panier, $reservation, $entityManager){
+    public function createBooking($panier, $reservation){
 
         //il faut créer autant d'entité booking que de produit dans le panier
         foreach($panier as $p){
@@ -180,8 +182,8 @@ class ShopController extends AbstractController
             //hydrate l'objet reservation pour pouvoir accèder plus tard aux réservations
             $reservation->addBooking($booking);
 
-            $entityManager->persist($booking); //prepare
-            $entityManager->flush(); //execute
+            $this->entityManager->persist($booking); //prepare
+            $this->entityManager->flush(); //execute
             
         }
     }
@@ -206,7 +208,7 @@ class ShopController extends AbstractController
 
     //ajoute le panier en réservation
     #[Route('/shop/reservation', name: 'make_reservation')]
-    public function makeReservation(EntityManagerInterface $entityManager, Request $request, UserInterface $user, BasketService $basketService, UniqueIdService $uniqueIdService, MailerInterface $mailer): Response
+    public function makeReservation(Request $request, UserInterface $user, BasketService $basketService, UniqueIdService $uniqueIdService, MailerInterface $mailer): Response
     {
 
         //la personne doit être connectée pour que la réservation soit associée à une entité
@@ -233,14 +235,14 @@ class ShopController extends AbstractController
                     //traite la création de reservation
                     $this->createReservation($basketService, $uniqueIdService, $user, $reservation);
         
-                    $entityManager->persist($reservation); //prepare
-                    $entityManager->flush(); //execute
+                    $this->entityManager->persist($reservation); //prepare
+                    $this->entityManager->flush(); //execute
     
                     //---------------------------------------------------entité booking------------------------------
     
                     $panier = $basketService->getBasket();
                     //traite la création de booking
-                    $this->createBooking($panier, $reservation, $entityManager);
+                    $this->createBooking($panier, $reservation);
     
                     
                     //-----------------------------------------envoie d'un email de confirmation
