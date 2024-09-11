@@ -280,5 +280,73 @@ class AdminController extends AbstractController
         ]);
     }
 
+    //met à jour les rendez-vous dynamiquement avec fullcalendar
+    #[Route('/coiffe/rendez-vousEdit/{id}', name: 'edit_event')] //modifie
+    #[Route('/coiffe/rendez-vousPost', name: 'post_event')] //ajoute
+    public function majEvent(?Appointment $appointment, Request $request, UserRepository $userRepository, MailerInterface $mailer){
+        
+        $donnees = json_decode($request->getContent()); //tableau renvoye dans la requete xml
+        // si le tableau a bien tous les éléments dont l'objet Appointment a besoin
+
+        if(
+            isset($donnees->title) && !empty($donnees->title) &&
+            isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->end) && !empty($donnees->end)
+            ){
+                //si le rdv n'existait pas on le crée
+                if(!$appointment){
+                    $appointment = new Appointment;
+                    $emailContact = $donnees->user;
+                    $userSelected = $userRepository->findOneBy(['email' => $donnees->user]);
+                    $appointment->setUser($userSelected);
+                }
+
+                $appointment->setTitle($donnees->title);
+                $appointment->setDateStart(new \DateTime($donnees->start));
+                $appointment->setDateEnd(new \DateTime($donnees->end));
+
+                $emailContact = $appointment->getUser()->getEmail();
+
+                $this->entityManager->persist($appointment);
+                $this->entityManager->flush();
+
+                $email = (new TemplatedEmail())
+                    ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                    ->to($emailContact)
+                    ->subject('Prise de rendez-vous')
+
+                    ->context([
+                        'title' => $donnees->title,
+                        'start' => $donnees->start,
+                        'end' => $donnees->end,
+                    ])
+                    ->htmlTemplate('email/confirmationRdv.html.twig')
+                    ;
+
+                $mailer->send($email);
+
+                $this->addFlash('success', 'Rendez-vous mis à jour');
+                return $this->redirectToRoute('app_rendezvous');
+            } else {
+                return new Response('Données incomplètes', 404);
+            }
+
+    }
+
+    //supprime un rdv
+    #[Route('/coiffe/rendez-vousDelete/{id}', name: 'delete_event')]
+    public function deleteEvent(Appointment $appointment){
+        
+        if($appointment){
+            
+            $this->entityManager->remove($appointment);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Rendez-vous supprimé');
+            return $this->redirectToRoute('app_rendezvous');
+        }
+
+    }
+
     
 }

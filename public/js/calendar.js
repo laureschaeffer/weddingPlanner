@@ -31,12 +31,13 @@ window.onload = () => {
         headerToolbar: {
             start: 'prev,next today',
             center: 'customAddEvent',
-            end: 'timeGridWeek,dayGridMonth'
+            end: 'listWeek,timeGridWeek,dayGridMonth'
         },
         buttonText: {
-            today: 'Aujourdh\'ui',
+            today: 'Aujourd\'hui',
             month: 'Mois',
             week: 'Semaine',
+            list: 'Liste'
         },
         slotMinTime: '08:00:00', 
         slotMaxTime: '19:00:00',
@@ -52,7 +53,7 @@ window.onload = () => {
         },
         eventClick: (infos) => {
             if(!confirm("Êtes-vous sûr de vouloir supprimer cet évènement?")){
-                infos.revert()
+                infos.event.revert()
             } else {
                 infos.event.remove()
                 deleteEvent(infos)
@@ -64,7 +65,7 @@ window.onload = () => {
     //ecouteur d'evenement "au changement", requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd
     calendar.on('eventChange', (e) => {
         // console.log(e)
-        let url = `/api/edit/${e.event.id}`
+        let url = `/coiffe/rendez-vousEdit/${e.event.id}`
         let donnees = {
             "title": e.event.title,
             "start": e.event.start,
@@ -112,15 +113,23 @@ window.onload = () => {
                     end: endValue,
                     user: userValue
                 };
-                
-                let url = '/api/post';
+                //ajoute l'évènement en direct mais ne l'enregistre pas en base de données
+                calendar.addEvent({
+                    title: titleValue,
+                    start: startValue,
+                    end: endValue,
+                    backgroundColor: '#2c3e50',
+                    borderColor: '#ffff',
+                    textColor: '#ffff',
+                })
+                let url = '/coiffe/rendez-vousPost';
         
                 let xhr = new XMLHttpRequest();
                 xhr.open("POST", url);
             
         
                 xhr.send(JSON.stringify(donnees));
-                modal.style.display = "none";
+                modal.style.display = "none"; //ferme le modal
                 
             } else {
                 alert("Veuillez sélectionner une date valide!")
@@ -134,7 +143,7 @@ window.onload = () => {
     // ----------------supprime un evenement---------------- 
     function deleteEvent(infos) {
        
-        let url = `/api/delete/${infos.event.id}`;
+        let url = `/coiffe/rendez-vousDelete/${infos.event.id}`;
 
         let xhr = new XMLHttpRequest()
         xhr.open("DELETE", url)

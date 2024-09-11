@@ -5,11 +5,14 @@
 {% block body %}
 <section id="prise-rendez-vous">
     <h1>Prise de rendez-vous</h1>
-    
-    
-    {{form(form)}}
+    <p>Veuillez cliquer ou selectionner un créneau</p>
+    <div id="calendrier" data-calendar="{{data}}"></div>
 
 
 </section>
 
+<script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
+"></script>
+<script src="{{asset('js/calendarUser.js')}}"></script>
 {% endblock %}

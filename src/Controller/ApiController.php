@@ -3,18 +3,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Appointment;
-use App\Repository\UserRepository;
-use Symfony\Component\Mime\Address;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\Mailer\MailerInterface;
 
 class ApiController extends AbstractController
 {
@@ -42,71 +35,4 @@ class ApiController extends AbstractController
         // ...
     }
 
-    //met à jour les rendez-vous dynamiquement avec fullcalendar
-    #[Route('/api/edit/{id}', name: 'edit_event')] //modifie
-    #[Route('/api/post', name: 'post_event')] //ajoute
-    public function majEvent(?Appointment $appointment, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, MailerInterface $mailer){
-        
-        $donnees = json_decode($request->getContent()); //tableau renvoye dans la requete xml
-        // si le tableau a bien tous les éléments dont l'objet Appointment a besoin
-
-        if(
-            isset($donnees->title) && !empty($donnees->title) &&
-            isset($donnees->start) && !empty($donnees->start) &&
-            isset($donnees->end) && !empty($donnees->end)
-            ){
-                //si le rdv n'existait pas on le crée
-                if(!$appointment){
-                    $appointment = new Appointment;
-                    $emailContact = $donnees->user;
-                    $userSelected = $userRepository->findOneBy(['email' => $donnees->user]);
-                    $appointment->setUser($userSelected);
-                }
-
-                $appointment->setTitle($donnees->title);
-                $appointment->setDateStart(new \DateTime($donnees->start));
-                $appointment->setDateEnd(new \DateTime($donnees->end));
-
-                $emailContact = $appointment->getUser()->getEmail();
-
-                $entityManager->persist($appointment);
-                $entityManager->flush();
-
-                $email = (new TemplatedEmail())
-                    ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
-                    ->to($emailContact)
-                    ->subject('Prise de rendez-vous')
-
-                    ->context([
-                        'title' => $donnees->title,
-                        'start' => $donnees->start,
-                        'end' => $donnees->end,
-                    ])
-                    ->htmlTemplate('email/confirmationRdv.html.twig')
-                    ;
-
-                $mailer->send($email);
-
-                $this->addFlash('success', 'Rendez-vous mis à jour');
-                return $this->redirectToRoute('app_rendezvous');
-            } else {
-                return new Response('Données incomplètes', 404);
-            }
-
-    }
-
-    //supprime un rdv
-    #[Route('/api/delete/{id}', name: 'delete_event')]
-    public function deleteEvent(Appointment $appointment, EntityManagerInterface $entityManager){
-        
-        if($appointment){
-            
-            $entityManager->remove($appointment);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Rendez-vous supprimé');
-            return $this->redirectToRoute('app_rendezvous');
-        }
-
-    }
 }

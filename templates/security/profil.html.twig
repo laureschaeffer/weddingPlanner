@@ -258,7 +258,7 @@
             <p><b>Passés</b></p>
             {% for appointment in app.user.appointments %}
                 {# rdv passés  #}
-                {% if appointment.dateEnd > "now" %}
+                {% if appointment.dateEnd < "now" %}
 
                     <div class="rdv-card">
                         <div class="rdv-card-svg">
@@ -285,7 +285,7 @@
             <svg fill="#f5f5f5" width="40px" height="40px" viewBox="0 0 32 32" id="Outlined" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Fill"> <path d="M26,4V2H24V4H8V2H6V4H2V25a3,3,0,0,0,3,3H27a3,3,0,0,0,3-3V4Zm2,21a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V6H6V9H8V6H24V9h2V6h2Z"></path> <path d="M6,17h6V11H6Zm2-4h2v2H8Z"></path> <path d="M13,17h6V11H13Zm2-4h2v2H15Z"></path> <path d="M20,17h6V11H20Zm2-4h2v2H22Z"></path> <path d="M6,24h6V18H6Zm2-4h2v2H8Z"></path> <path d="M13,24h6V18H13Zm2-4h2v2H15Z"></path> </g> </g></svg>
         </span>
         <span class="rdv-text">
-            <a href="{{path('create_appointment')}}">Rendez-vous</a>
+            <a href="{{path('app_appointment')}}">Rendez-vous</a>
         </span>
     </div>
 
@@ -304,8 +304,10 @@
       <button type="submit" name="submit" class="btn-delete">Supprimer son compte</button>
     </form>
 
-    {# -----réinitialiser mdp----- #}
-    <p><a href="{{path('app_forgot_password_request')}}">Réinitialiser son mot de passe</a></p>
+    {# -----réinitialiser mdp si on n'est pas utilisateur google ----- #}
+    {% if app.user.googleUser == false %}
+        <p><a href="{{path('app_forgot_password_request')}}">Réinitialiser son mot de passe</a></p>
+    {% endif %}
         
 </section>
 

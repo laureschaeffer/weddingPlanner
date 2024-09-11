@@ -9,7 +9,6 @@ use App\Entity\Testimony;
 use App\Form\ProjectType;
 use App\Entity\Appointment;
 use App\Form\TestimonyType;
-use App\Form\AppointmentType;
 use App\Repository\StateRepository;
 use Symfony\Component\Mime\Address;
 use App\Repository\WorkerRepository;
@@ -185,9 +184,9 @@ class HomeController extends AbstractController
     
     //-------------------------------------------------------------------------partie RENDEZ-VOUS------------------------------------------------------------------------
     
-    //nouveau le rendez-vous
-    #[Route('/rendez-vous/new', name: 'create_appointment')]
-    public function newAppointment(Request $request, AppointmentRepository $appointmentRepository, MailerInterface $mailer): Response
+    //affiche la page créer un nouveau rendez-vous
+    #[Route('/rendez-vous', name: 'app_appointment')]
+    public function showCalendarUser(AppointmentRepository $appointmentRepository): Response
     {
         //----conditions----
         $user = $this->getUser();
@@ -195,68 +194,74 @@ class HomeController extends AbstractController
             $this->addFlash('error', 'Veuillez vous connecter pour prendre un nouveau rendez-vous');
             return $this->redirectToRoute('app_login');
         }
-        //filtre
-        $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS); //honey pot field
-    
-        //si ce champ est rempli c'est un robot
-        if($honeypot){
-            return $this->redirectToRoute('app_home');
-        } 
+ 
+        $events = $appointmentRepository->findAll();
 
-        //--------
-        $appointment = new Appointment();
-        
-        //crée le formulaire
-        $form = $this->createForm(AppointmentType::class, $appointment);
-        $form->handleRequest($request); 
-    
-        if($form->isSubmitted() && $form->isValid()){
-
-            $appointment = $form->getData();
-            
-            //crée une copie indépendante de dateStart pour ne pas la modifier directement, partant du principe qu'un rdv dure une heure
-            $dateEnd = clone $appointment->getDateStart();
-            $dateEnd = \DateTime::createFromInterface($dateEnd); //modifie en DateTime pour avoir accès à la methode modify
-            $dateEnd->modify('+1 hour');
-
-            //si la date est déjà prise
-            if($appointmentRepository->isDateTaken($appointment->getDateStart(), $dateEnd)){
-                $this->addFlash('error', 'Le créneau est déjà pris');
-                return $this->redirectToRoute('create_appointment');
-            }
-
-            $appointment->setUser($user); //user en session
-            $appointment->setDateEnd($dateEnd);
-
-            //envoie email confirmation
-            $email = (new TemplatedEmail())
-                    ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
-                    ->to($appointment->getUser()->getEmail())
-                    ->subject('Prise de rendez-vous')
-
-                    ->context([
-                        'title' => $appointment->getTitle(),
-                        'start' => $appointment->getDateStart(),
-                        'end' => $appointment->getDateEnd(),
-                    ])
-                    ->htmlTemplate('email/confirmationRdv.html.twig')
-                    ;
-
-                $mailer->send($email);
-
-
-            $this->entityManager->persist($appointment); //prepare
-            $this->entityManager->flush(); //execute
-
-            $this->addFlash('success', 'Le rendez-vous a été confirmé');
-            return $this->redirectToRoute('app_profil');
+        foreach($events as $event){
+            $rdvs[] = [
+                'start' => $event->getDateStart()->format('Y-m-d H:i:s'),
+                'end' => $event->getDateEnd()->format('Y-m-d H:i:s'),
+                'title' => "",
+                'backgroundColor' => '#b3b9c1',
+                'borderColor' => '#b3b9c1',
+                'textColor' => '#000',
+                'allDay' => false
+            ];
         }
-        
 
+        $data = json_encode($rdvs);
         return $this->render('home/newAppointment.html.twig', [
-            'form' => $form
-        ]);
-       
+            'data' => $data
+        ]);  
         
     }
+    
+    //ajoute un nouveau rdv dans la bdd
+    #[Route('/rendez-vous/new', name: 'new_appointment')]
+    public function createAppointment(Request $request, MailerInterface $mailer){
+        //si la personne n'est pas connectée
+        if(!$this->getUser()){
+            $this->addFlash('error', 'Veuillez vous connecter');
+            return $this->redirectToRoute('app_login');
+        }
+        $donnees = json_decode($request->getContent());
+        if(
+            isset($donnees->title) && !empty($donnees->title) &&
+            isset($donnees->start) && !empty($donnees->start) &&
+            isset($donnees->end) && !empty($donnees->end)
+            ){
+                $appointment = new Appointment;
+                $appointment->setUser($this->getUser());
+                $appointment->setTitle($donnees->title);
+                $appointment->setDateStart(new \DateTime($donnees->start));
+                $appointment->setDateEnd(new \DateTime($donnees->end));
+
+                // //envoie email confirmation
+                // $email = (new TemplatedEmail())
+                // ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                // ->to($this->getUser()->getEmail())
+                // ->subject('Prise de rendez-vous')
+
+                // ->context([
+                //     'title' => $donnees->title,
+                //     'start' => $donnees->start,
+                //     'end' => $donnees->end,
+                // ])
+                // ->htmlTemplate('email/confirmationRdv.html.twig')
+                // ;
+
+                // $mailer->send($email);
+
+                $this->entityManager->persist($appointment);
+                $this->entityManager->flush();
+
+                $this->addFlash('success', 'Rendez-vous ajouté');
+                return $this->redirectToRoute('app_appointment');
+            } else {
+                return new Response('Données incomplètes', 404);
+            }
+            
+    }
+
+    
 }
