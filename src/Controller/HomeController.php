@@ -195,9 +195,9 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
  
-        $events = $appointmentRepository->findAll();
+        $eventsArray = $appointmentRepository->findAll();
 
-        foreach($events as $event){
+        foreach($eventsArray as $event){
             $rdvs[] = [
                 'start' => $event->getDateStart()->format('Y-m-d H:i:s'),
                 'end' => $event->getDateEnd()->format('Y-m-d H:i:s'),
@@ -209,16 +209,16 @@ class HomeController extends AbstractController
             ];
         }
 
-        $data = json_encode($rdvs);
+        $events = json_encode($rdvs);
         return $this->render('home/newAppointment.html.twig', [
-            'data' => $data
+            'events' => $events
         ]);  
         
     }
     
     //ajoute un nouveau rdv dans la bdd
     #[Route('/rendez-vous/new', name: 'new_appointment')]
-    public function createAppointment(Request $request, MailerInterface $mailer){
+    public function createAppointment(Request $request, MailerInterface $mailer, ValidatorInterface $validator){
         //si la personne n'est pas connectée
         if(!$this->getUser()){
             $this->addFlash('error', 'Veuillez vous connecter');
@@ -237,20 +237,20 @@ class HomeController extends AbstractController
                 $appointment->setDateEnd(new \DateTime($donnees->end));
 
                 // //envoie email confirmation
-                // $email = (new TemplatedEmail())
-                // ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
-                // ->to($this->getUser()->getEmail())
-                // ->subject('Prise de rendez-vous')
+                $email = (new TemplatedEmail())
+                ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
+                ->to($this->getUser()->getEmail())
+                ->subject('Prise de rendez-vous')
 
-                // ->context([
-                //     'title' => $donnees->title,
-                //     'start' => $donnees->start,
-                //     'end' => $donnees->end,
-                // ])
-                // ->htmlTemplate('email/confirmationRdv.html.twig')
-                // ;
+                ->context([
+                    'title' => $donnees->title,
+                    'start' => $donnees->start,
+                    'end' => $donnees->end,
+                ])
+                ->htmlTemplate('email/confirmationRdv.html.twig')
+                ;
 
-                // $mailer->send($email);
+                $mailer->send($email);
 
                 $this->entityManager->persist($appointment);
                 $this->entityManager->flush();
