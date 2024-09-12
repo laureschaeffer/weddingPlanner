@@ -2,8 +2,14 @@ window.onload = () => {
     let calendarEl = document.querySelector('#calendrier') //element dom calendrier
     let data = JSON.parse(calendarEl.dataset.calendar) //données dans les data-attribute
 
-    let modal = document.querySelector("#modal"); //modal
+    let modalNew = document.querySelector(".modal.new-event"); //modal nouveau evenement
+    let modalShow = document.querySelector(".modal.show-event"); //modal montre l'evenement
     let closeModal = document.querySelector('.close') //ferme le modal
+    let closeShowModal = document.querySelector('.close.showModal') //ferme le show modal
+    // paragraphes qui contiendront le titre et le user dynamiquement
+    let titleModal = document.querySelector('.modalTitle')    
+    let userModal = document.querySelector('.modalUser')
+    let deleteBtnModal = document.querySelector('.modalDeleteBtn') //btn qui supprimera l'évènement
     
     //form et ses 4 input 
     let formEvent = document.querySelector('#new-event')
@@ -24,7 +30,7 @@ window.onload = () => {
             customAddEvent: {
                 text: 'Créer un rendez-vous',
                 click: function() {
-                    modal.style.display = "block"; 
+                    modalNew.style.display = "block"; 
                 }
             }
         },
@@ -41,25 +47,54 @@ window.onload = () => {
         },
         slotMinTime: '08:00:00', 
         slotMaxTime: '19:00:00',
+        allDaySlot: false,
         hiddenDays: [ 0 ], //ne pas afficher le dimanche
 
         events: data,
         editable: true,
         eventResizableFromStart: true,
+        //-----evenements-----
         eventDrop: (infos) => {
             if(!confirm("Êtes-vous sûr de vouloir modifier cet évènement?")){
                 infos.revert()
             }
         },
         eventClick: (infos) => {
-            if(!confirm("Êtes-vous sûr de vouloir supprimer cet évènement?")){
-                infos.event.revert()
-            } else {
-                infos.event.remove()
-                deleteEvent(infos)
-            }
+            showInfoModal(infos)
         }
     })
+
+    //--------------affiche les infos--------------
+    function showInfoModal(infos){
+        let selectedEvent = infos.event
+        modalShow.style.display = "block"
+        // ajoute dynamiquement les infos 
+        titleModal.insertAdjacentHTML("beforeend", infos.event.title)             
+        userModal.insertAdjacentHTML("beforeend", infos.event.extendedProps.user) 
+
+        // ferme le modal avec le bouton ou en cliquant ailleurs
+        closeShowModal.onclick = () => {
+            modalShow.style.display = "none"; 
+        }
+        window.onclick = (event) => {
+            if (event.target == modalShow) {
+                modalShow.style.display = "none";
+            }
+        }
+
+        // -----bouton dans le modal pour supprimer l'evenement
+        deleteBtnModal.onclick = (event) => {
+            if(!confirm("Êtes-vous sûr de vouloir supprimer cet évènement?")){
+                    return
+                } else {
+                    selectedEvent.remove()                    
+                    modalShow.style.display = "none";
+                    deleteEvent(selectedEvent)
+                }
+
+        }
+
+    }
 
     // ----------------modifie un evenement----------------  
     //ecouteur d'evenement "au changement", requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd
@@ -81,12 +116,12 @@ window.onload = () => {
     // ----------------ajoute un nouvel evenement----------------   
     // ferme le modal avec le bouton ou en cliquant ailleurs
     closeModal.onclick = () => {
-        modal.style.display = "none"; 
+        modalNew.style.display = "none"; 
     }
 
     window.onclick = (event) => {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == modalNew) {
+            modalNew.style.display = "none";
         }
     }
 
@@ -129,7 +164,7 @@ window.onload = () => {
             
         
                 xhr.send(JSON.stringify(donnees));
-                modal.style.display = "none"; //ferme le modal
+                modalNew.style.display = "none"; //ferme le modal
                 
             } else {
                 alert("Veuillez sélectionner une date valide!")
@@ -141,9 +176,9 @@ window.onload = () => {
     }    
 
     // ----------------supprime un evenement---------------- 
-    function deleteEvent(infos) {
+    function deleteEvent(selectedEvent) {
        
-        let url = `/coiffe/rendez-vousDelete/${infos.event.id}`;
+        let url = `/coiffe/rendez-vousDelete/${selectedEvent.id}`;
 
         let xhr = new XMLHttpRequest()
         xhr.open("DELETE", url)

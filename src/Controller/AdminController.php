@@ -266,6 +266,7 @@ class AdminController extends AbstractController
                 'start' => $appointment->getDateStart()->format('Y-m-d H:i:s'),
                 'end' => $appointment->getDateEnd()->format('Y-m-d H:i:s'),
                 'title' => $appointment->getTitle(),
+                'user' => $appointment->getUser()->getEmail(),
                 'backgroundColor' => '#2c3e50',
                 'borderColor' => '#ffffff',
                 'textColor' => '#ffffff',

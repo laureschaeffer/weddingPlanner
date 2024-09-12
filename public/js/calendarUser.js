@@ -42,6 +42,7 @@ window.onload = () => {
         },
         slotMinTime: '08:00:00', 
         slotMaxTime: '19:00:00',
+        allDaySlot: false,
         //affiche de la date d'ajd à dans 3 mois
         validRange: {
             start: new Date(),

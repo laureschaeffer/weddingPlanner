@@ -61,6 +61,9 @@ class SecurityController extends AbstractController
     #[Route('/profil', name: 'app_profil')]
     public function profil() : Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
         return $this->render('security/profil.html.twig');
     }
 
