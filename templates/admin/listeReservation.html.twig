@@ -60,10 +60,20 @@
         {% endfor %}
 
     </div>
-    
+    {{ knp_pagination_render(reservationsAPreparer) }}
+
+    {# code à la main  #}
+
+    {# {% if page > 1 %}
+        <a href="{{path('app_commande', {page: page - 1})}}">Page précédente</a>
+    {% endif %}
+
+    {% if page < maxPage %}
+        <a href="{{path('app_commande', {page: page + 1})}}">Page suivante</a>
+    {% endif %} #}
     
     <hr>
-    <h2>Commandes passées</h2>
+    {# <h2>Commandes passées</h2>
     
     <div class="reservation-container">
 
@@ -82,9 +92,9 @@
                 </div>
             
             
-                {# contact  #}
+                
                 <div>
-                    {# <p>{{reservation.user.phone}}</p> #}
+                   
                     {% if reservation.user %}
                             <p>{{reservation.firstname}} {{reservation.surname}}</p>
                       {% else %}
@@ -96,7 +106,7 @@
                         <p>anonyme</p>
                     {% endif %}
                 </div>
-                {# produits  #}
+                
                 <div>
                     {% if reservation.bookings |length >1  %}
                         <p>{{ reservation.bookings |length }} produits</p>
@@ -113,7 +123,9 @@
                 <p><a href="{{path('show_commande', {'id': reservation.id})}}">Voir plus</a></p>
             </div>
         {% endfor %}
-    </div>
+    </div> #}
+
+
 {# <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="24" height="24" color="#000000"><defs><style>.cls-637b88e7f95e86b59c57a20f-1{fill:none;stroke:currentColor;stroke-miterlimit:10;}</style></defs><path class="cls-637b88e7f95e86b59c57a20f-1" d="M21.18,14.86l-4.35,4.6A6.63,6.63,0,0,1,12,21.55h0a6.63,6.63,0,0,1-4.83-2.09l-4.35-4.6a3.77,3.77,0,0,1,.64-6.17,4.4,4.4,0,0,1,0-.51A3.82,3.82,0,0,1,7.23,4.36a3.76,3.76,0,0,1,1.34.26,3.8,3.8,0,0,1,6.86,0,3.76,3.76,0,0,1,1.34-.26,3.82,3.82,0,0,1,3.82,3.82,4.4,4.4,0,0,1-.05.51,3.77,3.77,0,0,1,.64,6.17Z"></path><line class="cls-637b88e7f95e86b59c57a20f-1" x1="10.95" y1="16.83" x2="8.18" y2="4.36"></line><line class="cls-637b88e7f95e86b59c57a20f-1" x1="15.82" y1="4.36" x2="13.05" y2="16.83"></line><line class="cls-637b88e7f95e86b59c57a20f-1" x1="9.03" y1="17.26" x2="3.41" y2="9.14"></line><line class="cls-637b88e7f95e86b59c57a20f-1" x1="20.59" y1="9.14" x2="14.97" y2="17.26"></line></svg> #}
 </section>
 

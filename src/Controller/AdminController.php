@@ -18,15 +18,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/coiffe')]
 class AdminController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManager) {
     }
 
-    #[Route('/coiffe', name: 'app_admin')]
+    #[Route('/', name: 'app_admin')]
     public function index(ProjectRepository $projectRepository): Response
     {
         //tableau des differents etats de projets pour le diagramme
@@ -55,7 +55,7 @@ class AdminController extends AbstractController
     //----------------------------------------------partie témoignages--------------------------------
 
     //affiche la page pour verifier les avis
-    #[Route('/coiffe/avis', name: 'app_avis')]
+    #[Route('/avis', name: 'app_avis')]
     public function listTestimony(TestimonyRepository $testimonyRepository): Response
     {
         //liste des avis publiés ou non publiés
@@ -69,7 +69,7 @@ class AdminController extends AbstractController
     }
 
     //change l'avis en publié ou non publié
-    #[Route('/coiffe/changeAvis/{id}', name: 'change_avis')]
+    #[Route('/changeAvis/{id}', name: 'change_avis')]
     public function changeTestimonyState(Testimony $testimony = null, TestimonyRepository $testimonyRepository){
 
         //trouve le nb de témoignages publiés
@@ -98,7 +98,7 @@ class AdminController extends AbstractController
     }
 
     //supprimer un avis de la bdd (non publiés)
-    #[Route('/coiffe/supprAvis/{id}', name: 'remove_avis')] 
+    #[Route('/supprAvis/{id}', name: 'remove_avis')] 
     public function deleteTestimony(Testimony $testimony = null){
         
         //si le temoignage existe et qu'il n'est pas publié
@@ -121,22 +121,24 @@ class AdminController extends AbstractController
     //----------------------------------------------partie réservation de commandes--------------------------------
 
     //liste des reservations de commandes
-    #[Route('coiffe/commande', name: 'app_commande')]
-    public function listCommande(ReservationRepository $reservationRepository): Response
+    #[Route('/commande', name: 'app_commande')]
+    public function listCommande(ReservationRepository $reservationRepository, Request $request): Response
     {
+        $page = $request->query->getInt('page', 1);
+        $reservationsAPreparer = $reservationRepository->paginateReservations($page);
         
-        $reservationsAPreparer = $reservationRepository->findBy(['isPrepared' => 0], ['datePicking' => 'ASC']);
-        $reservationsPassees = $reservationRepository->findBy(['isPrepared' => 1], ['dateOrder' => 'ASC']);
+        // $reservationsAPreparer = $reservationRepository->findBy(['isPrepared' => 0], ['datePicking' => 'ASC']);
+        // $reservationsPassees = $reservationRepository->findBy(['isPrepared' => 1], ['dateOrder' => 'ASC']);
 
         return $this->render('admin/listeReservation.html.twig', [
             'reservationsAPreparer' => $reservationsAPreparer,
-            'reservationsPassees' => $reservationsPassees
+            // 'reservationsPassees' => $reservationsPassees
         ]);
         
     }
 
     //modifie la commande
-    #[Route('coiffe/editCommande/{id<\d+>}', name: 'edit_commande')]
+    #[Route('/editCommande/{id<\d+>}', name: 'edit_commande')]
     public function editCommande(Request $request, Reservation $reservation): Response
     {
         if($reservation){
@@ -167,7 +169,7 @@ class AdminController extends AbstractController
     }
 
     //detail d'une reservation
-    #[Route('coiffe/commande/{id<\d+>}', name: 'show_commande')]
+    #[Route('/commande/{id<\d+>}', name: 'show_commande')]
     public function showCommande(Reservation $reservation = null): Response
     {
 
@@ -184,7 +186,7 @@ class AdminController extends AbstractController
     }
 
     //passer une commande en préparée ou non préparée
-    #[Route('coiffe/changeCommandePrepared/{id<\d+>}', name: 'change_commande_prepared')]
+    #[Route('/changeCommandePrepared/{id<\d+>}', name: 'change_commande_prepared')]
     public function changeCommandePrepared(Reservation $reservation =null, MailerInterface $mailer){
 
         //si la commande existe
@@ -226,7 +228,7 @@ class AdminController extends AbstractController
 
 
     //passer une commande en récupérée ou non récupérée
-    #[Route('coiffe/changeCommandePicked/{id<\d+>}', name: 'change_commande_picked')]
+    #[Route('/changeCommandePicked/{id<\d+>}', name: 'change_commande_picked')]
     public function changeCommandePicked(Reservation $reservation =null){
 
         //si la commande existe
@@ -255,7 +257,7 @@ class AdminController extends AbstractController
     //-------------------------------------------------------------------------partie RENDEZ-VOUS ------------------------------------------------------------------------
 
     // affiche les rendez-vous
-    #[Route('/coiffe/rendez-vous', name: 'app_rendezvous')]
+    #[Route('/rendez-vous', name: 'app_rendezvous')]
     public function showAppointment(AppointmentRepository $appointmentRepository, UserRepository $userRepository){
         $appointments = $appointmentRepository->findAll();
         $activeUsers = $userRepository->findAllExceptRoleSupprime();
@@ -282,8 +284,8 @@ class AdminController extends AbstractController
     }
 
     //met à jour les rendez-vous dynamiquement avec fullcalendar
-    #[Route('/coiffe/rendez-vousEdit/{id}', name: 'edit_event')] //modifie
-    #[Route('/coiffe/rendez-vousPost', name: 'post_event')] //ajoute
+    #[Route('/rendez-vousEdit/{id}', name: 'edit_event')] //modifie
+    #[Route('/rendez-vousPost', name: 'post_event')] //ajoute
     public function majEvent(?Appointment $appointment, Request $request, UserRepository $userRepository, MailerInterface $mailer){
         
         $donnees = json_decode($request->getContent()); //tableau renvoye dans la requete xml
@@ -338,7 +340,7 @@ class AdminController extends AbstractController
     }
 
     //supprime un rdv
-    #[Route('/coiffe/rendez-vousDelete/{id}', name: 'delete_event')]
+    #[Route('/rendez-vousDelete/{id}', name: 'delete_event')]
     public function deleteEvent(Appointment $appointment){
         
         if($appointment){

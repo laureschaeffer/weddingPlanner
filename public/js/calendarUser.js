@@ -66,26 +66,31 @@ window.onload = () => {
     function createEvent(info, title) {
 
         if(isEventAvailable(info, eventsJSON)){
-            // ajoute l'évènement en direct
-            calendar.addEvent({
-                title: "",
-                start: info.startStr,
-                end: info.endStr,
-                backgroundColor: '#b3b9c1',
-                borderColor: '#b3b9c1',
-                textColor : '#000',
-            });
-    
-            // // requete ajax pour la bdd 
-            let newEventDonnees = {
-                title: title,
-                start: info.startStr,
-                end: info.endStr
+            if(new Date(info.startStr) > new Date()){
+
+                // ajoute l'évènement en direct
+                calendar.addEvent({
+                    title: "",
+                    start: info.startStr,
+                    end: info.endStr,
+                    backgroundColor: '#b3b9c1',
+                    borderColor: '#b3b9c1',
+                    textColor : '#000',
+                });
+        
+                // // requete ajax pour la bdd 
+                let newEventDonnees = {
+                    title: title,
+                    start: info.startStr,
+                    end: info.endStr
+                }
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", "/rendez-vous/new")
+                
+                xhr.send(JSON.stringify(newEventDonnees))
+            } else {
+                alert("La date est dépassée!")
             }
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "/rendez-vous/new")
-            
-            xhr.send(JSON.stringify(newEventDonnees))
 
         } else {
             alert("Veuillez choisir une date disponible!");

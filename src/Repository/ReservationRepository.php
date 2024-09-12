@@ -3,15 +3,17 @@
 namespace App\Repository;
 
 use App\Entity\Reservation;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Reservation>
  */
 class ReservationRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private PaginatorInterface $paginator)
     {
         parent::__construct($registry, Reservation::class);
     }
@@ -32,6 +34,25 @@ class ReservationRepository extends ServiceEntityRepository
 
         $query = $qb->getQuery();
         return $query->getResult();
+    }
+
+    public function paginateReservations(int $page): PaginationInterface
+    {
+        return $this->paginator->paginate(
+            $this->createQueryBuilder('r'),
+            $page,
+            10
+        );
+
+        /*
+        return new Paginator($this
+            ->createQueryBuilder('a')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->setHint(Paginator::HINT_ENABLE_DISTINCT, false), false
+        );
+        */
     }
 
     //recherche en fonction d'un mot clé dans les enregistrements dans la bdd
