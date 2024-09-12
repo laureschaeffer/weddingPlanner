@@ -6,9 +6,10 @@ window.onload = () => {
     let modalShow = document.querySelector(".modal.show-event"); //modal montre l'evenement
     let closeModal = document.querySelector('.close') //ferme le modal
     let closeShowModal = document.querySelector('.close.showModal') //ferme le show modal
-    // paragraphes qui contiendront le titre et le user dynamiquement
+    // paragraphes qui contiendront le titre le user et la date dynamiquement
     let titleModal = document.querySelector('.modalTitle')    
     let userModal = document.querySelector('.modalUser')
+    let dateModal = document.querySelector('.modalDate')
     let deleteBtnModal = document.querySelector('.modalDeleteBtn') //btn qui supprimera l'évènement
     
     //form et ses 4 input 
@@ -59,6 +60,11 @@ window.onload = () => {
                 infos.revert()
             }
         },
+        eventResize : (infos) => {
+            if(!confirm("Êtes-vous sûr de vouloir modifier cet évènement?")){
+                infos.revert()
+            }
+        },
         eventClick: (infos) => {
             showInfoModal(infos)
         }
@@ -66,11 +72,29 @@ window.onload = () => {
 
     //--------------affiche les infos--------------
     function showInfoModal(infos){
+        let startFormatDate = infos.event.start.toLocaleString('fr-FR', {
+            weekday: 'long',
+            day: 'numeric',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          })
+        let endFormatDate = infos.event.end.toLocaleString('fr-FR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          })
+        // console.log(startFormatDate + endFormatDate);
+        
         let selectedEvent = infos.event
         modalShow.style.display = "block"
         // ajoute dynamiquement les infos 
         titleModal.insertAdjacentHTML("beforeend", infos.event.title)             
         userModal.insertAdjacentHTML("beforeend", infos.event.extendedProps.user) 
+        let htmlDate = startFormatDate + " - " + endFormatDate
+        dateModal.insertAdjacentHTML("beforeend",  htmlDate) 
 
         // ferme le modal avec le bouton ou en cliquant ailleurs
         closeShowModal.onclick = () => {
@@ -97,19 +121,23 @@ window.onload = () => {
     }
 
     // ----------------modifie un evenement----------------  
-    //ecouteur d'evenement "au changement", requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd
-    calendar.on('eventChange', (e) => {
-        // console.log(e)
-        let url = `/coiffe/rendez-vousEdit/${e.event.id}`
-        let donnees = {
-            "title": e.event.title,
-            "start": e.event.start,
-            "end": e.event.end
-        };
-        // console.log(donnees);
-        let xhr = new XMLHttpRequest
-        xhr.open("PUT", url)
-        xhr.send(JSON.stringify(donnees))
+    //ecouteur d'evenement "au changement", requete ajax avec l'objet XMLHttpRequest qui change directement l'évènement dans la bdd, commun pour select et drop
+    calendar.on('eventChange', (info) => {
+        if(new Date(info.event.start) > new Date()){            
+            let url = `/coiffe/rendez-vousEdit/${info.event.id}`
+            let donnees = {
+                "title": info.event.title,
+                "start": info.event.start,
+                "end": info.event.end
+            };
+            // console.log(donnees);
+            let xhr = new XMLHttpRequest
+            xhr.open("PUT", url)
+            xhr.send(JSON.stringify(donnees))
+        } else {
+            alert('La date est passée!')
+            info.revert()
+        }
     });
 
 
@@ -133,7 +161,7 @@ window.onload = () => {
         let titleValue = inputTitle.value;
         let startValue = inputStart.value;
         let endValue = inputEnd.value;
-        let userValue = inputUser.value;
+        let userValue = inputUser.value;       
 
         if(
             titleValue && titleValue !== "" &&
@@ -142,32 +170,38 @@ window.onload = () => {
             userValue && userValue !== ""
         ){
             if(startValue < endValue){
-                let donnees = {
-                    title: titleValue,
-                    start: startValue,
-                    end: endValue,
-                    user: userValue
-                };
-                //ajoute l'évènement en direct mais ne l'enregistre pas en base de données
-                calendar.addEvent({
-                    title: titleValue,
-                    start: startValue,
-                    end: endValue,
-                    backgroundColor: '#2c3e50',
-                    borderColor: '#ffff',
-                    textColor: '#ffff',
-                })
-                let url = '/coiffe/rendez-vousPost';
-        
-                let xhr = new XMLHttpRequest();
-                xhr.open("POST", url);
+                if(new Date(startValue) > new Date()){
+                    let donnees = {
+                        title: titleValue,
+                        start: startValue,
+                        end: endValue,
+                        user: userValue
+                    };
+                    //ajoute l'évènement en direct mais ne l'enregistre pas en base de données
+                    calendar.addEvent({
+                        title: titleValue,
+                        start: startValue,
+                        end: endValue,
+                        backgroundColor: '#2c3e50',
+                        borderColor: '#ffff',
+                        textColor: '#ffff',
+                    })
+                    let url = '/coiffe/rendez-vousPost';
             
-        
-                xhr.send(JSON.stringify(donnees));
-                modalNew.style.display = "none"; //ferme le modal
+                    let xhr = new XMLHttpRequest();
+                    xhr.open("POST", url);
+                
+            
+                    xhr.send(JSON.stringify(donnees));
+                    modalNew.style.display = "none"; //ferme le modal
+
+                } else {
+                    alert("La date est passée!")
+                }
                 
             } else {
                 alert("Veuillez sélectionner une date valide!")
+
             }
         } else {
             alert("Veuillez remplir tous les champs!")

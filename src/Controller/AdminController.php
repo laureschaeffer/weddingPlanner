@@ -300,11 +300,14 @@ class AdminController extends AbstractController
                     $emailContact = $donnees->user;
                     $userSelected = $userRepository->findOneBy(['email' => $donnees->user]);
                     $appointment->setUser($userSelected);
+
+                    $text = 'Rendez-vous créé';
                 }
 
                 $appointment->setTitle($donnees->title);
                 $appointment->setDateStart(new \DateTime($donnees->start));
                 $appointment->setDateEnd(new \DateTime($donnees->end));
+                $text = 'Rendez-vous mis à jour';
 
                 $emailContact = $appointment->getUser()->getEmail();
 
@@ -326,7 +329,7 @@ class AdminController extends AbstractController
 
                 $mailer->send($email);
 
-                $this->addFlash('success', 'Rendez-vous mis à jour');
+                $this->addFlash('success', $text);
                 return $this->redirectToRoute('app_rendezvous');
             } else {
                 return new Response('Données incomplètes', 404);
