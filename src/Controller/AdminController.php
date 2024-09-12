@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/coiffe')]
+#[Route('/coiffe')] //simplifie le nommage des routes des fonctions
 class AdminController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManager) {
@@ -125,16 +125,24 @@ class AdminController extends AbstractController
     public function listCommande(ReservationRepository $reservationRepository, Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
-        $reservationsAPreparer = $reservationRepository->paginateReservations($page);
-        
-        // $reservationsAPreparer = $reservationRepository->findBy(['isPrepared' => 0], ['datePicking' => 'ASC']);
-        // $reservationsPassees = $reservationRepository->findBy(['isPrepared' => 1], ['dateOrder' => 'ASC']);
+        $reservationsAPreparer = $reservationRepository->paginateReservations($page, false);
 
         return $this->render('admin/listeReservation.html.twig', [
-            'reservationsAPreparer' => $reservationsAPreparer,
-            // 'reservationsPassees' => $reservationsPassees
+            'reservationsAPreparer' => $reservationsAPreparer
         ]);
         
+    }
+
+    //listes des reservations de commandes déjà préparées
+    #[Route('/commande/historique', name: 'app_commande_historique')]
+    public function listeOldCommandes(ReservationRepository $reservationRepository, Request $request): Response
+    {
+        $page = $request->query->getInt('page', 1);
+        $reservationsPassees = $reservationRepository->paginateReservations($page, true);
+
+        return $this->render('admin/listeOldReservation.html.twig', [
+            'reservationsPassees' => $reservationsPassees
+        ]);
     }
 
     //modifie la commande
