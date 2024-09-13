@@ -440,6 +440,24 @@ header{
     gap: 1.5rem;
 }
 
+/* ============================================================================PROJET=========================================================== */
+
+#nav-projets{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: var(--main-padding) 0;
+    margin-bottom: var(--escape-padding);
+    background-color: #e3e4db ;
+
+    a{
+        color: #000;
+        font-size: var(--nav-font-size) ;
+        font-weight: var(--semi-bold);
+        text-decoration: none;
+    }
+
+}
 .projet-card{
     background-color: #D9D9D9;
     padding: var(--main-padding);

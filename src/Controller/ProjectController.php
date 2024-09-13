@@ -35,18 +35,39 @@ class ProjectController extends AbstractController
     {    }
 
     //liste des demandes reçues
-    #[Route('/coiffe/projet', name: 'app_projet')]
-    public function index(ProjectRepository $projectRepository): Response
-    {
-        $projetNonTraites = $projectRepository->findBy(['isContacted' => 0], ['dateReceipt' => 'DESC']);
-        $projetTraites = $projectRepository->findBy(['isContacted' => 1], ['dateReceipt' => 'DESC']);
+    // #[Route('/coiffe/projet/{page?toBeContacted}', name: 'app_projet')] //page par défaut
+    // public function index(Request $request, ProjectRepository $projectRepository, string $page = 'toBeContacted'): Response
+    // {
+    //     //si la page est 'toBeContacted', alors passe isContacted à false, sinon à true
+    //     $isContacted = ($page == 'toBeContacted') ? false : true;
+
+    //     $projets = $projectRepository->findBy(['isContacted' => $isContacted], ['dateReceipt' => 'DESC']);
+        
+    //     $pageNb = $request->query->getInt('page', 1);
+    //     $pagProjets = $projectRepository->paginateProject($pageNb);
+
+
+    //     return $this->render('admin/listeProject.html.twig', [
+    //         'projets' => $projets,
+    //         'page' => $page,
+    //         'pagProjets' => $pagProjets
+    //     ]);
+    // }
+    
+    #[Route('/coiffe/projet/{contactState}', name: 'app_projet', defaults: ['contactState' => 'toBeContacted'])] //permet d'afficher en premier les personnes à contacter
+    public function index(Request $request, ProjectRepository $projectRepository, string $contactState = 'toBeContacted') {
+        $page = $request->query->getInt('page', 1);
+
+        // si la page est 'toBeContacted', alors passe isContacted à false, sinon à true
+        $isContacted = ($contactState == 'toBeContacted') ? false : true;
+        $projets = $projectRepository->paginate($isContacted, $page);
 
         return $this->render('admin/listeProject.html.twig', [
-            'projetNonTraites' => $projetNonTraites,
-            'projetTraites' => $projetTraites
+            'projets' => $projets,
+            'contactState' => $contactState
         ]);
     }
-    
+
     //detail d'une demande
     #[Route('/coiffe/projet/{id}', name: 'show_projet')]
     public function showProject(Project $project = null, Request $request, UserInterface $user): Response

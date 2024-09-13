@@ -23,12 +23,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/shop')]
 class ShopController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $entityManager) {
     }
     //liste des collections avec quelques produits, "batch"= collection 
-    #[Route('/shop', name: 'app_shop')]
+    #[Route('/', name: 'app_shop')]
     public function index(BatchRepository $batchRepository): Response
     {
         $collections = $batchRepository->findBy([]);        
@@ -38,23 +39,29 @@ class ShopController extends AbstractController
     }
 
     //detail d'une collection avec ses produits
-    #[Route('/shop/collection/{id}', name: 'show_batch')]
-    public function showCollection(Batch $batch=null): Response 
+    #[Route('/collection/{id}', name: 'show_batch')]
+    public function showCollection(Batch $batch=null, Request $request, ProductRepository $productRepository): Response 
     {
         //si la collection existe
         if($batch){
+
+            //paginator des produits associés à une collection
+            $page = $request->query->getInt('page', 1);
+            $products = $productRepository->paginateProduct($batch->getId(), $page);
+            // dd($batchPag);
             return $this->render('shop/batch.html.twig', [
-                'batch' => $batch
+                'batch' => $batch,
+                'products' => $products
             ]);
 
         } else {
-            //msg d'erreur
+            $this->addFlash('error', 'Cette collection n\'existe pas');
             return $this->redirectToRoute('app_shop');
         }
     }
 
     //detail d'un produit
-    #[Route('/shop/produit/{id}', name: 'show_product')]
+    #[Route('/produit/{id}', name: 'show_product')]
     public function showProduct(Product $product = null, ProductRepository $productRepository): Response 
     {
 
@@ -74,7 +81,7 @@ class ShopController extends AbstractController
     //ajoute un produit au panier, à la session
     // {id<\d+} est une expression régulière qui force à ce que le paramètre soit un id
     // au lieu d'envoyer une erreur, il explique que cet url n'existe simplement pas
-    #[Route('/shop/ajoutePanier/{id<\d+>}', name: 'add_basket')]
+    #[Route('/ajoutePanier/{id<\d+>}', name: 'add_basket')]
     public function addProduct(BasketService $basketService, int $id, ProductRepository $productRepository)
     {
         $product = $productRepository->findOneBy(['id' => $id]);
@@ -95,7 +102,7 @@ class ShopController extends AbstractController
 
 
     //augmente la quantité d'un produit
-    #[Route('/shop/increaseProduct/{id<\d+>}', name: 'increase_product')]
+    #[Route('/increaseProduct/{id<\d+>}', name: 'increase_product')]
     public function increaseProduct(BasketService $basketService, int $id){
         $text = $basketService->increaseProduct($id);
 
@@ -104,7 +111,7 @@ class ShopController extends AbstractController
     }
 
     //diminue la quantité d'un produit
-    #[Route('/shop/decreaseProduct/{id<\d+>}', name: 'decrease_product')]
+    #[Route('/decreaseProduct/{id<\d+>}', name: 'decrease_product')]
     public function decreaseProduct(BasketService $basketService, int $id){
         $text = $basketService->decreaseProduct($id);
 
@@ -115,7 +122,7 @@ class ShopController extends AbstractController
     //-----------------------------------------------------------------------------------------suppression---------------------------------------------------------------
 
     //retire un produit du panier
-    #[Route('/shop/retirePanier/{id<\d+>}', name: 'remove_product')]
+    #[Route('/retirePanier/{id<\d+>}', name: 'remove_product')]
     public function removeProduct(BasketService $basketService, int $id){
         $text = $basketService->removeProduct($id);
 
@@ -125,7 +132,7 @@ class ShopController extends AbstractController
 
 
     //supprime le panier
-    #[Route('/shop/supprimePanier', name: 'delete_basket')]
+    #[Route('/supprimePanier', name: 'delete_basket')]
     public function deleteBasket(BasketService $basketService){
         $basketService->deleteBasket();
 
@@ -136,7 +143,7 @@ class ShopController extends AbstractController
     //-----------------------------------------------------------------------------------------affiche---------------------------------------------------------------
 
     //montre le panier, appelle la methode dans BasketService
-    #[Route('/shop/panier', name: 'app_basket')]
+    #[Route('/panier', name: 'app_basket')]
     public function showBasket(BasketService $basketService): Response 
     {
         $panier = $basketService->getBasket();
@@ -207,7 +214,7 @@ class ShopController extends AbstractController
     }
 
     //ajoute le panier en réservation
-    #[Route('/shop/reservation', name: 'make_reservation')]
+    #[Route('/reservation', name: 'make_reservation')]
     public function makeReservation(Request $request, UserInterface $user, BasketService $basketService, UniqueIdService $uniqueIdService, MailerInterface $mailer): Response
     {
 

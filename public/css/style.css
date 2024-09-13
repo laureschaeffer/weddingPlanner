@@ -236,6 +236,20 @@ textarea{
     border-color: #c3e6cb;
 }
 
+/* ******************pagination*********************** */
+.pagination{
+    font-size: 3rem;
+    color: black;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+
+    a{
+        color: black;
+        /* text-decoration: none; */
+    }
+}
+
 /* ==================================================================================template=================================================================== */
 
 /* --------------header  */

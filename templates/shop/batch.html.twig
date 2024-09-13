@@ -10,13 +10,13 @@
 <section id="shop-batch">
 
     <h1>Commerce</h1>
-    
+
     {# <p><a href="{{path('app_basket')}}" class="icon-shop"><i class="fa-solid fa-cart-shopping"></i></a></p> #}
     <h2>{{batch}}</h2>
     <p class="batch-description">{{batch.description}}</p>
     
     <div class="collection-produit">
-        {% for product in batch.products %}
+        {% for product in products %}
             <div class="collection-produit-card">
                 <a href="{{path('show_product', {'id': product.id}) }}"><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></a>
                 <a href="{{path('show_product', {'id': product.id}) }}"><p>{{product}}</p></a>
@@ -26,6 +26,7 @@
         {% endfor %}
     </div>
 
+    {{ knp_pagination_render(products) }}
 </section>
 
 {% endblock %}

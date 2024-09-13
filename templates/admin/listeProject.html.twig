@@ -7,47 +7,13 @@
 <section id="projets">
 
     <h1>Demandes de projet</h1>
+    <div id="nav-projets">
+        <a href="{{ path('app_projet', {contactState: 'toBeContacted'}) }}">A contacter</a>
+        <a href="{{ path('app_projet', {contactState: 'isContacted'}) }}">A été contacté</a>
+    </div>
     
-    <h2>Demandes où doit être contactée la personne</h2>
-    
-    {% for pnt in projetNonTraites %}
-    
-        <div class="projet-card">
-            <div class="projet-card-content">
-                {% if pnt.user %}
-                    <p>{{pnt}}, évènement le {{pnt.dateEvent | date("d.m.Y")}}, reçu le {{pnt.dateReceipt | date("d.m.Y")}} </p>
-                    {% else %}
-                    <p>Anonyme, évènement le {{pnt.dateEvent | date("d.m.Y")}}, reçu le {{pnt.dateReceipt | date("d.m.Y")}} </p>
-                {% endif %}
-            
-                <p> {{pnt.description}} </p>
-                <p><a href="{{path('show_projet', {'id': pnt.id})}}">Voir plus</a></p>
-            </div>
-            <div class="projet-card-state">
-                {# etat du projet  #}
-                <p>
-                    {# en attente ou en cours  #}
-                    {% if pnt.state.id == 1 or pnt.state.id == 2 %}
-                        <i class="fa-solid fa-hourglass-start"></i>
-                    {# accepté  #}
-                    {% elseif pnt.state.id == 3 %}
-                        <i class="fa-solid fa-circle-check"></i>
-                    {# refusé  #}
-                    {% elseif pnt.state.id == 4 %}
-                        <i class="fa-regular fa-circle-xmark"></i>
-                    {% endif %}
-                    {{pnt.state}}
-                </p>
-            </div>
-        </div>
-    
-        {% else %}
-        <p>Aucune demande à traiter</p>
-    {% endfor %}
-    
-    
-    <h2>Demandes où la personne a été contactée</h2>
-    {% for projet in projetTraites %}
+
+    {% for projet in projets %}
     
         <div class="projet-card">
             <div class="projet-card-content">
@@ -77,14 +43,14 @@
                 </p>
             </div>
         </div>
-        
+    
         {% else %}
-        <p>Aucune demande déjà traitée</p>
-            
+        <p>Aucune demande à traiter</p>
     {% endfor %}
 
 </section>
 
+{{ knp_pagination_render(projets) }}
 
 
 {% endblock %}
