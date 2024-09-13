@@ -415,7 +415,7 @@ class ProjectController extends AbstractController
         //si le token de la session et du formulaire n'est pas le meme, redirige
         if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
             $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
-            return $this->redirectToRoute('app_admin');
+            return $this->redirectToRoute('app_home');
         }
         
         //si je recois "firstname" c'est un robot, je redirige
@@ -501,7 +501,7 @@ class ProjectController extends AbstractController
         //si le token de la session et du formulaire n'est pas le meme, redirige
         if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
             $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
-            return $this->redirectToRoute('app_admin');
+            return $this->redirectToRoute('app_home');
         }
         
         //si je recois "firstname" c'est un robot, je redirige

@@ -73,16 +73,15 @@
     {% for prestation in project.prestations %}
         <p>{{prestation}}</p>
     {% endfor %}
-
+    
+    {% if project.finalPrice %}
+      <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
+      {% endif %}
+      
     <h3>Commentaires</h3>
     {% for comment in project.comments %}
         <p>{{comment}}</p>
     {% endfor %}
-
-    {% if project.finalPrice %}
-      <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
-    {% endif %}
-
 
     <br><hr>
     <img src="data:image/png;base64,{{ imageData }}" width="250px" height="250px" alt="ceremonie couture logo">

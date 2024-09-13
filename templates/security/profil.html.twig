@@ -178,18 +178,15 @@
         
                 {# ----------devis----------  #}
                 {% for quot in project.quotations %}
-                    {# si le devis a été refusé  #}
-                    {% if quot.isAccepted == false %}
-
-                        {# si le devis a été accepté  #}
-                      {% elseif quot.isAccepted %}
-                        <a href="{{path('show_facture', {'id': project.id})}}" target="_blank" class="btn-devis-facture"></a>
+                    {# si le devis a été accepté, afficher la facture  #}
+                    {% if quot.isAccepted == true %}
+                        <a href="{{path('show_facture', {'id': project.id})}}" target="_blank" class="btn-devis-facture">
                             Afficher la facture
                         </a>
                         <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
 
                         {# si l'état n'a pas encore été défini  #}
-
+                        {% elseif quot.isAccepted  == null %}
                         <p>Un devis a été généré par l'entreprise!</p>
                         <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank" class="btn-devis-facture">
                             Afficher le devis
@@ -198,9 +195,9 @@
     
                         {# accepter ou refuser le devis #}
                         <p>Accepter validera ce projet et son prix, refuser le clora et il faudra en commencer un nouveau.</p>
-                        <p id="devis-action">
+                        <div id="devis-action">
 
-                            <form action="{{path('refuse_devis', {id: quot.id})}}">
+                            <form action="{{path('refuse_devis', {id: quot.id})}}" method="post">
                                 <input type="hidden" name="_csrf_token"
                                     value="{{ csrf_token('authenticate') }}"
                                 >
@@ -209,7 +206,7 @@
                                 <button type="submit" name="submit" class="refuse-devis">Refuser le devis</button>
                             </form>
                             
-                            <form action="{{path('accepte_devis', {id: quot.id})}}">
+                            <form action="{{path('accepte_devis', {id: quot.id})}}" method="post">
                                 <input type="hidden" name="_csrf_token"
                                     value="{{ csrf_token('authenticate') }}"
                                 >
@@ -220,7 +217,8 @@
 
                             {# <a href="{{path('refuse_devis', {id: quot.id})}}" class="refuse-devis">Refuser le devis</a> #}
                             {# <a href="{{path('accepte_devis', {id: quot.id})}}" class="accepte-devis">Accepter le devis</a> #}
-                        </p>
+                        </div>
+                        {% else %}
                     {% endif %}
                     
                 {% endfor %}            
@@ -232,6 +230,7 @@
 
     {# *****************************************************rendez-vous***************************************************** #}
     {% if app.user.appointments is empty %}
+        <p>Vous n'avez encore aucun rendez-vous de programmé</p>
     {% else %}
 
         <div id="profil-rdv">
@@ -295,7 +294,7 @@
     <p>Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.</p>
 
     {# ----suppression compte---- #}
-    <form action="{{ path('delete_profil') }}" class="form-delete">
+    <form action="{{ path('delete_profil') }}" class="form-delete" method="post">
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
       >

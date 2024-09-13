@@ -77,7 +77,7 @@
     --title-font-weight: 500;
     --semi-bold: 600;
 
-    --border-radius: 10px;
+    --border-radius: 5px;
 
     /* img  */
     --main-img-size: 200px;
@@ -89,6 +89,8 @@
     --big-padding: 50px;
     --main-padding: 20px;
     --small-padding: 5px;
+
+    --btn-padding: 0.5rem 1.5rem;
 
     /* version mobile  */
     --padding-tel: 10px;
@@ -1145,12 +1147,12 @@ small{
 .btn-devis-facture{
     background: #b0203e;
     border: none;
-    padding: 0.5rem 1.5rem;
+    padding: var(--btn-padding);
     border-radius: var(--border-radius);
     color: white;
     cursor: pointer;
     transition: var(--hover-transition);
-    width: 12rem;
+    max-width: 15rem;
     text-decoration: none;
     font-size: var(--p-font-size);
     text-align: center;
@@ -1166,7 +1168,7 @@ small{
 }
 
 #devis-action a{
-    padding: 0.5rem 1.5rem;
+    padding: var(--btn-padding);
     border-radius: var(--border-radius);
 
     text-decoration: none;
@@ -1187,12 +1189,19 @@ small{
     background-color: #000;
     color: white;
 }
+
+.refuse-devis, .accepte-devis{
+    cursor: pointer;
+
+    padding: var(--btn-padding)
+}
+
 .form-delete{
     margin: 1.5rem 0;
 }
 
 .btn-delete{
-    padding: 0.5rem 1.5rem;
+    padding: var(--btn-padding);
     border-radius: var(--border-radius);
     border: red 2px solid;
     color: #ff0036;
@@ -1250,7 +1259,7 @@ small{
     color: #f5f5f5;
 
     transition: all 0.5s ease-in-out;
-    margin-bottom: var(--escape-padding);
+    margin: var(--escape-padding) 0;
   }
   
   

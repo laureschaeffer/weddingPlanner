@@ -89,6 +89,8 @@
     --small-padding: 5px;
     --footer-padding: 250px;
 
+    --btn-padding: 0.5rem 1.5rem;
+
     /* version mobile  */
     --padding-tel: 10px;
 
@@ -539,13 +541,15 @@ header{
     align-items: flex-start;
 
     a{
-        height: 50px;
         margin: 5px;
-        width: 120px;
+        padding: var(--btn-padding);
         background: #333;
+
+        display: flex;
         justify-content: center;
-        cursor: pointer;
         align-items: center;
+
+        cursor: pointer;
         border: solid #404c5d 1px;
         color: rgb(161, 161, 161);
         border-radius: 5px;
@@ -697,7 +701,7 @@ header{
   .modalDeleteBtn{
     background-color: #2c3e50;
     color: white;
-    padding: 0.5rem 1.5rem;
+    padding: var(--btn-padding);
     border-radius: 5px;
     outline: none;
     cursor: pointer;

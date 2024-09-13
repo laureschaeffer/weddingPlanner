@@ -72,6 +72,10 @@
         <p>{{prestation}}</p>
     {% endfor %}
 
+    {% if project.finalPrice %}
+      <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
+    {% endif %}
+    
     <h3>Commentaires</h3>
     {% for comment in project.comments %}
         <p>{{comment}}</p>
@@ -79,9 +83,6 @@
         <p>Aucun commentaire ajouté</p>
     {% endfor %}
 
-    {% if project.finalPrice %}
-      <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
-    {% endif %}
 
 
     <hr>
