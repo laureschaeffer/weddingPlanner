@@ -34,26 +34,7 @@ class ProjectController extends AbstractController
     public function __construct(private UniqueIdService $uniqueIdService, private PdfService $pdfService, private EntityManagerInterface $entityManager) 
     {    }
 
-    //liste des demandes reçues
-    // #[Route('/coiffe/projet/{page?toBeContacted}', name: 'app_projet')] //page par défaut
-    // public function index(Request $request, ProjectRepository $projectRepository, string $page = 'toBeContacted'): Response
-    // {
-    //     //si la page est 'toBeContacted', alors passe isContacted à false, sinon à true
-    //     $isContacted = ($page == 'toBeContacted') ? false : true;
-
-    //     $projets = $projectRepository->findBy(['isContacted' => $isContacted], ['dateReceipt' => 'DESC']);
-        
-    //     $pageNb = $request->query->getInt('page', 1);
-    //     $pagProjets = $projectRepository->paginateProject($pageNb);
-
-
-    //     return $this->render('admin/listeProject.html.twig', [
-    //         'projets' => $projets,
-    //         'page' => $page,
-    //         'pagProjets' => $pagProjets
-    //     ]);
-    // }
-    
+    //liste des demandes reçues    
     #[Route('/coiffe/projet/{contactState}', name: 'app_projet', defaults: ['contactState' => 'toBeContacted'])] //permet d'afficher en premier les personnes à contacter
     public function index(Request $request, ProjectRepository $projectRepository, string $contactState = 'toBeContacted') {
         $page = $request->query->getInt('page', 1);

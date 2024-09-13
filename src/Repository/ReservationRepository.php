@@ -37,13 +37,13 @@ class ReservationRepository extends ServiceEntityRepository
     }
 
     //liste des reservations, préparées ou non préparées en fonction du paramètre
-    public function paginateReservations(int $page, bool $bool): PaginationInterface
+    public function paginateReservations(int $page, bool $isPrepared): PaginationInterface
     {
         return $this->paginator->paginate(
             $this->createQueryBuilder('r')
-                ->where('r.isPrepared = :bool')
+                ->where('r.isPrepared = :isPrepared')
                 ->orderBy('r.datePicking', 'DESC')
-                ->setParameter('bool', $bool)
+                ->setParameter('isPrepared', $isPrepared)
             ,
             $page,
             12

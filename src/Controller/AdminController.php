@@ -121,29 +121,23 @@ class AdminController extends AbstractController
     //----------------------------------------------partie réservation de commandes--------------------------------
 
     //liste des reservations de commandes
-    #[Route('/commande', name: 'app_commande')]
-    public function listCommande(ReservationRepository $reservationRepository, Request $request): Response
+    //deux pages: celles à préparer et celles déjà préparées + pagination dans les deux cas
+    #[Route('/commande/{state}', name: 'app_commande', defaults: ['state' => 'toPrepare'])]
+    public function listCommande(ReservationRepository $reservationRepository, Request $request, string $state = 'toPrepare'): Response
     {
         $page = $request->query->getInt('page', 1);
-        $reservationsAPreparer = $reservationRepository->paginateReservations($page, false);
+
+        //si la page est 'à préparer' alors passe isprepared à false
+        $isPrepared = ($state == 'toPrepare') ? false : true ;
+
+        $reservations = $reservationRepository->paginateReservations($page, $isPrepared);
 
         return $this->render('admin/listeReservation.html.twig', [
-            'reservationsAPreparer' => $reservationsAPreparer
+            'reservations' => $reservations
         ]);
         
     }
 
-    //listes des reservations de commandes déjà préparées
-    #[Route('/commande/historique', name: 'app_commande_historique')]
-    public function listeOldCommandes(ReservationRepository $reservationRepository, Request $request): Response
-    {
-        $page = $request->query->getInt('page', 1);
-        $reservationsPassees = $reservationRepository->paginateReservations($page, true);
-
-        return $this->render('admin/listeOldReservation.html.twig', [
-            'reservationsPassees' => $reservationsPassees
-        ]);
-    }
 
     //modifie la commande
     #[Route('/editCommande/{id<\d+>}', name: 'edit_commande')]
@@ -177,7 +171,7 @@ class AdminController extends AbstractController
     }
 
     //detail d'une reservation
-    #[Route('/commande/{id<\d+>}', name: 'show_commande')]
+    #[Route('/{id<\d+>}/commande', name: 'show_commande')]
     public function showCommande(Reservation $reservation = null): Response
     {
 

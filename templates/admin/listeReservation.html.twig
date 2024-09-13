@@ -9,13 +9,14 @@
 
     <h1>Liste des commandes</h1>
     
-    <h2>Commandes à préparer</h2>
-
-    <p> <a href="{{path('app_commande_historique')}}">Voir l'historique des commandes préparées</a></p>
+    <div id="nav-projets-reservations">
+        <a href="{{ path('app_commande', {state: 'toPrepare'}) }}">A préparer</a>
+        <a href="{{ path('app_commande', {state: 'isPrepared'}) }}">A été préparée</a>
+    </div>
 
     <div class="reservation-container">
 
-        {% for rap in reservationsAPreparer %}
+        {% for rap in reservations %}
         
             <div class="reservation-card">
                 <div>
@@ -62,7 +63,7 @@
         {% endfor %}
 
     </div>
-    {{ knp_pagination_render(reservationsAPreparer) }}
+    {{ knp_pagination_render(reservations) }}
 
     {# code à la main  #}
 
