@@ -482,16 +482,21 @@ footer p, footer a{
 
 /* ------3 cards proposition, evjf, organisation----------- */
 
+#home-prestation{
+    width: 60%;
+    margin: auto;
+    margin-bottom: 200px;
+}
+
 .home-prestation-card{
     display: flex;
     align-items: center;
-    padding: var(--escape-padding) 100px;
-    gap: 10rem;
+    padding: var(--escape-padding) 10px;
+    gap: 5rem;
 }
 
-/* inverse le sens une fois sur deux  */
-.home-prestation-card:nth-child(even){
-    flex-direction: row-reverse;
+.home-svg{
+    text-align: center;
 }
 
 .home-prestation-card p{
@@ -499,7 +504,7 @@ footer p, footer a{
 }
 
 .home-prestation-card img{
-    width: 30vw;
+    width: 20vw;
     border-radius: var(--border-radius);
 }
 
@@ -584,7 +589,7 @@ footer p, footer a{
     background-color: #D2DDD2;
     padding: 50px;
     border: 1px solid;
-    margin: 30px;
+    margin: 150px 30px;
 }
 
 #home-contact svg{
@@ -1428,7 +1433,7 @@ small{
         padding: 0;
     }
     /* ---------flex-direction column------- */
-    .home-prestation-card, .home-prestation-card:nth-child(even), #home-presentation, .prestation-card, .equipe-card, .equipe-card:nth-child(odd), #contact-form .form-flex, .produit-card {
+    .home-prestation-card, #home-presentation, .prestation-card, .equipe-card, .equipe-card:nth-child(odd), #contact-form .form-flex, .produit-card {
         flex-direction: column;
     }
 
@@ -1470,6 +1475,10 @@ small{
     /* ----contact---- */
     #home-contact p{
         font-size: var(--title-mb);
+    }
+
+    #home-prestation{
+        width: 100%;
     }
 
     .service-card img, .service-card svg{
@@ -1528,4 +1537,10 @@ small{
         gap: 1rem;
     }
 
+}
+
+@media screen and (min-width: 768px) and (max-width: 1025px){
+    #home-prestation{
+        width: 100%;
+    }
 }
