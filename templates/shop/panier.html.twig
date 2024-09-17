@@ -13,48 +13,56 @@
     {% set total = 0 %}
     
     <div id="panier">
-        <div class="panier-head">
-            <p>Produit</p>
-            <p>Quantité</p>
-            <p>Sous-total</p>
-        </div>
-        <hr>
 
-        {# produits du panier  #}
-        {% for p in panier %}
-            <div class="panier">
-                <div class="panier-produit">
-                    <figure><img src="{{asset(p.produit.urlPicture)}}" alt="{{p.produit.altPicture}}"></figure>
-                    <p><a href="{{path('show_product', {'id': p.produit.id}) }}">{{p.produit}}</a></p>
-                    <p>{{p.produit.price}} €</p>
-                </div>
+        <div class="panier-card">
 
-                <p class="basket-qtt">
-                    {# diminue #}
-                    <a href="{{path('decrease_product', {'id': p.produit.id})}}"><i class="fa-solid fa-minus"></i></a>
-                    {# qtt  #}
-                    <span class="basket-qtt-nb">{{p.qtt}}</span>
-                    {# augmente #}
-                    <a href="{{path('increase_product', {'id': p.produit.id})}}"><i class="fa-solid fa-plus"></i></a>
-                </p>
-
-                <p class="basket-soustotal">
-                    <span>{{p.sousTotal}} €</span>
-                    <a href="{{path('remove_product', {'id': p.produit.id})}}"><i class="fa-solid fa-trash-can"></i></a>
-                </p>
+            <div class="panier-row">
+                <p>Produit</p>
+                <p>Quantité</p>
+                <p>Sous-total</p>
             </div>
-            <hr>            
-            {# calcule le total de la commande  #}
-            {% set total = total + p.sousTotal %}
-            
+            {# <hr> #}
+    
+            {# produits du panier  #}
+            {% for p in panier %}
+                <div class="panier-row">
+                    <div class="panier-produit">
+                        <figure><img src="{{asset(p.produit.urlPicture)}}" alt="{{p.produit.altPicture}}"></figure>
+                        <p><a href="{{path('show_product', {'id': p.produit.id}) }}">{{p.produit}}</a></p>
+                        <p>{{p.produit.price}} €</p>
+                    </div>
+    
+                    <p class="basket-qtt">
+                        {# diminue #}
+                        <a href="{{path('decrease_product', {'id': p.produit.id})}}" aria-label="diminue quantité produit"><i class="fa-solid fa-minus"></i></a>
+                        {# qtt  #}
+                        <span class="basket-qtt-nb">{{p.qtt}}</span>
+                        {# augmente #}
+                        <a href="{{path('increase_product', {'id': p.produit.id})}}" aria-label="augmente quantité produit"><i class="fa-solid fa-plus"></i></a>
+                    </p>
+    
+                    <p class="basket-soustotal">
+                        <span>{{p.sousTotal}} €</span>
+                        <a href="{{path('remove_product', {'id': p.produit.id})}}"aria-label="supprime le produit"><i class="fa-solid fa-trash-can"></i></a>
+                    </p>
+                </div>
+                {# <hr>             #}
+                {# calcule le total de la commande  #}
+                {% set total = total + p.sousTotal %}
+                
             {% endfor %}
-            
+
+        </div>
+        <div class="panier-action">
             <p>Total {{total}} €</p>
             <p><a href="{{path('delete_basket')}}">Supprimer tout le panier</a></p>
         
-            <hr>
+            {# <hr> #}
         
             <a href="{{path('make_reservation')}}"><button class="add-basket-btn">Réserver</button></a>
+
+        </div>
+            
         
     </div>
 

@@ -30,7 +30,11 @@ class ReservationType extends AbstractType
             ->add('telephone', TelType::class, [
                 'label' => 'Téléphone'
             ])
-            ->add('Reserver', SubmitType::class)
+            ->add('Reserver', SubmitType::class, [
+                'attr' => [
+                    'class' => 'contact-btn'
+                ]
+            ])
         ;
     }
 

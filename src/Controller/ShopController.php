@@ -26,7 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/shop')]
 class ShopController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager) {
+    public function __construct(private EntityManagerInterface $entityManager, private BasketService $basketService) {
     }
     //liste des collections avec quelques produits, "batch"= collection 
     #[Route('/', name: 'app_shop')]
@@ -34,7 +34,8 @@ class ShopController extends AbstractController
     {
         $collections = $batchRepository->findBy([]);        
         return $this->render('shop/index.html.twig', [
-            'collections' => $collections
+            'collections' => $collections,
+            'panier' => $this->basketService->getBasket()
         ]);
     }
 
@@ -48,10 +49,11 @@ class ShopController extends AbstractController
             //paginator des produits associés à une collection
             $page = $request->query->getInt('page', 1);
             $products = $productRepository->paginateProduct($batch->getId(), $page);
-            // dd($batchPag);
+            
             return $this->render('shop/batch.html.twig', [
                 'batch' => $batch,
-                'products' => $products
+                'products' => $products,
+                'panier' => $this->basketService->getBasket()
             ]);
 
         } else {
@@ -71,7 +73,8 @@ class ShopController extends AbstractController
             $propositions = $productRepository->findBy(['batch' => $product->getBatch()->getId()], [], 6 );
             return $this->render('shop/product.html.twig', [
                 'product' => $product,
-                'propositions' => $propositions
+                'propositions' => $propositions,
+                'panier' => $this->basketService->getBasket()
             ]);
         }
     }
@@ -82,13 +85,13 @@ class ShopController extends AbstractController
     // {id<\d+} est une expression régulière qui force à ce que le paramètre soit un id
     // au lieu d'envoyer une erreur, il explique que cet url n'existe simplement pas
     #[Route('/ajoutePanier/{id<\d+>}', name: 'add_basket')]
-    public function addProduct(BasketService $basketService, int $id, ProductRepository $productRepository)
+    public function addProduct(int $id, ProductRepository $productRepository)
     {
         $product = $productRepository->findOneBy(['id' => $id]);
         
         //si le produit existe
         if($product){
-            $basketService->addToBasket($id);
+            $this->basketService->addToBasket($id);
           
             $this->addFlash('success', 'Produit ajouté');
             return $this->redirectToRoute('show_product', ['id' => $id]);
@@ -103,8 +106,8 @@ class ShopController extends AbstractController
 
     //augmente la quantité d'un produit
     #[Route('/increaseProduct/{id<\d+>}', name: 'increase_product')]
-    public function increaseProduct(BasketService $basketService, int $id){
-        $text = $basketService->increaseProduct($id);
+    public function increaseProduct(int $id){
+        $text = $this->basketService->increaseProduct($id);
 
         $this->addFlash('success', $text);
         return $this->redirectToRoute('app_basket');
@@ -112,8 +115,8 @@ class ShopController extends AbstractController
 
     //diminue la quantité d'un produit
     #[Route('/decreaseProduct/{id<\d+>}', name: 'decrease_product')]
-    public function decreaseProduct(BasketService $basketService, int $id){
-        $text = $basketService->decreaseProduct($id);
+    public function decreaseProduct(int $id){
+        $text = $this->basketService->decreaseProduct($id);
 
         $this->addFlash('success', $text);
         return $this->redirectToRoute('app_basket');
@@ -123,8 +126,8 @@ class ShopController extends AbstractController
 
     //retire un produit du panier
     #[Route('/retirePanier/{id<\d+>}', name: 'remove_product')]
-    public function removeProduct(BasketService $basketService, int $id){
-        $text = $basketService->removeProduct($id);
+    public function removeProduct(int $id){
+        $text = $this->basketService->removeProduct($id);
 
         $this->addFlash('success', $text);
         return $this->redirectToRoute('app_basket');
@@ -133,8 +136,8 @@ class ShopController extends AbstractController
 
     //supprime le panier
     #[Route('/supprimePanier', name: 'delete_basket')]
-    public function deleteBasket(BasketService $basketService){
-        $basketService->deleteBasket();
+    public function deleteBasket(){
+        $this->basketService->deleteBasket();
 
         $this->addFlash('succes', 'Panier supprimé');
         return $this->redirectToRoute('app_shop');
@@ -144,9 +147,9 @@ class ShopController extends AbstractController
 
     //montre le panier, appelle la methode dans BasketService
     #[Route('/panier', name: 'app_basket')]
-    public function showBasket(BasketService $basketService): Response 
+    public function showBasket(): Response 
     {
-        $panier = $basketService->getBasket();
+        $panier = $this->basketService->getBasket();
 
         return $this->render('shop/panier.html.twig', [
             'panier' => $panier
@@ -157,7 +160,7 @@ class ShopController extends AbstractController
     //=========================================================================================RESERVATION=================================================================
     
     //traite la création de réservation avec le formulaire, factorisation de la fonction makeReservation
-    public function createReservation($basketService, $uniqueIdService, $user, $reservation){
+    public function createReservation($uniqueIdService, $user, $reservation){
         
         $roles = $user->getRoles();
         array_push($roles, "ROLE_ACHETEUR"); //passe l'utilisateur en acheteur
@@ -167,7 +170,7 @@ class ShopController extends AbstractController
         $referenceOrder = $uniqueIdService->generateUniqueId(); //id unique
         $reservation->setReferenceOrder($referenceOrder);
 
-        $panier = $basketService->getBasket(); //recupere le panier en session
+        $panier = $this->basketService->getBasket(); //recupere le panier en session
         $total = end($panier)["total"]; //recupere le total au dernier index du tableau
 
         $reservation->setTotalPrice($total);
@@ -215,7 +218,7 @@ class ShopController extends AbstractController
 
     //ajoute le panier en réservation
     #[Route('/reservation', name: 'make_reservation')]
-    public function makeReservation(Request $request, UserInterface $user, BasketService $basketService, UniqueIdService $uniqueIdService, MailerInterface $mailer): Response
+    public function makeReservation(Request $request, UserInterface $user, UniqueIdService $uniqueIdService, MailerInterface $mailer): Response
     {
 
         //la personne doit être connectée pour que la réservation soit associée à une entité
@@ -240,14 +243,14 @@ class ShopController extends AbstractController
                 if($reservation->getValidDate()){
 
                     //traite la création de reservation
-                    $this->createReservation($basketService, $uniqueIdService, $user, $reservation);
+                    $this->createReservation($uniqueIdService, $user, $reservation);
         
                     $this->entityManager->persist($reservation); //prepare
                     $this->entityManager->flush(); //execute
     
                     //---------------------------------------------------entité booking------------------------------
     
-                    $panier = $basketService->getBasket();
+                    $panier = $this->basketService->getBasket();
                     //traite la création de booking
                     $this->createBooking($panier, $reservation);
     
@@ -255,7 +258,7 @@ class ShopController extends AbstractController
                     //-----------------------------------------envoie d'un email de confirmation
                     $this->sendConfirmationMail($user, $reservation, $mailer);
 
-                    $basketService->deleteBasket(); //supprime le panier en session
+                    $this->basketService->deleteBasket(); //supprime le panier en session
         
                     $this->addFlash('success', 'Réservation effectuée');
                     return $this->redirectToRoute('app_home');

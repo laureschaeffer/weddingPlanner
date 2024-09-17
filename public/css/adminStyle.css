@@ -728,6 +728,29 @@ header{
         background-color: #1e2b37;
     }
   }
+#new-event{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: var(--p-font-size);
+
+    input, select {
+        border-radius: 15px;
+        padding: 0 10px;
+        border: 2px solid transparent;
+        transition: border-color .3s cubic-bezier(.25,.01,.25,1) 0s, color .3s cubic-bezier(.25,.01,.25,1) 0s,background .2s cubic-bezier(.25,.01,.25,1) 0s;
+        height: 30px;
+        background-color: #05060f0a;
+      }
+}
+
+#new-event div{
+    display: flex;
+    flex-direction: column;
+}
 
 /* ======================================================================================================================================================================================================================================================REPONSIVE==================================================================================================================================================================================================================================== */
 @media screen and (max-width: 768px) {
@@ -812,6 +835,16 @@ header{
     .detail-reservation-head{
         flex-direction: column;
         gap: 1rem;
+    }
+
+    /* ********************************************RDV********************************** */
+
+    #calendrier{
+        height: 100%;
+        width: 100%;
+    }
+    .fc .fc-toolbar{
+        flex-direction: column;
     }
 
 }
