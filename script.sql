@@ -28,10 +28,11 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_FE38F844A76ED395` (`user_id`),
-  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.appointment : ~12 rows (environ)
+-- Listage des données de la table weddingplanner.appointment : ~9 rows (environ)
+DELETE FROM `appointment`;
 INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) VALUES
 	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'lorem ipsum'),
 	(3, 2, '2024-09-13 10:00:00', '2024-09-13 12:30:00', 'nouvel evenement'),
@@ -52,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `batch` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.batch : ~4 rows (environ)
+DELETE FROM `batch`;
 INSERT INTO `batch` (`id`, `title`, `description`) VALUES
 	(1, 'Les indispensables', 'Découvrez notre collection "Les indispensables" dédiée à tous les essentiels pour un mariage parfait. Des invitations élégantes aux décorations raffinées, en passant par les accessoires de cérémonie, chaque produit a été soigneusement sélectionné pour ajouter une touche de magie à votre grand jour. Préparez-vous à vivre un moment inoubliable avec des articles qui répondent à tous vos besoins et bien plus encore.'),
 	(2, 'Cadeaux pour les mariés', 'Offrez un souvenir mémorable avec notre collection "Cadeaux pour les mariés". Cette sélection unique comprend des articles personnalisés, des souvenirs intemporels et des objets de luxe qui sauront toucher le cœur des nouveaux mariés. Que ce soit pour remercier vos hôtes ou célébrer votre amour, trouvez le cadeau parfait qui restera gravé dans les mémoires.'),
@@ -70,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `bill` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.bill : ~2 rows (environ)
+DELETE FROM `bill`;
 INSERT INTO `bill` (`id`, `quotation_id`, `bill_number`, `date_creation`) VALUES
 	(1, 2, 'FACT_172355934655', '2024-08-13'),
 	(3, 4, 'FACT_172406086148', '2024-08-19');
@@ -85,15 +88,17 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `IDX_E00CEDDEB83297E7` (`reservation_id`),
   CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.booking : ~5 rows (environ)
+-- Listage des données de la table weddingplanner.booking : ~6 rows (environ)
+DELETE FROM `booking`;
 INSERT INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(18, 2, 20, 1),
 	(19, 3, 19, 1),
 	(20, 2, 22, 2),
 	(22, 1, 19, 2),
-	(23, 2, 19, 1);
+	(23, 2, 19, 1),
+	(24, 3, 24, 1);
 
 -- Listage de la structure de table weddingplanner. budget
 CREATE TABLE IF NOT EXISTS `budget` (
@@ -104,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `budget` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.budget : ~4 rows (environ)
+DELETE FROM `budget`;
 INSERT INTO `budget` (`id`, `min_price`, `max_price`) VALUES
 	(1, 0, 15000),
 	(2, 15000, 30000),
@@ -118,6 +124,7 @@ CREATE TABLE IF NOT EXISTS `category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.category : ~2 rows (environ)
+DELETE FROM `category`;
 INSERT INTO `category` (`id`, `title`) VALUES
 	(1, 'Mariage'),
 	(2, 'Décoration');
@@ -132,18 +139,21 @@ CREATE TABLE IF NOT EXISTS `comment` (
   PRIMARY KEY (`id`),
   KEY `IDX_9474526C166D1F9C` (`project_id`),
   KEY `IDX_9474526CA76ED395` (`user_id`),
-  CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
+  CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.comment : ~6 rows (environ)
+DELETE FROM `comment`;
 INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
 	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum!', '2024-06-05 12:17:03'),
 	(4, 1, 3, 'test', '2024-06-06 12:46:21'),
 	(5, 1, 2, 'test pour Kévin', '2024-07-29 11:41:10'),
 	(6, 3, 2, 'En lien avec', '2024-07-31 13:50:51'),
-	(8, 4, 7, 'Commentaire ajouté en bdd', '2024-08-19 11:36:36');
+	(8, 4, 7, 'Commentaire ajouté en bdd', '2024-08-19 11:36:36'),
+	(9, 8, 2, 'personne à contacter le 20/09!', '2024-09-17 08:51:24'),
+	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52');
 
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
@@ -158,6 +168,7 @@ CREATE TABLE IF NOT EXISTS `creation` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.creation : ~4 rows (environ)
+DELETE FROM `creation`;
 INSERT INTO `creation` (`id`, `category_id`, `title`, `description`, `pictures`) VALUES
 	(1, 1, 'Mariage de luxe', 'Nos mariages de luxe incarnent l\'élégance et le raffinement. Chaque détail est soigneusement orchestré pour créer une expérience somptueuse et inoubliable, alliant des lieux d\'exception, des décorations exquises et un service impeccable.', '[{"alt": "Mariage de luxe1", "url": "img/creation/mariage/pexels-emma-bauso-1183828-2253842.webp"}, {"alt": "Mariage de luxe2", "url": "img/creation/mariage/pexels-punchbrandstock-1244627.webp"}]'),
 	(2, 2, 'Fleurs', 'Nos compositions florales subliment chaque mariage. De bouquets délicats aux installations grandioses, nous utilisons les plus belles fleurs de saison pour créer des arrangements sur mesure qui reflètent la personnalité des mariés et l\'ambiance désirée.', '[{"alt": "Fleurs de table", "url": "img/creation/decoration/flowers-7948554_1280.webp"}, {"alt": "Fleurs de décoration", "url": "img/creation/decoration/pexels-panditwiguna-2970287.webp"}, {"alt": "Bouquets", "url": "img/creation/decoration/pexels-trungnguyenphotog-2959192.webp"}, {"alt": "Bouquets 2", "url": "img/creation/decoration/pexels-zaher-ataba-997482-1940583.webp"}]'),
@@ -172,6 +183,7 @@ CREATE TABLE IF NOT EXISTS `destination` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.destination : ~4 rows (environ)
+DELETE FROM `destination`;
 INSERT INTO `destination` (`id`, `name`) VALUES
 	(1, 'Strasbourg'),
 	(2, 'Paris'),
@@ -186,6 +198,7 @@ CREATE TABLE IF NOT EXISTS `job` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.job : ~4 rows (environ)
+DELETE FROM `job`;
 INSERT INTO `job` (`id`, `title`) VALUES
 	(1, 'Organisatrice'),
 	(2, 'Chargée de communication'),
@@ -208,10 +221,30 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.messenger_messages : ~3 rows (environ)
+DELETE FROM `messenger_messages`;
 INSERT INTO `messenger_messages` (`id`, `body`, `headers`, `queue_name`, `created_at`, `available_at`, `delivered_at`) VALUES
 	(1, 'O:36:\\"Symfony\\\\Component\\\\Messenger\\\\Envelope\\":2:{s:44:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0stamps\\";a:1:{s:46:\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\";a:1:{i:0;O:46:\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\":1:{s:55:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\0busName\\";s:21:\\"messenger.bus.default\\";}}}s:45:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0message\\";O:51:\\"Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\":2:{s:60:\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0message\\";O:39:\\"Symfony\\\\Bridge\\\\Twig\\\\Mime\\\\TemplatedEmail\\":5:{i:0;s:41:\\"registration/confirmation_email.html.twig\\";i:1;N;i:2;a:3:{s:9:\\"signedUrl\\";s:167:\\"http://127.0.0.1:8000/verify/email?expires=1716796386&signature=CWfgR%2BPGWIgcGQmQ0kvVyd2d9iHrGNFrsetuS63U3pg%3D&token=hdNJBQobB6LAa3u9BMknydUNsYOIWhQzq795%2FetNAHQ%3D\\";s:19:\\"expiresAtMessageKey\\";s:26:\\"%count% hour|%count% hours\\";s:20:\\"expiresAtMessageData\\";a:1:{s:7:\\"%count%\\";i:1;}}i:3;a:6:{i:0;N;i:1;N;i:2;N;i:3;N;i:4;a:0:{}i:5;a:2:{i:0;O:37:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\":2:{s:46:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0headers\\";a:3:{s:4:\\"from\\";a:1:{i:0;O:47:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:4:\\"From\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:58:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\";a:1:{i:0;O:30:\\"Symfony\\\\Component\\\\Mime\\\\Address\\":2:{s:39:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\";s:36:\\"laure.schaeffer@ceremonie-couture.fr\\";s:36:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\";s:21:\\"Ceremonie Couture Bot\\";}}}}s:2:\\"to\\";a:1:{i:0;O:47:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:2:\\"To\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:58:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\";a:1:{i:0;O:30:\\"Symfony\\\\Component\\\\Mime\\\\Address\\":2:{s:39:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\";s:14:\\"person@test.fr\\";s:36:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\";s:0:\\"\\";}}}}s:7:\\"subject\\";a:1:{i:0;O:48:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:7:\\"Subject\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:55:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\";s:25:\\"Please Confirm your Email\\";}}}s:49:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0lineLength\\";i:76;}i:1;N;}}i:4;N;}s:61:\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0envelope\\";N;}}', '[]', 'default', '2024-05-27 06:53:06', '2024-05-27 06:53:06', NULL),
 	(2, 'O:36:\\"Symfony\\\\Component\\\\Messenger\\\\Envelope\\":2:{s:44:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0stamps\\";a:1:{s:46:\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\";a:1:{i:0;O:46:\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\":1:{s:55:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\0busName\\";s:21:\\"messenger.bus.default\\";}}}s:45:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0message\\";O:51:\\"Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\":2:{s:60:\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0message\\";O:39:\\"Symfony\\\\Bridge\\\\Twig\\\\Mime\\\\TemplatedEmail\\":5:{i:0;s:41:\\"registration/confirmation_email.html.twig\\";i:1;N;i:2;a:3:{s:9:\\"signedUrl\\";s:165:\\"http://127.0.0.1:8000/verify/email?expires=1716890979&signature=N4044HsjLTq452YHehUnkB2gmpzrmhUPV4RoMtVIl%2FA%3D&token=TueVXFDuj0uK5oTdFbwPXO9NKvUCYNFdXBD2mMNLxwI%3D\\";s:19:\\"expiresAtMessageKey\\";s:26:\\"%count% hour|%count% hours\\";s:20:\\"expiresAtMessageData\\";a:1:{s:7:\\"%count%\\";i:1;}}i:3;a:6:{i:0;N;i:1;N;i:2;N;i:3;N;i:4;a:0:{}i:5;a:2:{i:0;O:37:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\":2:{s:46:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0headers\\";a:3:{s:4:\\"from\\";a:1:{i:0;O:47:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:4:\\"From\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:58:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\";a:1:{i:0;O:30:\\"Symfony\\\\Component\\\\Mime\\\\Address\\":2:{s:39:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\";s:36:\\"laure.schaeffer@ceremonie-couture.fr\\";s:36:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\";s:21:\\"Ceremonie Couture Bot\\";}}}}s:2:\\"to\\";a:1:{i:0;O:47:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:2:\\"To\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:58:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\";a:1:{i:0;O:30:\\"Symfony\\\\Component\\\\Mime\\\\Address\\":2:{s:39:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\";s:15:\\"test@exemple.fr\\";s:36:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\";s:0:\\"\\";}}}}s:7:\\"subject\\";a:1:{i:0;O:48:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:7:\\"Subject\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:55:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\";s:25:\\"Please Confirm your Email\\";}}}s:49:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0lineLength\\";i:76;}i:1;N;}}i:4;N;}s:61:\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0envelope\\";N;}}', '[]', 'default', '2024-05-28 09:09:39', '2024-05-28 09:09:39', NULL),
 	(3, 'O:36:\\"Symfony\\\\Component\\\\Messenger\\\\Envelope\\":2:{s:44:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0stamps\\";a:1:{s:46:\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\";a:1:{i:0;O:46:\\"Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\":1:{s:55:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Stamp\\\\BusNameStamp\\0busName\\";s:21:\\"messenger.bus.default\\";}}}s:45:\\"\\0Symfony\\\\Component\\\\Messenger\\\\Envelope\\0message\\";O:51:\\"Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\":2:{s:60:\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0message\\";O:39:\\"Symfony\\\\Bridge\\\\Twig\\\\Mime\\\\TemplatedEmail\\":5:{i:0;s:41:\\"registration/confirmation_email.html.twig\\";i:1;N;i:2;a:3:{s:9:\\"signedUrl\\";s:169:\\"http://127.0.0.1:8000/verify/email?expires=1716891102&signature=vV84ZdtU3LWpeTN%2FsJm%2Fi0sq13sCvXMJvZjsLEHJWvE%3D&token=iovTp1cFYz%2F06qguBvWdkQmIw3xIL2jA8YOZlia2Aug%3D\\";s:19:\\"expiresAtMessageKey\\";s:26:\\"%count% hour|%count% hours\\";s:20:\\"expiresAtMessageData\\";a:1:{s:7:\\"%count%\\";i:1;}}i:3;a:6:{i:0;N;i:1;N;i:2;N;i:3;N;i:4;a:0:{}i:5;a:2:{i:0;O:37:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\":2:{s:46:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0headers\\";a:3:{s:4:\\"from\\";a:1:{i:0;O:47:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:4:\\"From\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:58:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\";a:1:{i:0;O:30:\\"Symfony\\\\Component\\\\Mime\\\\Address\\":2:{s:39:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\";s:36:\\"laure.schaeffer@ceremonie-couture.fr\\";s:36:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\";s:21:\\"Ceremonie Couture Bot\\";}}}}s:2:\\"to\\";a:1:{i:0;O:47:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:2:\\"To\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:58:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\MailboxListHeader\\0addresses\\";a:1:{i:0;O:30:\\"Symfony\\\\Component\\\\Mime\\\\Address\\":2:{s:39:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0address\\";s:18:\\"person2@exemple.fr\\";s:36:\\"\\0Symfony\\\\Component\\\\Mime\\\\Address\\0name\\";s:0:\\"\\";}}}}s:7:\\"subject\\";a:1:{i:0;O:48:\\"Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\":5:{s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0name\\";s:7:\\"Subject\\";s:56:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lineLength\\";i:76;s:50:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0lang\\";N;s:53:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\AbstractHeader\\0charset\\";s:5:\\"utf-8\\";s:55:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\UnstructuredHeader\\0value\\";s:25:\\"Please Confirm your Email\\";}}}s:49:\\"\\0Symfony\\\\Component\\\\Mime\\\\Header\\\\Headers\\0lineLength\\";i:76;}i:1;N;}}i:4;N;}s:61:\\"\\0Symfony\\\\Component\\\\Mailer\\\\Messenger\\\\SendEmailMessage\\0envelope\\";N;}}', '[]', 'default', '2024-05-28 09:11:42', '2024-05-28 09:11:42', NULL);
+
+-- Listage de la structure de table weddingplanner. note
+CREATE TABLE IF NOT EXISTS `note` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `project_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_post` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_CFBDFA14A76ED395` (`user_id`),
+  KEY `IDX_CFBDFA14166D1F9C` (`project_id`),
+  CONSTRAINT `FK_CFBDFA14166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table weddingplanner.note : ~1 rows (environ)
+DELETE FROM `note`;
+INSERT INTO `note` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
+	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18');
 
 -- Listage de la structure de table weddingplanner. prestation
 CREATE TABLE IF NOT EXISTS `prestation` (
@@ -226,6 +259,7 @@ CREATE TABLE IF NOT EXISTS `prestation` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.prestation : ~3 rows (environ)
+DELETE FROM `prestation`;
 INSERT INTO `prestation` (`id`, `title`, `subtitle`, `description`, `url_picture`, `alt_picture`, `price`) VALUES
 	(1, 'Emeraude expérience', 'sous-titre', 'Laissez-nous prendre en charge chaque détail de votre mariage avec notre service d\'organisation complète. De la conception initiale à l\'exécution finale, nous nous occupons de tout : gestion du budget, sélection des fournisseurs, planification de la cérémonie et de la réception, coordination le jour J, et bien plus encore. Vous pourrez vous détendre et profiter de chaque instant, sachant que votre mariage est entre les mains d\'experts passionnés.', 'img/creation/mariage/pexels-punchbrandstock-1244627.jpg', 'formule emeraude expérience', 50000),
 	(2, 'Coordination du jour J', 'sous-titre', 'Pour les couples qui ont déjà tout planifié mais qui souhaitent une assistance professionnelle le jour de leur mariage, notre service de coordination du jour J est idéal. Nous nous assurerons que tout se déroule sans accroc, en gérant la logistique et en supervisant les fournisseurs. Vous pourrez vous concentrer sur vos moments de bonheur et laisser notre équipe s\'occuper du reste.', 'img/stocksnap_A7S8U2WAMN.jpg', 'formule coordination du jour J', 10000),
@@ -246,6 +280,7 @@ CREATE TABLE IF NOT EXISTS `product` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.product : ~4 rows (environ)
+DELETE FROM `product`;
 INSERT INTO `product` (`id`, `batch_id`, `name`, `price`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Lettre pour carton d\'invitation', 20, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/invitation_card_with_a_ribbon.jpg', 'lettre pour carton d\'invitation'),
 	(2, 4, 'Box soin ', 50, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi asperiores sapiente tenetur necessitatibus', 'img/commerce/pexels-tima-miroshnichenko-7879833.jpg', 'box cadeau, soin pour les mariés'),
@@ -281,6 +316,7 @@ CREATE TABLE IF NOT EXISTS `project` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.project : ~7 rows (environ)
+DELETE FROM `project`;
 INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, NULL, 1, 1, 4, '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '394d61e52f9d85d456d245c974dd8fa9dd494c485140f45862686934', '42834e1ca1bf978b8d2ffa346c8ecdcbac6566b43dc4cd5672205d8d', '0e3f86e3e69988b18983f88c524e614004dc92c45cf5b0173c88a594', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000),
 	(3, 7, 2, 3, 3, 'Maria', 'Nomdef', NULL, '0611223344', '2025-07-30 10:00:00', 200, 'projet', '2024-07-31 11:23:53', 1, 40000),
@@ -302,6 +338,7 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.project_prestation : ~4 rows (environ)
+DELETE FROM `project_prestation`;
 INSERT INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1),
 	(3, 1),
@@ -321,6 +358,7 @@ CREATE TABLE IF NOT EXISTS `quotation` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.quotation : ~2 rows (environ)
+DELETE FROM `quotation`;
 INSERT INTO `quotation` (`id`, `project_id`, `quotation_number`, `date_creation`, `is_accepted`) VALUES
 	(2, 3, '10', '2024-08-02', 1),
 	(4, 4, 'DEV_172406008210', '2024-05-19', 1);
@@ -341,13 +379,15 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   PRIMARY KEY (`id`),
   KEY `IDX_42C84955A76ED395` (`user_id`),
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~4 rows (environ)
+DELETE FROM `reservation`;
 INSERT INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, '2024-06-07', 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
 	(20, 3, '6661689eec632', '2024-06-06 07:43:26', 50, '2024-06-07', 0, 0, 'Laure', 'Nomdefamille', '0611223344'),
-	(22, 1, '172467680532', '2024-08-26 12:53:25', 100, '2024-08-27', 0, 0, '.', '.', '.');
+	(22, 1, '172467680532', '2024-08-26 12:53:25', 100, '2024-08-27', 0, 0, '.', '.', '.'),
+	(24, 2, '172657952320', '2024-09-17 13:25:22', 15, '2024-09-18', 0, 0, 'Didier', 'Muller', '0611223344');
 
 -- Listage de la structure de table weddingplanner. reset_password_request
 CREATE TABLE IF NOT EXISTS `reset_password_request` (
@@ -363,6 +403,7 @@ CREATE TABLE IF NOT EXISTS `reset_password_request` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.reset_password_request : ~0 rows (environ)
+DELETE FROM `reset_password_request`;
 
 -- Listage de la structure de table weddingplanner. state
 CREATE TABLE IF NOT EXISTS `state` (
@@ -372,6 +413,7 @@ CREATE TABLE IF NOT EXISTS `state` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.state : ~0 rows (environ)
+DELETE FROM `state`;
 INSERT INTO `state` (`id`, `name`) VALUES
 	(1, 'En cours'),
 	(2, 'En attente'),
@@ -389,6 +431,7 @@ CREATE TABLE IF NOT EXISTS `testimony` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.testimony : ~0 rows (environ)
+DELETE FROM `testimony`;
 INSERT INTO `testimony` (`id`, `couple_name`, `description`, `is_published`, `date_receipt`) VALUES
 	(1, 'Mr & Mme Nom', 'Nous ne pouvons que chanter les louanges de Cérémonie Couture pour avoir fait de notre mariage un jour absolument parfait. Dès notre première rencontre avec Clara, notre wedding planner, nous avons su que nous étions entre de bonnes mains. Son professionnalisme, sa créativité et son attention aux moindres détails nous ont tout de suite mis en confiance. Clara a su écouter nos souhaits et nos préoccupations, tout en nous guidant avec des suggestions brillantes qui ont vraiment transformé notre vision en réalité. Chaque aspect du mariage, de la décoration florale aux choix musicaux, a été orchestré avec une telle précision que nous n\'avions rien à faire d\'autre que de profiter de notre journée spéciale. Le jour J, tout s\'est déroulé sans accroc. Clara et son équipe ont géré la logistique avec une telle fluidité que nous avons pu nous concentrer entièrement sur nos moments de bonheur, entourés de nos proches. Nous avons reçu d\'innombrables compliments de la part de nos invités sur la beauté et l\'organisation impeccable de notre mariage. Nous sommes immensément reconnaissants à Clara et à toute l\'équipe de Cérémonie Couture pour avoir créé des souvenirs que nous chérirons pour toujours. Nous recommandons vivement leurs services à tous ceux qui souhaitent un mariage parfait et sans stress. Merci infiniment pour tout !', 1, '2024-05-20'),
 	(2, 'Mr & Mme Nomdefamille', 'lorem ipsum', 0, '2024-06-15'),
@@ -409,6 +452,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.user : ~0 rows (environ)
+DELETE FROM `user`;
 INSERT INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`, `google_user`) VALUES
 	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0, 0),
 	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0, 0),
@@ -430,6 +474,7 @@ CREATE TABLE IF NOT EXISTS `worker` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.worker : ~4 rows (environ)
+DELETE FROM `worker`;
 INSERT INTO `worker` (`id`, `job_id`, `name`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Jeanne', 'Directrice de Création, passionnée par l\'univers du mariage et l\'esthétique. Avec plus de 10 ans d\'expérience dans le design et la planification d\'événements, elle apporte une touche unique et sophistiquée à chacune de nos collections. Jeanne est diplômée de l\'École des Beaux-Arts et a travaillé avec des marques prestigieuses avant de rejoindre notre équipe. Son talent et son souci du détail font d\'elle une force créative incontournable pour notre entreprise.', 'img/equipe/equipe1.jpg', 'photo de notre organisatrice'),
 	(2, 2, 'Sophie', 'Sophie est chargée de la gestion de notre présence en ligne et de l\'interaction avec notre communauté. Diplômée en communication digitale et avec 5 ans d\'expérience dans les réseaux sociaux, Sophie crée du contenu engageant et gère nos campagnes publicitaires avec brio. Elle est passionnée par les relations humaines et adore partager l\'enthousiasme de nos clients pour nos produits.', 'img/equipe/pexels-vinicius-wiesehofer-289347-1130626.jpg', 'photo de notre chargée de communication'),

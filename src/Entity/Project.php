@@ -80,6 +80,12 @@ class Project
     #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'project')]
     private Collection $quotations;
 
+    /**
+     * @var Collection<int, Note>
+     */
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'project', orphanRemoval: true)]
+    private Collection $notes;
+
     public function __construct()
     {
         $this->prestations = new ArrayCollection();
@@ -89,6 +95,7 @@ class Project
         $this->dateReceipt = new \DateTime('now', $timezone);
         $this->isContacted = false;
         $this->quotations = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -371,6 +378,36 @@ class Project
             // set the owning side to null (unless already changed)
             if ($quotation->getProject() === $this) {
                 $quotation->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): static
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): static
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getProject() === $this) {
+                $note->setProject(null);
             }
         }
 
