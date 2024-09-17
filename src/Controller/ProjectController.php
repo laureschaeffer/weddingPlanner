@@ -50,7 +50,7 @@ class ProjectController extends AbstractController
     }
 
     //detail d'une demande
-    #[Route('/coiffe/projet/{id}', name: 'show_projet')]
+    #[Route('/coiffe/{id}/projet', name: 'show_projet')]
     public function showProject(Project $project = null, Request $request, UserInterface $user): Response
     {
         //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
