@@ -87,127 +87,136 @@
 
             
         </div>
-        <div class="projet-action">
-            {# passe le projet en "la personne a été contacté" ou inversement #}
-            {% if project.isEditable %}
-                {% if project.isContacted %}
-                    <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a>
-                    {% else %}
-                    <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a>
-                {% endif %}
-                
-                {# modifier si superadmin  #}
-                {% if "ROLE_SUPERADMIN" in app.user.roles %}
-                    <a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a>
-                                    
-                {% endif %}
-            {% endif %}
-
-
-        </div>
-
 
     </div>
 
-
     <h3>Suivi du projet</h3>
-    {# suivi du projet, commentaires des personnes présentes sur le pannel admin  #}
-    {% for comment in project.comments %}
+    <nav id="nav-projet">
+        <span href="#" class="open-note">Notes</span>
+        <span href="#" class="open-commentaire">Commentaires</span>
+        <span href="#" class="open-action">Actions</span>
+    </nav>
 
-        <div class="projet-suivi">
-            <div class="projet-suivi-content">
-                <p>Par <b>{{comment.user}}</b> le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
-                {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
-                <p>{{comment.content}} </p>
-            </div>
-            {# si le projet est modifiable  #}
-            {% if project.isEditable %}
-                <div class="projet-suivi-action">
-                    <p><a href="{{path('delete_comment', {'id': comment.id})}}"><i class="fa-regular fa-circle-xmark"></i></a></p>
-                    <button class="change-form" data-target="form{{comment.id}}"> <i class="fa-solid fa-pen"></i></button>
+    <div class="notes">
+        <p class="suivi-intro">Les notes sont vues seulement par les administrateurs.</p>
+        {% for note in project.notes %}
+            <p>{{note}}</p>
+        {% endfor %}
+    </div>
+    {# ------------------------------suivi du projet, commentaires des personnes présentes sur le pannel admin------------------------------  #}
+    <div class="commentaires">
+        <p class="suivi-intro">Les commentaires sont visibles par tout le monde.</p>
+        {% for comment in project.comments %}
+    
+            <div class="projet-suivi">
+                <div class="projet-suivi-content">
+                    <p>Par <b>{{comment.user}}</b> le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
+                    {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
+                    <p>{{comment.content}} </p>
                 </div>
-                {% else %}
-            {% endif %}
-        </div>
+                {# si le projet est modifiable  #}
+                {% if project.isEditable %}
+                    <div class="projet-suivi-action">
+                        <p><a href="{{path('delete_comment', {'id': comment.id})}}" aria-label="supprimer commentaire"><i class="fa-regular fa-circle-xmark"></i></a></p>
+                        <button class="change-form" data-target="form{{comment.id}}"> <i class="fa-solid fa-pen"></i></button>
+                    </div>
+                    {% else %}
+                {% endif %}
+            </div>
+    
+            {# formulaire pour modifier un commentaire, s'ouvre au clic du bouton plus haut #}
+            <form action="{{path('edit_comment', {'id': comment.id})}}" method="post" id="form{{comment.id}}" style="display: none;">
+                <input type="text" name="comment" value="{{comment.content}}" class="edit-comment">
+                
+                <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+                >
+                {# honeypot #}
+                <input name="firstname" type="text" id="firstname" class="hide-robot">
+                <button type="submit" class="small-btn">Modifier</button>
+            </form>
 
-        {# formulaire pour modifier un commentaire, s'ouvre au clic du bouton plus haut #}
-        <form action="{{path('edit_comment', {'id': comment.id})}}" method="post" id="form{{comment.id}}" style="display: none;">
-            <input type="text" name="comment" value="{{comment.content}}" class="edit-comment">
-            
-            <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-            >
-            {# honeypot #}
-		    <input name="firstname" type="text" id="firstname" class="hide-robot">
-            <button type="submit" class="small-btn">Modifier</button>
-        </form>
-    {% endfor %}
-    {# ---------------------------------interactions suivi de projet----------------------------------- #}
+        {% endfor %}
 
-    {# si le projet est "en cours"  #}
-    {% if  project.isEditable %}
-
-        <h4>Ajouter un commentaire</h4>
-        {# ajout de commentaires  #}
-        {{ form_start(form) }}
-    
-            {# {{ form_row(form.content) }} #}
-    
-            {{ form_errors(form.content) }}
-            {{ form_label(form.content) }}
+        {# si le projet est "en cours"  #}
+        {% if  project.isEditable %}
+            <h4>Ajouter un commentaire</h4>
+            {# ajout de commentaires  #}
+            {{ form_start(form) }}
+        
+                {{ form_row(form.content) }}
             
-            {{ form_widget(form.content) }}
-    
-            
-            {{ form_row(form.Envoyer, {'attr': {'class': 'small-btn'}}) }}
-    
-    
-        {{ form_end(form) }}
-        <hr>
-        <h3>Fixer le prix final</h3>
-        {# fixe le prix final  #}
-        {% if project.finalPrice %}
-            {% set price = project.finalPrice %}
-            {% else %}
-            {% set price = "" %}
+                {{ form_row(form.Envoyer, {'attr': {'class': 'small-btn'}}) }}
+        
+            {{ form_end(form) }}
         {% endif %}
-        <form action="{{ path('fixe_prix', {'id': project.id})}}" method="post">
-            <p>
-                <label>Prix final</label> 
+
+    </div>
+
+    {# ---------------------------------interactions suivi de projet----------------------------------- #}
+    <div class="actions">
+        {# passe le projet en "la personne a été contactée" ou inversement #}
+        <p>
+            {% if project.isContacted %}
+                <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a>
+                {% else %}
+                <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne contactée</a>
+            {% endif %}
+        </p>
+
+        {# modifier si superadmin  #}
+        {% if "ROLE_SUPERADMIN" in app.user.roles %}
+            <p><a href="{{path('edit_projet', {'id': project.id} )}}">Apporter une modification</a></p>            
+        {% endif %}
+
+        {# si le projet est "en cours"  #}
+        {% if  project.isEditable %}
+
+        {# ********** fixe le prix final ********** #}
+            <h4>Fixer le prix final</h4>
+            {% if project.finalPrice %}
+                {% set price = project.finalPrice %}
+                {% else %}
+                {% set price = "" %}
+            {% endif %}
+            <form action="{{ path('fixe_prix', {'id': project.id})}}" method="post">
+                
+                <label for="price">Prix final</label> 
                 <input type="number" name="price" value="{{price}}"/>
                 {# honeypot #}
                 <input name="firstname" type="text" id="firstname" class="hide-robot">
-            </p>
-            <button type="submit" name="submit" class="small-btn">Valider</button>
-        </form>
+                
+                <button type="submit" name="submit" class="small-btn">Valider</button>
+            </form>
 
-        <hr>
-        <div class="projet-devis">
-            
-            <h4>Générer un dévis pour vous</h4>
-            {# genere un pdf  #}
-            <a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank" role="button">Devis</a>
-            
-            <p>Si le devis vous convient, <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a></p>
-
-        </div>
+            <div class="projet-devis">
+                
+                <h4>Générer un dévis pour vous</h4>
+                {# ********** genere un pdf ********** #}
+                <a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank" role="button">Devis</a>
+                
+                <p>Si le devis vous convient</p>
+                <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a>
     
-        {# <h4>Prendre rendez-vous avec le client</h4>
-        <p><a href="{{path('app_rendezvous')}}">Rendez-vous</a></p> #}
+            </div>
+    
+        {# un devis a été généré, en attente de la réponse du client  #}
+        {% elseif project.state.id == 2 %}
+            <p>Un devis a été généré, en attente de la réponse du client, vous ne pouvez plus modifier.</p>
+            
+        {% elseif project.state.id == 3 %}
+            <p>Le devis a été accepté!</p>
+            <p><a href="{{path('show_facture', {'id': project.id})}}" target="_blank">Afficher la facture</a></p>
+            <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
+            
+        {% elseif project.state.id == 4 %}
+            <p>Le devis a été refusé, fin du projet.</p>
+    
+        {% endif %}
+    
+        </div>
+    </div>
 
-    {# un devis a été généré, en attente de la réponse du client  #}
-    {% elseif project.state.id == 2 %}
-        <p>Un devis a été généré, en attente de la réponse du client, vous ne pouvez plus modifier.</p>
-        
-    {% elseif project.state.id == 3 %}
-        <p>Le devis a été accepté!</p>
-        <p><a href="{{path('show_facture', {'id': project.id})}}" target="_blank">Afficher la facture</a></p>
-        <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
-        
-    {% elseif project.state.id == 4 %}
-        <p>Le devis a été refusé, fin du projet.</p>
-
-    {% endif %}
 
 
 

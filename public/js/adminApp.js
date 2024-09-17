@@ -103,7 +103,7 @@ if(canvasEP){
 }
 
 
-//----------------------------------fonction pour afficher ou enlever le formulaire page showProject.php
+//----------------------------------fonction pour afficher ou enlever le formulaire page detail de projet
 
 // a chaque bouton, ajoute un ecouteur d'evenement
 buttons = document.querySelectorAll('.change-form');
@@ -130,3 +130,44 @@ if(buttons){
   }
 
 }
+
+window.onload = () => {
+
+  //----------------------------------page detail projet: navbar----------------------------------
+  const noteBtn = document.querySelector('.open-note') 
+  const commentaireBtn = document.querySelector('.open-commentaire') 
+  const actionBtn = document.querySelector('.open-action') 
+  
+  const noteEl = document.querySelector('.notes')
+  const commentaireEl = document.querySelector('.commentaires')
+  const actionEl = document.querySelector('.actions')
+  
+  // par defaut 
+  noteEl.classList.add('active')
+
+  //fonction montre la div
+  function showElement(element){
+    // enleve la classe active à tous les elements
+    noteEl.classList.remove('active')
+    commentaireEl.classList.remove('active')
+    actionEl.classList.remove('active')
+  
+    element.classList.add('active')
+  }
+  
+  // ecouteurs d'evenement 
+
+  noteBtn.onclick = () => {
+    showElement(noteEl)
+  }
+
+  commentaireBtn.onclick = () => {
+    showElement(commentaireEl)
+  }
+
+  actionBtn.onclick = () => {
+    showElement(actionEl)
+  }
+
+}
+

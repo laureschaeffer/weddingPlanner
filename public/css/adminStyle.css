@@ -477,6 +477,31 @@ header{
 
 /* --------------------detail d'une demande de contact -------------------- */
 
+#nav-projet{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: var(--main-padding) 0;
+    margin: var(--main-padding) 0;
+    background-color: #e3e4db;
+
+    span{
+        color: #000;
+        font-weight: var(--semi-bold);
+        font-size: var(--p-font-size);
+        cursor: pointer;
+    }
+
+}
+
+/* par defaut enleve section commentaires et action  */
+.commentaires, .actions, .notes{
+    display: none;
+}
+.active{
+    display: block;
+}
+
 #detail-projet{
     padding: var(--escape-padding);
 }
@@ -510,7 +535,7 @@ header{
 #detail-projet form{
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.5rem;
     margin: 1rem 0;
 }
 
@@ -543,6 +568,10 @@ header{
     justify-content: space-between;
 }
 
+.suivi-intro{
+    margin-bottom: 1rem;
+}
+
 .projet-suivi i{
     color: black;
 }
@@ -555,11 +584,10 @@ header{
     padding: 1.2rem 0;
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 0.5rem;
     align-items: flex-start;
 
     a{
-        margin: 5px;
         padding: var(--btn-padding);
         background: #333;
 
@@ -577,15 +605,7 @@ header{
         text-decoration: none;
 
     }
-        
 
-
-    a:hover {
-        box-shadow: 1px 1px 13px #5d2b42, -1px -1px 13px #5d2b42;
-        color: #d6d6d6;
-        -webkit-transition: 500ms;
-        transition: 500ms;
-    }
 }
 
 /* ===================================================================modifier projet formulaire ===================================================== */
