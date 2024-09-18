@@ -134,39 +134,47 @@ if(buttons){
 window.onload = () => {
 
   //----------------------------------page detail projet: navbar----------------------------------
+  //les elements de la nav
   const noteBtn = document.querySelector('.open-note') 
   const commentaireBtn = document.querySelector('.open-commentaire') 
   const actionBtn = document.querySelector('.open-action') 
   
+  //les sections
   const noteEl = document.querySelector('.notes')
   const commentaireEl = document.querySelector('.commentaires')
   const actionEl = document.querySelector('.actions')
   
   // par defaut 
   noteEl.classList.add('active')
+  noteBtn.classList.add('nav-active')
 
   //fonction montre la div
-  function showElement(element){
-    // enleve la classe active à tous les elements
+  function showElement(element, navElement){
+    // enleve la classe active à tous les elements et son "btn" de la nav
     noteEl.classList.remove('active')
     commentaireEl.classList.remove('active')
     actionEl.classList.remove('active')
+
+    noteBtn.classList.remove('nav-active')
+    commentaireBtn.classList.remove('nav-active')
+    actionBtn.classList.remove('nav-active')
   
     element.classList.add('active')
+    navElement.classList.add('nav-active')
   }
   
   // ecouteurs d'evenement 
 
   noteBtn.onclick = () => {
-    showElement(noteEl)
+    showElement(noteEl, noteBtn)
   }
 
   commentaireBtn.onclick = () => {
-    showElement(commentaireEl)
+    showElement(commentaireEl, commentaireBtn)
   }
 
   actionBtn.onclick = () => {
-    showElement(actionEl)
+    showElement(actionEl, actionBtn)
   }
 
 }

@@ -154,11 +154,11 @@ p{
 textarea{
     width: 100%;
     min-height: 200px;
+    padding: 10px;
     font-size: var(--p-font-size);
     font-family: var(--main-font);
     outline: none;
     border: var(--grey-color) solid 3px;
-    background: none;
 }
 
 /* honeypot */
@@ -479,17 +479,18 @@ header{
 
 #nav-projet{
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
-    padding: var(--main-padding) 0;
     margin: var(--main-padding) 0;
     background-color: #e3e4db;
-
+    
     span{
+        flex: 1;
+        padding: var(--main-padding);
         color: #000;
         font-weight: var(--semi-bold);
         font-size: var(--p-font-size);
         cursor: pointer;
+        text-align: center;
     }
 
 }
@@ -498,6 +499,13 @@ header{
 .commentaires, .actions, .notes{
     display: none;
 }
+
+/* nav active  */
+.nav-active{
+    background-color: #cccfb3;
+}
+
+/* section ouverte  */
 .active{
     display: block;
 }
@@ -562,10 +570,17 @@ header{
 
 
 .projet-suivi{
-    border: var(--grey-color) solid 3px;
     margin: var(--main-padding) 0;
     display: flex;
     justify-content: space-between;
+}
+
+.projet-suivi.commentaire{
+    border: var(--grey-color) solid 3px;
+}
+
+.projet-suivi.note{
+    border: #bd8c8eb0 solid 3px;
 }
 
 .suivi-intro{
@@ -578,6 +593,24 @@ header{
 
 .projet-suivi p{
     padding: var(--small-padding);
+}
+
+.projet-suivi-action{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-size: 1.5rem;
+}
+
+.change-form{
+    border: none;
+    cursor: pointer;
+
+    transition: var(--hover-transition);
+
+    &:hover{
+        opacity: var(--hover-opacity);
+    }
 }
 
 .projet-devis{

@@ -92,33 +92,64 @@
 
     <h3>Suivi du projet</h3>
     <nav id="nav-projet">
-        <span href="#" class="open-note">Notes</span>
-        <span href="#" class="open-commentaire">Commentaires</span>
-        <span href="#" class="open-action">Actions</span>
+        <span class="open-note">Notes</span>
+        <span class="open-commentaire">Commentaires</span>
+        <span class="open-action">Actions</span>
     </nav>
 
+    {# ------------------------------suivi du projet, notes------------------------------  #}
+
     <div class="notes">
-        <p class="suivi-intro">Les notes sont vues seulement par les administrateurs.</p>
+        <p class="suivi-intro"><small>Les notes sont vues seulement par les administrateurs.</small></p>
+
         {% for note in project.notes %}
-            <p>{{note}}</p>
+        
+            <div class="projet-suivi note">
+                <div class="projet-suivi-content">
+                    <p>Par <b>{{note.user}}</b> le {{note.datePost |format_datetime('short', 'short', locale='fr') }}</p>
+                    <p>{{note}} </p>
+                </div>
+                {# si le projet est modifiable  #}
+                {% if project.isEditable %}
+                    <div class="projet-suivi-action">
+                        <span><a href="{{ path('delete_note', {'id': note.id}) }}" title="supprimer une note"><i class="fa-regular fa-circle-xmark"></i></a></span>
+                        <button class="change-form" title="affiche le formulaire modifier note"> <i class="fa-solid fa-pen"></i></button>
+                    </div>
+                    {% else %}
+                {% endif %}
+            </div>
+
         {% endfor %}
+
+        {# formulaire ajout de notes  #}
+        {# si le projet est "en cours"  #}
+        {% if  project.isEditable %}
+            <h4>Ajouter une note</h4>
+            {{ form_start(formNote) }}
+        
+                {{ form_row(formNote.content) }}
+            
+                {{ form_row(formNote.Envoyer, {'attr': {'class': 'small-btn'}}) }}
+        
+            {{ form_end(formNote) }}
+        {% endif %}
+
     </div>
     {# ------------------------------suivi du projet, commentaires des personnes présentes sur le pannel admin------------------------------  #}
     <div class="commentaires">
-        <p class="suivi-intro">Les commentaires sont visibles par tout le monde.</p>
+        <p class="suivi-intro"><small>Les commentaires sont visibles par tout le monde.</small></p>
         {% for comment in project.comments %}
     
-            <div class="projet-suivi">
+            <div class="projet-suivi commentaire">
                 <div class="projet-suivi-content">
                     <p>Par <b>{{comment.user}}</b> le {{comment.datePost |format_datetime('short', 'short', locale='fr') }}</p>
-                    {# <p>Par {{comment.user}} le {{comment.datePost | date("d.m.Y")}}</p> #}
                     <p>{{comment.content}} </p>
                 </div>
                 {# si le projet est modifiable  #}
                 {% if project.isEditable %}
                     <div class="projet-suivi-action">
-                        <p><a href="{{path('delete_comment', {'id': comment.id})}}" aria-label="supprimer commentaire"><i class="fa-regular fa-circle-xmark"></i></a></p>
-                        <button class="change-form" data-target="form{{comment.id}}"> <i class="fa-solid fa-pen"></i></button>
+                        <span><a href="{{path('delete_comment', {'id': comment.id})}}" title="supprimer commentaire"><i class="fa-regular fa-circle-xmark"></i></a></span>
+                        <button class="change-form" data-target="form{{comment.id}}" title="affiche le formulaire editer commentaire"> <i class="fa-solid fa-pen"></i></button>
                     </div>
                     {% else %}
                 {% endif %}
