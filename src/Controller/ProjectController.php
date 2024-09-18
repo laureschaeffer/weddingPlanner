@@ -190,6 +190,42 @@ class ProjectController extends AbstractController
     
     // ************************************************NOTE************************************************
 
+    //modifie une note
+    #[Route('/coiffe/editNote/{id}', name: 'edit_note')]
+    public function editNote(?Note $note, CsrfTokenManagerInterface $csrfTokenManager){
+        if($note){
+
+            $idProjet = $note->getProject()->getId(); //recupere l'id du projet pour la redirection
+            $tokenInput = filter_input(INPUT_POST, '_csrf_token', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+            $csrfTokenId = 'authenticate';
+
+            //si le token de la session et du formulaire n'est pas le meme, redirige
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken($csrfTokenId, $tokenInput))) {
+                $this->addFlash('error', 'Une erreur est apparue, veuillez réessayer');
+                return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
+            }
+
+            //recupere la note dans l'input
+            $content = filter_input(INPUT_POST, 'note', FILTER_SANITIZE_SPECIAL_CHARS);
+            //honey pot field
+            $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
+        
+            //si je recois "firstname" c'est un robot, je redirige
+            if($honeypot){
+                return $this->redirectToRoute('app_home');
+            } else {
+                $note->setContent($content);
+                $this->entityManager->flush();
+    
+                $this->addFlash('success', 'Note modifiée');
+                return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
+                
+            }
+
+        }
+    }
+
     //supprime un commentaire du suivi
     #[Route('/coiffe/deleteNote/{id}', name: 'delete_note')]
     public function deleteNote(?Note $note){
