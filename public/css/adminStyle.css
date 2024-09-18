@@ -444,17 +444,19 @@ header{
 
 #nav-projets-reservations{
     display: flex;
-    justify-content: space-around;
     flex-wrap: wrap;
-    padding: var(--main-padding) 0;
-    margin-bottom: var(--escape-padding);
-    background-color: #e3e4db ;
+    margin: var(--main-padding) 0;
+    background-color: #e3e4db;
 
     a{
-        color: #000;
-        font-size: var(--nav-font-size) ;
-        font-weight: var(--semi-bold);
         text-decoration: none;
+        flex: 1;
+        padding: var(--main-padding);
+        color: #000;
+        font-weight: var(--semi-bold);
+        font-size: var(--p-font-size);
+        cursor: pointer;
+        text-align: center;
     }
 
 }
@@ -495,7 +497,7 @@ header{
 
 }
 
-/* par defaut enleve section commentaires et action  */
+/* par defaut enleve section notes commentaires et action  */
 .commentaires, .actions, .notes{
     display: none;
 }
@@ -508,6 +510,26 @@ header{
 /* section ouverte  */
 .active{
     display: block;
+}
+
+.actions{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
+    a{
+        color: black;
+        font-weight: var(--semi-bold);
+    }
+
+    form{
+        margin-left: 30px;
+    }
+
+    label{
+        font-size: var(--p-font-size);
+    }
+
 }
 
 #detail-projet{
@@ -544,7 +566,15 @@ header{
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin: 1rem 0;
+
+    
+    input{
+        padding: 10px;
+        font-size: var(--p-font-size);
+        font-family: var(--main-font);
+        outline: none;
+        border: var(--grey-color) solid 3px;
+    }
 }
 
 .small-btn{
@@ -565,7 +595,8 @@ header{
     font-size: var(--p-font-size);
     font-family: var(--main-font);
     border: var(--grey-color) solid 3px;
-    background: none;
+    outline: none;
+    padding: 5px;
 }
 
 
@@ -573,6 +604,7 @@ header{
     margin: var(--main-padding) 0;
     display: flex;
     justify-content: space-between;
+    padding: var(--small-padding);
 }
 
 .projet-suivi.commentaire{
@@ -591,9 +623,6 @@ header{
     color: black;
 }
 
-.projet-suivi p{
-    padding: var(--small-padding);
-}
 
 .projet-suivi-action{
     display: flex;
@@ -613,33 +642,6 @@ header{
     }
 }
 
-.projet-devis{
-    padding: 1.2rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
-
-    a{
-        padding: var(--btn-padding);
-        background: #333;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        cursor: pointer;
-        border: solid #404c5d 1px;
-        color: rgb(161, 161, 161);
-        border-radius: 5px;
-        background: linear-gradient(145deg, #2e2d2d, #212121);
-        
-        color: white;
-        text-decoration: none;
-
-    }
-
-}
 
 /* ===================================================================modifier projet formulaire ===================================================== */
 

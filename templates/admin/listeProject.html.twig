@@ -8,8 +8,8 @@
 
     <h1>Demandes de projet</h1>
     <div id="nav-projets-reservations">
-        <a href="{{ path('app_projet', {contactState: 'toBeContacted'}) }}">A contacter</a>
-        <a href="{{ path('app_projet', {contactState: 'isContacted'}) }}">A été contacté</a>
+        <a href="{{ path('app_projet', {contactState: 'toBeContacted'}) }}" {% if contactState == 'toBeContacted' %}class="nav-active"{% endif %}>A contacter</a>
+        <a href="{{ path('app_projet', {contactState: 'isContacted'}) }}" {% if contactState == 'isContacted' %}class="nav-active"{% endif %}>A été contacté</a>
     </div>
     
 

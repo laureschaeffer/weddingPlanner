@@ -84,6 +84,7 @@ class Project
      * @var Collection<int, Note>
      */
     #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'project', orphanRemoval: true)]
+    #[ORM\OrderBy(["datePost" => "DESC"])]
     private Collection $notes;
 
     public function __construct()

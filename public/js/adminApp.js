@@ -116,17 +116,17 @@ if(buttons){
   
   // Fonction pour afficher/masquer le formulaire correspondant à l'aide de l'id passé dans le data-attribute
   function toggleForm(event) {
-  const targetId = event.currentTarget.getAttribute('data-target');
+    const targetId = event.currentTarget.getAttribute('data-target');
   
-  
-  const form = document.getElementById(targetId); //recupere le formulaire qui a l'id du boutton qu'on a récupéré
-  
-  //switch de display
-  if (form.style.display === "none" || form.style.display === "") {
-      form.style.display = "flex";
-  } else {
-      form.style.display = "none";
-  }
+    
+    const form = document.getElementById(targetId); //recupere le formulaire qui a l'id du boutton qu'on a récupéré
+    
+    //switch de display
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "flex";
+    } else {
+        form.style.display = "none";
+    }
   }
 
 }

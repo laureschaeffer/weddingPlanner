@@ -113,26 +113,37 @@
                 {% if project.isEditable %}
                     <div class="projet-suivi-action">
                         <span><a href="{{ path('delete_note', {'id': note.id}) }}" title="supprimer une note"><i class="fa-regular fa-circle-xmark"></i></a></span>
-                        <button class="change-form" title="affiche le formulaire modifier note"> <i class="fa-solid fa-pen"></i></button>
+                        <button class="change-form" data-target="form{{note.id}}" title="affiche le formulaire modifier note"> <i class="fa-solid fa-pen"></i></button>
                     </div>
                     {% else %}
                 {% endif %}
             </div>
 
+            {# formulaire pour modifier une note, s'ouvre au clic du bouton plus haut #}
+            <form action="{{path('edit_note', {'id': note.id})}}" method="post" id="form{{note.id}}" style="display: none;">
+                <input type="text" name="note" value="{{note.content}}" class="edit-comment">
+                
+                <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+                >
+                {# honeypot #}
+                <input name="firstname" type="text" id="firstname" class="hide-robot">
+                <button type="submit" class="small-btn">Modifier</button>
+            </form>
+
         {% endfor %}
 
         {# formulaire ajout de notes  #}
-        {# si le projet est "en cours"  #}
-        {% if  project.isEditable %}
-            <h4>Ajouter une note</h4>
-            {{ form_start(formNote) }}
+        <h4>Ajouter une note</h4>
+        {{ form_start(formNote) }}
+    
+            {{ form_row(formNote.content) }}
         
-                {{ form_row(formNote.content) }}
-            
-                {{ form_row(formNote.Envoyer, {'attr': {'class': 'small-btn'}}) }}
+            {{ form_row(formNote.Envoyer, {'attr': {'class': 'small-btn'}}) }}
+    
+        {{ form_end(formNote) }}
         
-            {{ form_end(formNote) }}
-        {% endif %}
+        
 
     </div>
     {# ------------------------------suivi du projet, commentaires des personnes présentes sur le pannel admin------------------------------  #}
@@ -188,6 +199,7 @@
     <div class="actions">
         {# passe le projet en "la personne a été contactée" ou inversement #}
         <p>
+            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20V17.6M12 6.4V4M20 12H17.6M6.4 12H4M17.6569 6.34315L15.9598 8.0402M8.0402 15.9598L6.34315 17.6569M6.34293 6.34332L8.03999 8.04038M15.9596 15.96L17.6566 17.657" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
             {% if project.isContacted %}
                 <a href="{{path('change_contacted_projet', {'id': project.id})}}">Personne à contacter</a>
                 {% else %}
@@ -203,8 +215,11 @@
         {# si le projet est "en cours"  #}
         {% if  project.isEditable %}
 
+            <p><svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20V17.6M12 6.4V4M20 12H17.6M6.4 12H4M17.6569 6.34315L15.9598 8.0402M8.0402 15.9598L6.34315 17.6569M6.34293 6.34332L8.03999 8.04038M15.9596 15.96L17.6566 17.657" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                Fixe le prix final
+            </p>
+
         {# ********** fixe le prix final ********** #}
-            <h4>Fixer le prix final</h4>
             {% if project.finalPrice %}
                 {% set price = project.finalPrice %}
                 {% else %}
@@ -220,17 +235,16 @@
                 <button type="submit" name="submit" class="small-btn">Valider</button>
             </form>
 
-            <div class="projet-devis">
-                
-                <h4>Générer un dévis pour vous</h4>
-                {# ********** genere un pdf ********** #}
-                <a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank" role="button">Devis</a>
-                
-                <p>Si le devis vous convient</p>
-                <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a>
-    
-            </div>
-    
+            <p>
+                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20V17.6M12 6.4V4M20 12H17.6M6.4 12H4M17.6569 6.34315L15.9598 8.0402M8.0402 15.9598L6.34315 17.6569M6.34293 6.34332L8.03999 8.04038M15.9596 15.96L17.6566 17.657" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                Générer un dévis pour vous : <a href="{{path('create_devis_pdf', {'id': project.id})}}" target="_blank">devis</a>
+            </p>
+            
+            <p>
+                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20V17.6M12 6.4V4M20 12H17.6M6.4 12H4M17.6569 6.34315L15.9598 8.0402M8.0402 15.9598L6.34315 17.6569M6.34293 6.34332L8.03999 8.04038M15.9596 15.96L17.6566 17.657" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
+                Si le devis vous convient : <a href="{{path('create_devis', {'id': project.id})}}">proposer le devis au client</a>
+            </p>
+
         {# un devis a été généré, en attente de la réponse du client  #}
         {% elseif project.state.id == 2 %}
             <p>Un devis a été généré, en attente de la réponse du client, vous ne pouvez plus modifier.</p>

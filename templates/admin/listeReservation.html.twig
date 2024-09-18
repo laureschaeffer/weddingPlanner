@@ -10,8 +10,8 @@
     <h1>Liste des commandes</h1>
     
     <div id="nav-projets-reservations">
-        <a href="{{ path('app_commande', {state: 'toPrepare'}) }}">A préparer</a>
-        <a href="{{ path('app_commande', {state: 'isPrepared'}) }}">A été préparée</a>
+        <a href="{{ path('app_commande', {state: 'toPrepare'}) }}" {% if state == 'toPrepare' %}class="nav-active"{% endif %}>A préparer</a>
+        <a href="{{ path('app_commande', {state: 'isPrepared'}) }}" {% if state == 'isPrepared' %}class="nav-active"{% endif %}>A été préparée</a>
     </div>
 
     <div class="reservation-container">

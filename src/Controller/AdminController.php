@@ -133,7 +133,8 @@ class AdminController extends AbstractController
         $reservations = $reservationRepository->paginateReservations($page, $isPrepared);
 
         return $this->render('admin/listeReservation.html.twig', [
-            'reservations' => $reservations
+            'reservations' => $reservations,
+            'state' => $state
         ]);
         
     }
