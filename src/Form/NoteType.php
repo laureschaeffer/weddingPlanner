@@ -14,9 +14,8 @@ class NoteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextareaType::class)
-            ->add('datePost', null, [
-                'widget' => 'single_text',
+            ->add('content', TextareaType::class, [
+                'label' => 'Note'
             ])
             ->add('Envoyer', SubmitType::class)
         ;

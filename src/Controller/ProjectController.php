@@ -5,9 +5,11 @@ namespace App\Controller;
 
 use App\Entity\Bill;
 use App\Entity\Comment;
+use App\Entity\Note;
 use App\Entity\Project;
 use App\Entity\Quotation;
 use App\Form\CommentType;
+use App\Form\NoteType;
 use App\Service\PdfService;
 use App\Service\UniqueIdService;
 use App\Repository\BillRepository;
@@ -49,42 +51,71 @@ class ProjectController extends AbstractController
         ]);
     }
 
+    //factorise showProject, gère le formulaire nouveau commentaire
+    public function newComment($project, $form){
+        $comment=$form->getData();
+
+        $comment->setProject($project); //remplit par le projet où se trouve l'utilisateur
+        $comment->setUser($this->getUser()); //remplit par l'utilisateur connecté
+
+        $this->entityManager->persist($comment); //prepare
+        $this->entityManager->flush(); //execute
+
+    }
+    
+    //factorise showProject, gère le formulaire nouvelle note
+    public function newNote($project, $formNote){
+        $note=$formNote->getData();
+
+        $note->setProject($project); //remplit par le projet où se trouve l'utilisateur
+        $note->setUser($this->getUser()); //remplit par l'utilisateur connecté
+
+        $this->entityManager->persist($note); //prepare
+        $this->entityManager->flush(); //execute
+
+    }
+
     //detail d'une demande
     #[Route('/coiffe/{id}/projet', name: 'show_projet')]
-    public function showProject(Project $project = null, Request $request, UserInterface $user): Response
+    public function showProject(?Project $project, Request $request): Response
     {
-        //si l'id passé dans l'url existe; possible comme je mets project en null par defaut en argument, sinon erreur
-        if($project){
+        if(!$project){
 
-
-            //formulaire ajout d'un commentaire au suivi du projet
-            $comment = new Comment();
-
-            $form = $this->createForm(CommentType::class, $comment);
-            $form->handleRequest($request); 
-    
-            if($form->isSubmitted() && $form->isValid()){
-                $comment=$form->getData();
-
-                $comment->setProject($project); //remplit par le projet où se trouve l'utilisateur
-                $comment->setUser($user); //remplit par l'utilisateur connecté
-    
-                $this->entityManager->persist($comment); //prepare
-                $this->entityManager->flush(); //execute
-
-                $this->addFlash('success', 'Commentaire ajouté');
-                return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
-            }
-            
-            return $this->render('admin/showProject.html.twig', [
-                'project' => $project,
-                'form' => $form
-            ]);
-
-        } else {
             $this->addFlash('error', 'Ce projet n\'existe pas');
             return $this->redirectToRoute('app_projet');
         }
+
+        //formulaire ajout d'un commentaire au suivi du projet
+        $comment = new Comment();
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request); 
+
+        if($form->isSubmitted() && $form->isValid()){
+            $this->newComment($project, $form);
+
+            $this->addFlash('success', 'Commentaire ajouté');
+            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        }
+
+        //formulaire ajout d'une note
+        $note = new Note();
+        $formNote = $this->createForm(NoteType::class, $note);
+        $formNote->handleRequest($request);
+        
+        if($formNote->isSubmitted() && $formNote->isValid()){
+            $this->newNote($project, $formNote);
+
+            $this->addFlash('success', 'Note ajoutée');
+            return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
+        }
+        
+        return $this->render('admin/showProject.html.twig', [
+            'project' => $project,
+            'form' => $form,
+            'formNote' => $formNote
+        ]);
+
     }
 
     //modifie un commentaire du suivi
