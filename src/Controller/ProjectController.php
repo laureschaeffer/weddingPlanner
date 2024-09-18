@@ -118,6 +118,8 @@ class ProjectController extends AbstractController
 
     }
 
+    // ************************************************COMMENTAIRE************************************************
+    
     //modifie un commentaire du suivi
     #[Route('/coiffe/editComment/{id}', name: 'edit_comment')]
     public function editComment(Comment $comment =null, CsrfTokenManagerInterface $csrfTokenManager){
@@ -163,7 +165,7 @@ class ProjectController extends AbstractController
     //supprime un commentaire du suivi
     #[Route('/coiffe/deleteComment/{id}', name: 'delete_comment')]
     public function deleteComment(Comment $comment = null){
-        //si le temoignage existe et qu'il n'est pas publié
+        //si le commentaire existe
         if($comment){
             $idProjet = $comment->getProject()->getId(); //recupere l'id du projet pour la redirection
 
@@ -184,6 +186,35 @@ class ProjectController extends AbstractController
             $this->addFlash('error', 'Ce commentaire n\'existe pas');
             return $this->redirectToRoute('app_projet');
         }
+    }
+    
+    // ************************************************NOTE************************************************
+
+    //supprime un commentaire du suivi
+    #[Route('/coiffe/deleteNote/{id}', name: 'delete_note')]
+    public function deleteNote(?Note $note){
+        //si la note existe
+        if(!$note){
+            $this->addFlash('error', 'Ce commentaire n\'existe pas');
+            return $this->redirectToRoute('app_projet');
+        }
+
+        $idProjet = $note->getProject()->getId(); //recupere l'id du projet pour la redirection
+
+        //si le projet n'est pas modifiable
+        if(!$note->getProject()->isEditable()){
+            $this->addFlash('error', 'L\'état du projet ne permet plus de le modifier');
+            return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
+        }
+
+        $this->entityManager->remove($note); //prepare
+        $this->entityManager->flush(); //execute
+        
+        // notif et redirection
+        $this->addFlash('success', 'Note supprimée');
+        return $this->redirectToRoute('show_projet', ['id' => $idProjet]);
+        
+        
     }
 
     //passe le projet en "a été contacté" ou "à contacter"
