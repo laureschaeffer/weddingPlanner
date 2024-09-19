@@ -12,7 +12,19 @@
     
     
     <div class="form reservation">
-        {{form(form)}}
+        {{ form_start(form) }}
+    
+        <div class="form-flex">
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.surname) }}
+        </div>
+        <div class="form-flex">
+            {{ form_row(form.datePicking) }}
+            {{ form_row(form.telephone) }}
+        </div>
+
+        {{ form_row(form.Reserver) }}
+        {{ form_end(form) }}
     </div>
         
 </section>    

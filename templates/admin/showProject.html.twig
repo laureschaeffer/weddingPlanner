@@ -112,8 +112,8 @@
                 {# si le projet est modifiable  #}
                 {% if project.isEditable %}
                     <div class="projet-suivi-action">
-                        <span><a href="{{ path('delete_note', {'id': note.id}) }}" title="supprimer une note"><i class="fa-regular fa-circle-xmark"></i></a></span>
-                        <button class="change-form" data-target="form{{note.id}}" title="affiche le formulaire modifier note"> <i class="fa-solid fa-pen"></i></button>
+                        <span><a href="{{ path('delete_note', {'id': note.id}) }}" aria-label="supprimer une note" title="supprimer une note"><i class="fa-regular fa-circle-xmark"></i></a></span>
+                        <button class="change-form" data-target="form{{note.id}}" aria-label="affiche le formulaire modifier note" title="affiche le formulaire modifier note"> <i class="fa-solid fa-pen"></i></button>
                     </div>
                     {% else %}
                 {% endif %}
@@ -159,8 +159,8 @@
                 {# si le projet est modifiable  #}
                 {% if project.isEditable %}
                     <div class="projet-suivi-action">
-                        <span><a href="{{path('delete_comment', {'id': comment.id})}}" title="supprimer commentaire"><i class="fa-regular fa-circle-xmark"></i></a></span>
-                        <button class="change-form" data-target="form{{comment.id}}" title="affiche le formulaire editer commentaire"> <i class="fa-solid fa-pen"></i></button>
+                        <span><a href="{{path('delete_comment', {'id': comment.id})}}" aria-label="supprimer commentaire" title="supprimer commentaire"><i class="fa-regular fa-circle-xmark"></i></a></span>
+                        <button class="change-form" data-target="form{{comment.id}}" aria-label="affiche le formulaire editer commentaire" title="affiche le formulaire editer commentaire"> <i class="fa-solid fa-pen"></i></button>
                     </div>
                     {% else %}
                 {% endif %}

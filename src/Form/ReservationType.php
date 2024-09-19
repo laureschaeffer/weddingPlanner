@@ -17,17 +17,29 @@ class ReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('datePicking', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Date pour récupérer la commande'
-            ])
             ->add('firstname', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Prénom'
             ])
             ->add('surname', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Nom'
             ])
+            ->add('datePicking', DateType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
+                'widget' => 'single_text',
+                'label' => 'Date pour récupérer la commande'
+            ])
             ->add('telephone', TelType::class, [
+                'row_attr' => [
+                    'class' => 'form-col'
+                ],
                 'label' => 'Téléphone'
             ])
             ->add('Reserver', SubmitType::class, [
