@@ -95,7 +95,7 @@ class ProjectRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function paginate($isContacted, int $page): PaginationInterface
+    public function paginateProject($isContacted, int $page): PaginationInterface
     {
         return $this->paginator->paginate(
             $this->createQueryBuilder('p')

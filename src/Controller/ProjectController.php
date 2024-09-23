@@ -43,7 +43,7 @@ class ProjectController extends AbstractController
 
         // si la page est 'toBeContacted', alors passe isContacted à false, sinon à true
         $isContacted = ($contactState == 'toBeContacted') ? false : true;
-        $projets = $projectRepository->paginate($isContacted, $page);
+        $projets = $projectRepository->paginateProject($isContacted, $page);
 
         return $this->render('admin/listeProject.html.twig', [
             'projets' => $projets,

@@ -9,10 +9,10 @@
 
     <h1>Liste des commandes</h1>
     
-    <div id="nav-projets-reservations">
+    <nav id="nav-projets-reservations" aria-label="seconde nav">
         <a href="{{ path('app_commande', {state: 'toPrepare'}) }}" {% if state == 'toPrepare' %}class="nav-active"{% endif %}>A préparer</a>
         <a href="{{ path('app_commande', {state: 'isPrepared'}) }}" {% if state == 'isPrepared' %}class="nav-active"{% endif %}>A été préparée</a>
-    </div>
+    </nav>
 
     <div class="reservation-container">
 
