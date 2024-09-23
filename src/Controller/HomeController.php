@@ -123,6 +123,24 @@ class HomeController extends AbstractController
 
     }
 
+    //mentions légales
+    #[Route('/mentionsLegales', name: 'mentions_legales')]
+    public function showMentionsLegales(){
+        return $this->render('home/mentionsLegales.html.twig');
+    }
+
+    //politiques confidentialités
+    #[Route('/politiqueConfidentialite', name: 'politique_confidentialite')]
+    public function showPolitiqueConfidentialité(){
+        return $this->render('home/politiqueConfidentialite.html.twig');
+    }
+    
+    //CGV
+    #[Route('/cgv', name: 'cgv')]
+    public function showCgv(){
+        return $this->render('home/cgv.html.twig');
+    }
+
 
     //-------------------------------------------------------------------------partie EQUIPE------------------------------------------------------------------------
 

@@ -88,7 +88,9 @@
                     </ul>
                     <ul>
                         <li>Légal</li>
-                        <li>Mentions légales</li>
+                        <li><a href="{{path('mentions_legales')}}" target="_blank">Mentions légales</a></li>
+                        <li><a href="{{path('politique_confidentialite')}}" target="_blank">Politique de confidentialité</a></li>
+                        <li><a href="{{path('cgv')}}" target="_blank">CGV</a></li>
                         {# si la personne est connectée et admin, elle peut acceder au pannel admin  #}
                     {% if app.user %}
                         {% if ("ROLE_ADMIN" in app.user.roles) or ("ROLE_SUPERADMIN" in app.user.roles)  %}

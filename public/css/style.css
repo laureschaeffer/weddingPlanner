@@ -624,6 +624,29 @@ footer p, footer a{
 .btn-contact button, .service-card figure{
     transition: var(--hover-transition);
 }
+/* =================================================================================LEGAL========================================================================== */
+#legal{
+    padding: 10px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    ul{
+        font-size: var(--p-font-size);
+        padding-left: 1.5rem;
+    }
+    li{
+        list-style: none;
+    }
+
+    h2{
+        text-align: left;
+        margin-top: 1.5rem;
+    }
+}
+
+
+
 /* =================================================================================LOGIN========================================================================== */
 
 #login p{
