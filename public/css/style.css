@@ -5,21 +5,7 @@
     font-display: swap;
     src: url("../fonts/Cormorant_SC/CormorantSC-Medium.ttf");
   }
-@font-face {
-    font-family: "Cormorant Garamond";
-    font-style: normal;
-    font-display: swap;
-    font-weight: 300;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Light.ttf");
-  }
-@font-face {
-    font-family: "Cormorant Garamond";
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Regular.ttf");
-  }
-@font-face {
+  @font-face {
     font-family: "Cormorant Garamond";
     font-style: normal;
     font-display: swap;
@@ -27,18 +13,26 @@
     src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Medium.ttf");
   }
 @font-face {
-    font-family: "Cormorant Garamond";
+    font-family: "Nanum Gothic";
     font-style: normal;
     font-display: swap;
-    font-weight: 600;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-SemiBold.ttf");
+    font-weight: 400;
+    src: url("../fonts/Nanum_Gothic/NanumGothic-Regular.ttf");
   }
 @font-face {
-    font-family: "Cormorant Garamond";
-    font-style: normal;
+    font-family: "Nanum Gothic";
+    font-style: bold;
     font-display: swap;
     font-weight: 700;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Bold.ttf");
+    src: url("../fonts/Nanum_Gothic/NanumGothic-Bold.ttf");
+  }
+
+  @font-face {
+    font-family: "Nanum Gothic";
+    font-style: bold;
+    font-display: swap;
+    font-weight: 800;
+    src: url("../fonts/Nanum_Gothic/NanumGothic-ExtraBold.ttf");
   }
 
 /* ------------------------------variables  */
@@ -57,22 +51,23 @@
     --pink-color: #c4979942;
 
     /* polices d'ecriture  */
-    --main-font: "Cormorant Garamond";
+    --main-font: "Nanum Gothic";
     --title-font: "Cormorant SC";
+    --subtitle-font: "Cormorant Garamond";
     --contact-font: "Cormorant Unicase", serif;
 
     /* tailles  */
-    --p-font-size: 1.3rem;
-    --nav-font-size: 1.5rem;
-    --medium-font-size: 1.7rem;
+    --p-font-size: 1.2rem;
+    --nav-font-size: 1.4rem;
+    --medium-font-size: 1.6rem;
     --subtitle-font-size: 1.8rem;
     --title-font-size: 2rem;
 
     /* tailles tel */
-    --title-mb: 1.8rem;
-    --subtitle-mb: 1.6rem;
-    --medium-mb: 1.4rem;
-    --p-mb: 1.2rem;
+    --title-mb: 1.7rem;
+    --subtitle-mb: 1.5rem;
+    --medium-mb: 1.3rem;
+    --p-mb: 1.1rem;
 
     --title-font-weight: 500;
     --semi-bold: 600;
@@ -134,12 +129,14 @@ h1{
 }
 
 h2{
+    font-family: var(--subtitle-font);
     font-weight: var(--title-font-weight);
     font-size: var(--subtitle-font-size);
     text-align: center
 }
 
 h3{
+    font-family: var(--subtitle-font);
     font-size: var(--medium-font-size);
     font-weight: var(--title-font-weight);
     color: var(--burgundy-color);
@@ -207,7 +204,6 @@ textarea{
 
     label {
         margin-bottom: 10px;
-        font-weight: bold;
         color: black;
         transition: color .3s cubic-bezier(.25,.01,.25,1) 0s;
       }
@@ -430,6 +426,7 @@ footer p, footer a{
 #home-intro p{
     background-color: var(--pink-color);
     padding: 30px 80px;
+    text-align: center;
 }
 
 #home-presentation{
@@ -473,7 +470,7 @@ footer p, footer a{
 }
 
 .stat-nb{
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--burgundy-color);
 }
 
