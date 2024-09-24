@@ -1,24 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@300;400;500;600;700&display=swap');
 @font-face {
     font-family: "Cormorant SC";
     font-style: normal;
     font-display: swap;
     src: url("../fonts/Cormorant_SC/CormorantSC-Medium.ttf");
   }
-@font-face {
-    font-family: "Cormorant Garamond";
-    font-style: normal;
-    font-display: swap;
-    font-weight: 300;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Light.ttf");
-  }
-@font-face {
-    font-family: "Cormorant Garamond";
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Regular.ttf");
-  }
-@font-face {
+  @font-face {
     font-family: "Cormorant Garamond";
     font-style: normal;
     font-display: swap;
@@ -26,18 +13,26 @@
     src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Medium.ttf");
   }
 @font-face {
-    font-family: "Cormorant Garamond";
+    font-family: "Nanum Gothic";
     font-style: normal;
     font-display: swap;
-    font-weight: 600;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-SemiBold.ttf");
+    font-weight: 400;
+    src: url("../fonts/Nanum_Gothic/NanumGothic-Regular.ttf");
   }
 @font-face {
-    font-family: "Cormorant Garamond";
-    font-style: normal;
+    font-family: "Nanum Gothic";
+    font-style: bold;
     font-display: swap;
     font-weight: 700;
-    src: url("../fonts/Cormorant_Garamond/CormorantGaramond-Bold.ttf");
+    src: url("../fonts/Nanum_Gothic/NanumGothic-Bold.ttf");
+  }
+
+  @font-face {
+    font-family: "Nanum Gothic";
+    font-style: bold;
+    font-display: swap;
+    font-weight: 800;
+    src: url("../fonts/Nanum_Gothic/NanumGothic-ExtraBold.ttf");
   }
 
 /* ------------------------------variables  */
@@ -56,26 +51,28 @@
     --pink-color: #c4979942;
 
     /* polices d'ecriture  */
-    --main-font: "Cormorant Garamond";
+    --main-font: "Nanum Gothic";
     --title-font: "Cormorant SC";
+    --subtitle-font: "Cormorant Garamond";
+    --contact-font: "Cormorant Unicase", serif;
 
     /* tailles  */
-    --p-font-size: 1.3rem;
-    --nav-font-size: 1.5rem;
-    --medium-font-size: 1.7rem;
+    --p-font-size: 1.2rem;
+    --nav-font-size: 1.4rem;
+    --medium-font-size: 1.6rem;
     --subtitle-font-size: 1.8rem;
     --title-font-size: 2rem;
 
     /* tailles tel */
-    --title-mb: 1.8rem;
-    --subtitle-mb: 1.6rem;
-    --medium-mb: 1.4rem;
-    --p-mb: 1.2rem;
+    --title-mb: 1.7rem;
+    --subtitle-mb: 1.5rem;
+    --medium-mb: 1.3rem;
+    --p-mb: 1rem;
 
     --title-font-weight: 500;
     --semi-bold: 600;
 
-    --border-radius: 15px;
+    --border-radius: 5px;
 
     /* img  */
     --main-img-size: 200px;
@@ -87,7 +84,6 @@
     --big-padding: 50px;
     --main-padding: 20px;
     --small-padding: 5px;
-    --footer-padding: 250px;
 
     --btn-padding: 0.5rem 1.5rem;
 

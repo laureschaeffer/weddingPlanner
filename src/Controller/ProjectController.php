@@ -407,7 +407,7 @@ class ProjectController extends AbstractController
 
         $quotation = new Quotation();
         $quotation->setProject($project);
-        $quotationNumber = "DEV_" . $this->uniqueIdService->generateUniqueId(); //crée un nom unique aléatoire
+        $quotationNumber = "DEV_" . $this->uniqueIdService->generateUniqueId(); //crée un nom unique
         $quotation->setQuotationNumber($quotationNumber);
 
         $this->entityManager->persist($quotation); //prepare
@@ -444,6 +444,7 @@ class ProjectController extends AbstractController
 
     }
 
+    //envoie un mail au client, factorisation de la fonction createDevis
     public function sendMailToClient($emailContact, $project, $mailer){
         $email = (new TemplatedEmail())
         ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))

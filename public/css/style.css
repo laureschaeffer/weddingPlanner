@@ -67,7 +67,7 @@
     --title-mb: 1.7rem;
     --subtitle-mb: 1.5rem;
     --medium-mb: 1.3rem;
-    --p-mb: 1.1rem;
+    --p-mb: 1rem;
 
     --title-font-weight: 500;
     --semi-bold: 600;
@@ -155,7 +155,7 @@ p{
 
 textarea{
     width: 100%;
-    min-height: 200px;
+    min-height: 170px;
     font-size: var(--p-font-size);
     font-family: var(--main-font);
 }
@@ -360,10 +360,7 @@ header{
 /* ----------------footer */
 footer{
     background-color: var(--footer-color);
-    width: 100%;
-
-    /* position: fixed; */
-    /* bottom: 0; */
+    padding: 15px 5px;
 
     li{
         list-style: none;
@@ -1021,30 +1018,31 @@ small{
 
 /* ===================================================================================PRESTATION===================================================================== */
 
-#prestation-intro img{
+/* #prestation-intro img{
     width: 80%;
-}
+} */
 
 #prestation-intro p{
-    padding: 0 var(--escape-padding);
+    padding: var(--escape-padding);
 }
 
 .prestation-card img{
     width: 300px;
 }
 
-#prestation figure{
+/* #prestation figure{
     display: flex;
     justify-content: center;
     margin-bottom: var(--big-padding);
-}
+} */
 
 
 .prestation-card{
     display: flex;
     align-items: center;
-    margin: var(--big-padding) 0;
-    /* padding: 0 var(--escape-padding); */
+    margin: auto;
+    padding: 50px 0;
+    width: 70%;
 }
 
 .prestation-card-main{
@@ -1065,14 +1063,11 @@ small{
         background-color: #05060f0a;
     }
     
-    #project_description{
-        height: 50px;
-    }
 
     /* pour le formulaire de contact  */
     textarea {
         border-radius: 15px;
-        padding: 0 10px;
+        padding: 10px;
         border: 2px solid transparent;
         background-color: #05060f0a;
         transition: border-color .3s cubic-bezier(.25,.01,.25,1) 0s, color .3s cubic-bezier(.25,.01,.25,1) 0s,background .2s cubic-bezier(.25,.01,.25,1) 0s;
@@ -1235,13 +1230,11 @@ small{
 /* google maps frame  */
 
 .google-maps{
-    display: flex;
-    justify-content: center;
     margin-top: var(--big-padding);
 }
 
 .google-maps iframe{
-    width: 80%;
+    width: 100%;
     filter: brightness(80%);
 }
 
@@ -1452,7 +1445,7 @@ small{
         display: initial;
         text-align: center;
     }
-    nav{
+    #nav{
         display: none;
     }
 
@@ -1529,7 +1522,7 @@ small{
     }
 
     #home-presentation{
-        gap: var(--padding-tel);
+        gap: 40px;
     }
 
     .home-prestation-card{
@@ -1603,6 +1596,11 @@ small{
 
         padding: 1rem 0;
         gap: 1rem;
+    }
+    
+    /* =======================================================================FOOTER======================================================================= */
+    footer li{
+        font-size: var(--p-mb);
     }
 
 }

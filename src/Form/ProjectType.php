@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ProjectType extends AbstractType
 {
@@ -60,7 +61,7 @@ class ProjectType extends AbstractType
                 ],
                 'label' => 'Nombre d\'invités'
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'row_attr' => [
                     'class' => 'form-col'
                 ],

@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   KEY `IDX_E00CEDDEB83297E7` (`reservation_id`),
   CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.booking : ~6 rows (environ)
 DELETE FROM `booking`;
@@ -98,7 +98,8 @@ INSERT INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(20, 2, 22, 2),
 	(22, 1, 19, 2),
 	(23, 2, 19, 1),
-	(24, 3, 24, 1);
+	(24, 3, 24, 1),
+	(25, 2, 24, 2);
 
 -- Listage de la structure de table weddingplanner. budget
 CREATE TABLE IF NOT EXISTS `budget` (
@@ -143,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.comment : ~6 rows (environ)
+-- Listage des données de la table weddingplanner.comment : ~8 rows (environ)
 DELETE FROM `comment`;
 INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
@@ -232,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `note` (
   `id` int NOT NULL AUTO_INCREMENT,
   `project_id` int NOT NULL,
   `user_id` int NOT NULL,
-  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_post` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_CFBDFA14A76ED395` (`user_id`),
@@ -241,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `note` (
   CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.note : ~1 rows (environ)
+-- Listage des données de la table weddingplanner.note : ~0 rows (environ)
 DELETE FROM `note`;
 INSERT INTO `note` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18');
@@ -261,9 +262,9 @@ CREATE TABLE IF NOT EXISTS `prestation` (
 -- Listage des données de la table weddingplanner.prestation : ~3 rows (environ)
 DELETE FROM `prestation`;
 INSERT INTO `prestation` (`id`, `title`, `subtitle`, `description`, `url_picture`, `alt_picture`, `price`) VALUES
-	(1, 'Emeraude expérience', 'sous-titre', 'Laissez-nous prendre en charge chaque détail de votre mariage avec notre service d\'organisation complète. De la conception initiale à l\'exécution finale, nous nous occupons de tout : gestion du budget, sélection des fournisseurs, planification de la cérémonie et de la réception, coordination le jour J, et bien plus encore. Vous pourrez vous détendre et profiter de chaque instant, sachant que votre mariage est entre les mains d\'experts passionnés.', 'img/creation/mariage/pexels-punchbrandstock-1244627.jpg', 'formule emeraude expérience', 50000),
-	(2, 'Coordination du jour J', 'sous-titre', 'Pour les couples qui ont déjà tout planifié mais qui souhaitent une assistance professionnelle le jour de leur mariage, notre service de coordination du jour J est idéal. Nous nous assurerons que tout se déroule sans accroc, en gérant la logistique et en supervisant les fournisseurs. Vous pourrez vous concentrer sur vos moments de bonheur et laisser notre équipe s\'occuper du reste.', 'img/stocksnap_A7S8U2WAMN.jpg', 'formule coordination du jour J', 10000),
-	(3, 'Un mariage intime', 'sous-titre', 'Pour ceux qui souhaitent une célébration plus petite et intime, notre service d\'organisation de mariages intimes est parfait. Nous nous spécialisons dans la création de mariages chaleureux et personnels, en mettant l\'accent sur des expériences significatives pour vous et vos proches. Que ce soit une cérémonie en petit comité dans un jardin ou un dîner élégant dans un lieu exclusif, nous ferons en sorte que chaque détail soit parfait.', 'img/pexels-trungnguyenphotog-2959192.jpg', 'formule un mariage intime', 20000);
+	(1, 'Emeraude expérience', 'sous-titre', 'Laissez-nous prendre en charge chaque détail de votre mariage avec notre service d\'organisation complète. De la conception initiale à l\'exécution finale, nous nous occupons de tout : gestion du budget, sélection des fournisseurs, planification de la cérémonie et de la réception, coordination le jour J, et bien plus encore. Vous pourrez vous détendre et profiter de chaque instant, sachant que votre mariage est entre les mains d\'experts passionnés.', 'img/prestation/pexels-solliefoto-313707.webp', 'formule emeraude expérience', 50000),
+	(2, 'Coordination du jour J', 'sous-titre', 'Pour les couples qui ont déjà tout planifié mais qui souhaitent une assistance professionnelle le jour de leur mariage, notre service de coordination du jour J est idéal. Nous nous assurerons que tout se déroule sans accroc, en gérant la logistique et en supervisant les fournisseurs. Vous pourrez vous concentrer sur vos moments de bonheur et laisser notre équipe s\'occuper du reste.', 'img/prestation/pexels-jeremy-wong-382920-1082024.webp', 'formule coordination du jour J', 10000),
+	(3, 'Un mariage intime', 'sous-titre', 'Pour ceux qui souhaitent une célébration plus petite et intime, notre service d\'organisation de mariages intimes est parfait. Nous nous spécialisons dans la création de mariages chaleureux et personnels, en mettant l\'accent sur des expériences significatives pour vous et vos proches. Que ce soit une cérémonie en petit comité dans un jardin ou un dîner élégant dans un lieu exclusif, nous ferons en sorte que chaque détail soit parfait.', 'img/prestation/pexels-photo-1161372.webp', 'formule un mariage intime', 20000);
 
 -- Listage de la structure de table weddingplanner. product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -381,7 +382,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~0 rows (environ)
 DELETE FROM `reservation`;
 INSERT INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, '2024-06-07', 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
