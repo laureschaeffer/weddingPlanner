@@ -430,8 +430,7 @@ class ProjectController extends AbstractController
         $domPdf = $this->pdfService->showPdf($html);
         
         $uniqueId = $this->uniqueIdService->generateUniqueId();
-        // génère un nom de fichier unique
-        $filename = 'devis_' . $uniqueId . '.pdf';
+        $filename = 'devis_' . $uniqueId . '.pdf'; // génère un nom de fichier unique
         
         // chemin complet
         $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/devis/' . $filename;

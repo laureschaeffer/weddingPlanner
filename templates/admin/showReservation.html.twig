@@ -79,7 +79,10 @@
             <p><a href="{{path('change_commande_picked', {'id': reservation.id})}}">Commande récupérée</a></p>
         {% endif %}
         
-        <p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
+        {% if reservation.isPicked == false %}
+            <p><a href="{{path('edit_commande', {'id': reservation.id})}}">Modifier</a></p>
+            
+        {% endif %}
 
     </div>
 
