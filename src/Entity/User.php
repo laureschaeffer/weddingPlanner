@@ -62,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Appointment>
      */
     #[ORM\OneToMany(targetEntity: Appointment::class, mappedBy: 'User')]
+    #[ORM\OrderBy(["dateStart" => "DESC"])] //rajout d'un order by à la collection
     private Collection $appointments;
 
     /**

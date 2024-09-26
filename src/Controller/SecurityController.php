@@ -143,7 +143,7 @@ class SecurityController extends AbstractController
 
         //----------------entité USER----------------
         $user->setPseudo(hash('sha224', $user->getPseudo()));
-        // $user->setEmail(hash('sha224', $user->getEmail()));
+        $user->setEmail(hash('sha224', $user->getEmail()));
         $user->setRoles(["ROLE_SUPPRIME"]);
         $user->setGoogleUser(false);
 
