@@ -36,6 +36,13 @@
         </button>
     </form>
 
+    {# <nav id="nav-profil" aria-label="seconde nav"></nav>
+        {{ app.user.projects is empty ? '' : "<span class='open-projet'>Projet</span>"}}
+        {{ app.user.reservations is empty ? '' : "<span class='open-reservation'>Commande</span>"}}
+        <span class="open-rendezvous">Rendez-vous</span>
+        <span class="open-parametre">Paramètres</span>
+    </nav> #}
+
     <nav id="nav-profil" aria-label="seconde nav">
         {% if app.user.projects %}
             <span class="open-projet">Projet</span> 
@@ -48,9 +55,10 @@
     </nav>
         {# *****************************************************historique du suivi de projet***************************************************** #}
     
-    {% if app.user.projects is empty %}
-    {% else %}
-        <div id="profil-projet">
+    <div id="profil-projet">
+        {% if app.user.projects is empty %}
+        <p>Section vide</p>
+        {% else %}
 
             <h2>Rappel de votre projet</h2>
             
@@ -184,15 +192,15 @@
                     
             {% endfor %}
             
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
     
     {# *****************************************************historique de réservation/commande***************************************************** #}
     
-    {% if app.user.reservations is empty %}
-    
+    <div id="profil-reservation">
+        {% if app.user.reservations is empty %}
+            <p>Section vide</p>
         {% else %}
-        <div id="profil-reservation">
     
             <h2>Historique de réservation de commande</h2>
             {% for reservation in app.user.reservations %}
@@ -243,9 +251,8 @@
             <div class="google-maps">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5282.264677394042!2d7.735457376853546!3d48.549857622368755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4796c9855298939b%3A0x5702ac1dacd1a723!2s14%20Rue%20du%20Rh%C3%B4ne%2C%2067100%20Strasbourg!5e0!3m2!1sfr!2sfr!4v1727160110901!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
-    
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
     
     
 
@@ -260,8 +267,7 @@
             <p><b>A venir</b></p>
             {% for appointment in app.user.appointments %}
                 {# rdv a venir  #}
-                {% if appointment.dateEnd > "now" %}
-
+                {% if appointment.dateEnd|date('U') > "now"|date('U') %}
                     <div class="rdv-card">
                         <div class="rdv-card-svg">
                             <svg width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="8" cy="8" r="8" fill="#D2DDD2"></circle> </g></svg>
@@ -279,7 +285,7 @@
             <p><b>Passés</b></p>
             {% for appointment in app.user.appointments %}
                 {# rdv passés  #}
-                {% if appointment.dateEnd < "now" %}
+                {% if appointment.dateEnd|date('U') < "now"|date('U') %}
 
                     <div class="rdv-card">
                         <div class="rdv-card-svg">
@@ -317,7 +323,7 @@
         <p>Supprimer son compte supprimera également toute trace de <b>projet commencé</b> ainsi que les <b>réservations</b> dans la boutique! Pensez à vérifier qu'il n'y a rien en attente.</p>
     
         {# ----suppression compte---- #}
-        <form action="{{ path('delete_profil') }}" class="form-delete" method="post">
+        <form action="{{ path('delete_profil') }}" class="form-delete" method="post" onSubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte? Cette action est définitive')">
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
           >
