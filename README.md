@@ -2,7 +2,22 @@
 
 ![logo](public/img/logo/logo.png)
 
-Application pour une entreprise qui organise des mariages
+Application pour une entreprise qui organise des mariages  
+
+➡️ Site vitrine pour l'entreprise
+➡️ Boutique click & collect
+➡️ Le client démarre un projet via un formulaire de contact
+➡️ Gestion du projet dans le panel admin : ajout de notes, commentaires, prix final, devis
+➡️ Suivi visible par l'utilisateur sur sa page profil
+➡️ Prise de rendez-vous par un utilisateur ou un admin
+
+## Aperçu
+
+![gif](public/img/rendu/weddingplanner.gif)
+**Panel admin**  
+![rendu](public/img/rendu/wp_ad_1.png)
+![rendu](public/img/rendu/wp_ad_2.png)
+![rendu](public/img/rendu/wp_ad_3.gif)
 
 ### Mise en place 
 
