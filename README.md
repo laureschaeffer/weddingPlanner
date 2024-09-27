@@ -4,12 +4,12 @@
 
 Application pour une entreprise qui organise des mariages  
 
-➡️ Site vitrine pour l'entreprise
-➡️ Boutique click & collect
-➡️ Le client démarre un projet via un formulaire de contact
-➡️ Gestion du projet dans le panel admin : ajout de notes, commentaires, prix final, devis
-➡️ Suivi visible par l'utilisateur sur sa page profil
-➡️ Prise de rendez-vous par un utilisateur ou un admin
+➡️ Site vitrine pour l'entreprise  
+➡️ Boutique click & collect  
+➡️ Le client démarre un projet via un formulaire de contact  
+➡️ Gestion du projet dans le panel admin : ajout de notes, commentaires, prix final, devis  
+➡️ Suivi visible par l'utilisateur sur sa page profil  
+➡️ Prise de rendez-vous par un utilisateur ou un admin  
 
 ## Aperçu
 
