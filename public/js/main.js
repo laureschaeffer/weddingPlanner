@@ -8,6 +8,24 @@ const scrollUp = () =>{
 }
 window.addEventListener('scroll', scrollUp)
 
+// ---------------SCROLL REVEAL ANIMATION---------------
+
+const sr=ScrollReveal({
+    origin: 'top',
+    distance: '80px',
+    duration: 2500,
+    delay: 300,
+    reset: true,
+    //  animations repeat 
+})
+
+sr.reveal(`.stat-container`)
+sr.reveal(`#home-prestation`)
+sr.reveal('#home-avis')
+// sr.reveal(`.home__data, .care__list, .contact__img`, {delay: 500})
+// sr.reveal(`.new__card`, {delay: 500, interval: 100})
+// sr.reveal(`.shop__card`, {interval: 100})
+
 //----------------------------------page profil: navbar----------------------------------
 
   // les elements de la nav
