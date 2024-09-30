@@ -1,5 +1,7 @@
 <?php
 
+// ./vendor/bin/phpunit pour tester
+// ./vendor/bin/phpunit --testdox pour avoir un meilleur rendu
 namespace App\Tests\Unit\Entity;
 
 use App\Entity\User;

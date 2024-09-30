@@ -526,6 +526,12 @@ footer p, footer a{
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    transition: var(--hover-transition);
+
+    &:hover{
+        transform: translateY(-30px);
+    }
 }
 
 .service-card figure, .service-card svg{

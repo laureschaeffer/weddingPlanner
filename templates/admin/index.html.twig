@@ -8,21 +8,28 @@
     <h1>Bienvenue sur le pannel admin</h1>
     
     <div id="diag-container">
+      <div class="diag">
         <h2>Etats des projets</h2>
         <div>
           {# renvoie un tableau json avec data-attribute pour chartjs  #}
           <canvas id="diag-etat-projet" data-etat-projet="{{ etatProjets}}"></canvas>
         </div>
+      </div>
 
+      <div class="diag">
         <h2>Projets par mois</h2>
         <div>
           <canvas id="diag-projet-mois" data-projet-mois="{{ projetMois}}"></canvas>
         </div>
-        
+      </div>
+      <div class="diag">
         <h2>Chiffre d'affaire mensuel</h2>
         <div>
           <canvas id="diag-chiffre-affaire" data-chiffre-affaire="{{ caMois }}"></canvas>
         </div>
+      </div>
+
+        
     </div>
 
     <p>Rechercher dans les projets ou les réservations</p>

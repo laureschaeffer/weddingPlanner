@@ -9,7 +9,7 @@ window.onload = () => {
     // paragraphes qui contiendront le titre le user et la date dynamiquement
     let titleModal = document.querySelector('.modalTitle')    
     let userModal = document.querySelector('.modalUser')
-    let dateModal = document.querySelector('.modalDate')
+    // let dateModal = document.querySelector('.modalDate')
     let deleteBtnModal = document.querySelector('.modalDeleteBtn') //btn qui supprimera l'évènement
     
     //form et ses 4 input 
@@ -94,7 +94,7 @@ window.onload = () => {
         titleModal.insertAdjacentHTML("beforeend", infos.event.title)             
         userModal.insertAdjacentHTML("beforeend", infos.event.extendedProps.user) 
         let htmlDate = startFormatDate + " - " + endFormatDate
-        dateModal.insertAdjacentHTML("beforeend",  htmlDate) 
+        // dateModal.insertAdjacentHTML("beforeend",  htmlDate) 
 
         // ferme le modal avec le bouton ou en cliquant ailleurs
         closeShowModal.onclick = () => {
