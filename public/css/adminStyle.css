@@ -240,6 +240,7 @@ header{
 #admin-nav{
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 #nav-icon, header label{
@@ -255,6 +256,7 @@ header{
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.5rem;
 }
 
 #admin-nav a{
@@ -432,10 +434,22 @@ header{
 }
 
 /* ============================================================================TEMOIGNAGE=========================================================== */
-.avis-container{
+
+#temoignages h2{
+    margin: 2rem 0;
+}
+.avis-container, .avis-card{
     display: flex;
     flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.avis-container{
     gap: 1.5rem;
+}
+
+.avis-card{
+    gap: 0.5rem;
 }
 
 /* ============================================================================PROJET=========================================================== */

@@ -41,7 +41,7 @@ class Project
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateReceipt = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?bool $isContacted = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]

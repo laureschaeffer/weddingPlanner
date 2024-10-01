@@ -637,6 +637,7 @@ footer p, footer a{
     }
     li{
         list-style: none;
+        padding-bottom: 0.5rem;
     }
 
     h2{
@@ -1563,6 +1564,11 @@ small{
     .footer-align{
         flex-direction: column;
         gap: 30px;
+    }
+
+    /* *********** legal *********** */
+    #legal ul{
+        font-size: var(--p-mb);
     }
 
     /* =======================================================================PORTFOLIO======================================================================= */

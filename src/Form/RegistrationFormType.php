@@ -48,7 +48,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Entrez un mot de passe',
                     ]),
                     new Regex([
-                        'pattern' => ('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{5,}$/'),
+                        'pattern' => ('/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/'),
                         'message' => 'Le mot de passe devrait contenir au moins une lettre majuscule, un chiffre et un caractère spécial'
                     ]),  
                     new Length([

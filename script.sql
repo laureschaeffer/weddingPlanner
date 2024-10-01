@@ -28,10 +28,10 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `title` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_FE38F844A76ED395` (`user_id`),
-  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.appointment : ~5 rows (environ)
+-- Listage des données de la table weddingplanner.appointment : ~10 rows (environ)
 DELETE FROM `appointment`;
 INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) VALUES
 	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'lorem ipsum'),
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.booking : ~5 rows (environ)
+-- Listage des données de la table weddingplanner.booking : ~7 rows (environ)
 DELETE FROM `booking`;
 INSERT INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(18, 2, 20, 1),
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.comment : ~6 rows (environ)
+-- Listage des données de la table weddingplanner.comment : ~8 rows (environ)
 DELETE FROM `comment`;
 INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
@@ -240,12 +240,13 @@ CREATE TABLE IF NOT EXISTS `note` (
   KEY `IDX_CFBDFA14166D1F9C` (`project_id`),
   CONSTRAINT `FK_CFBDFA14166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.note : ~0 rows (environ)
 DELETE FROM `note`;
 INSERT INTO `note` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
-	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18');
+	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18'),
+	(2, 8, 2, 'msg ajouté', '2024-10-01 10:44:10');
 
 -- Listage de la structure de table weddingplanner. prestation
 CREATE TABLE IF NOT EXISTS `prestation` (
@@ -292,8 +293,8 @@ INSERT INTO `product` (`id`, `batch_id`, `name`, `price`, `description`, `url_pi
 CREATE TABLE IF NOT EXISTS `project` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
-  `destination_id` int DEFAULT NULL,
-  `budget_id` int DEFAULT NULL,
+  `destination_id` int NOT NULL,
+  `budget_id` int NOT NULL,
   `state_id` int DEFAULT NULL,
   `firstname` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `surname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -303,7 +304,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `nb_guest` int NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_receipt` datetime DEFAULT NULL,
-  `is_contacted` tinyint(1) DEFAULT NULL,
+  `is_contacted` tinyint(1) NOT NULL,
   `final_price` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_2FB3D0EE816C6140` (`destination_id`),
@@ -316,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EEA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~6 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~7 rows (environ)
 DELETE FROM `project`;
 INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, NULL, 1, 1, 4, '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '394d61e52f9d85d456d245c974dd8fa9dd494c485140f45862686934', '42834e1ca1bf978b8d2ffa346c8ecdcbac6566b43dc4cd5672205d8d', '0e3f86e3e69988b18983f88c524e614004dc92c45cf5b0173c88a594', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000),
@@ -338,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
   CONSTRAINT `FK_496EF49F9E45C554` FOREIGN KEY (`prestation_id`) REFERENCES `prestation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project_prestation : ~3 rows (environ)
+-- Listage des données de la table weddingplanner.project_prestation : ~4 rows (environ)
 DELETE FROM `project_prestation`;
 INSERT INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1),
@@ -382,7 +383,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~3 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~4 rows (environ)
 DELETE FROM `reservation`;
 INSERT INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `date_picking`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, '2024-06-07', 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
