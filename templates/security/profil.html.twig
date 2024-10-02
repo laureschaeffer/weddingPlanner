@@ -148,15 +148,19 @@
                 {# ----------devis----------  #}
                 {% for quot in project.quotations %}
                     {# si le devis a été accepté, afficher la facture  #}
-                    {% if quot.isAccepted == true %}
+                    {% if quot.isAccepted %}
                         <a href="{{path('show_facture', {'id': project.id})}}" target="_blank" class="btn-devis-facture">
                             Afficher la facture
                         </a>
                         <p>Si vous ne pouvez pas visualiser la facture en pdf, ouvrez le document html <a href="{{path('show_facture_html', {'id': project.id})}}" target="_blank">ici</a></p>
 
-                        {# si l'état n'a pas encore été défini  #}
-                        {% elseif quot.isAccepted  == null %}
-                        <p>Un devis a été généré par l'entreprise!</p>
+                        {# si le devis a été refusé  #}
+                    {% elseif quot.isAccepted  is same as (false) %} 
+                        <p>Le devis a été refusé, projet cloturé.</p>
+                        
+                        {# si le devis n'a pas encore d'état  #}
+                        {% elseif quot.isAccepted  is same as (null) %} 
+                        <p><b>Un devis a été généré par l'entreprise!</b></p>
                         <a href="{{path('show_devis', {'id': quot.id})}}" target="_blank" class="btn-devis-facture">
                             Afficher le devis
                         </a>
@@ -183,11 +187,7 @@
                                 <input name="firstname" type="text" id="firstname" class="hide-robot">
                                 <button type="submit" name="submit" class="accepte-devis">Accepter le devis</button>
                             </form>
-
-                            {# <a href="{{path('refuse_devis', {id: quot.id})}}" class="refuse-devis">Refuser le devis</a> #}
-                            {# <a href="{{path('accepte_devis', {id: quot.id})}}" class="accepte-devis">Accepter le devis</a> #}
                         </div>
-                        {% else %}
                     {% endif %}
                     
                 {% endfor %}            

@@ -2,18 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Devis</title>
 </head>
 <body>
     <style>
       body{
-        font-family: "Cormorant Garamond";
-        font-size: 18px;
+        font-family: "Nanum Gothic";
+        font-size: 16px;
       }
         h1{
             text-align: center;
@@ -32,14 +28,26 @@
           img{
             text-align: center;
           }
+          thead tr{
+            background-color: #D2DDD2;
+          }
     </style>
-    <h1>Devis pour projet de mariage</h1>
+    <h1>Devis final pour projet de mariage</h1>
+    <table>
+      <tr>
+        <td>Devis établi le (date) <br>Numéro de devis: (numéro de devis)</td>
+        <td><img src="data:image/png;base64,{{ imageData }}" width="100px" height="100px" alt="ceremonie couture logo"></td>
+      </tr>
+    </table>
 
     <table>
+      <thead>
         <tr>
           <th>Entreprise</th>
           <th class="th-right">Client</th>
         </tr>
+      </thead>
+      <tbody>
         <tr>
           <td>Cérémonie Couture</td>
           <td class="th-right">{{project.firstname}} {{project.surname}}</td>
@@ -57,24 +65,27 @@
           {% endif %}
           <td class="th-right">{{project.email}}</td>
         </tr>
+
+      </tbody>
       </table>
       <br><hr>
 
+    <h2>Description du projet: </h2>
     <p><b>Date de l'évènement: {{project.dateEvent | date("d.m.Y")}} </b></p>
     <p>Nombre d'invités: {{project.nbGuest}} </p>
     <p>Destination: {{project.destination}} </p>
 
-    <h3>Description du projet: </h3>
-    <p>{{project.description}}</p>
 
     <h3>Prestations choisies:</h3>
     {% for prestation in project.prestations %}
-        <p>{{prestation}}</p>
+        <p>{{prestation}} (à partir de {{prestation.price |number_format(0, ',', ' ') }} €)</p>
     {% endfor %}
 
-    {% if project.finalPrice %}
-      <p><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
-    {% endif %}
+    <h3>Budget initial:</h3>
+    <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{ project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
+
+    
+    <p style="font-size: large;"><b>Prix fixé: {{project.finalPrice |number_format(0, ',', ' ') }} € </b></p>
     
     <h3>Commentaires</h3>
     {% for comment in project.comments %}
@@ -83,10 +94,6 @@
         <p>Aucun commentaire ajouté</p>
     {% endfor %}
 
-
-
-    <hr>
-    <img src="data:image/png;base64,{{ imageData }}" width="250px" height="250px" alt="ceremonie couture logo">
 
 
 </body>

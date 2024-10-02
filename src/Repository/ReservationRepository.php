@@ -66,10 +66,10 @@ class ReservationRepository extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('r')
             ->from('App\Entity\Reservation', 'r')
-            ->where('r.referenceOrder LIKE %:word% OR r.firstname LIKE %:word% OR r.surname LIKE %:word% OR r.telephone LIKE %:word%')
-            ->setParameter('word', $word);
+            ->where('r.referenceOrder LIKE :word OR r.firstname LIKE :word OR r.surname LIKE :word OR r.telephone LIKE :word')
+            ->setParameter('word', '%'.$word.'%');
 
-        $query = $sub->getQuery();
+        $query = $qb->getQuery();
         return $query->getResult();
     }
 

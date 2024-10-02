@@ -84,10 +84,10 @@ class ProjectRepository extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('p')
             ->from('App\Entity\Project', 'p')
-            ->where('p.firstname LIKE %:word% OR p.surname LIKE %:word% OR p.email LIKE %:word% OR p.telephone LIKE %:word%')
-            ->setParameter('word', $word);
+            ->where('p.firstname LIKE :word OR p.surname LIKE :word OR p.email LIKE :word OR p.telephone LIKE :word')
+            ->setParameter('word', '%'.$word.'%');
 
-        $query = $sub->getQuery();
+        $query = $qb->getQuery();
         return $query->getResult();
     }
 
