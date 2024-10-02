@@ -90,7 +90,6 @@
                             <p> <small>{{project.nbGuest}} invités</small></p>
                         </div>
                         <div class="projet-entete-flex">
-                            <p>Coordonées renseignées</p>
                             <p> {{project.telephone }} </p>
                             {# s'il y a email c'est que l'user prefere etre contacté par celui donné dans le form plutot que celui du compte utilisateur #}
                             {% if project.email %}
@@ -100,25 +99,28 @@
                             {% endif %}
                         </div>
                     </div>
+
+                    <div class="projet-body">
+                        {# -----prestations-----  #}
+                        <h4>Prestation(s) envisagée(s):</h4>
+                        {% for presta in project.prestations %}
+                            <p>{{presta}}</p>
+                        {% endfor %}
+                
+                        {# -----budget-----  #}
+                        <h4>Budget: </h4>
+                        <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
+                
+                        {# -----prix fixé-----  #}
+                        {% if project.finalPrice %}
+                            <h4>Prix fixé: </h4>
+                            <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
+                        {% endif %}
+                
+                        {# -----description-----  #}
+                        <p> {{project.description}} </p>
+                    </div>
             
-                    {# -----prestations-----  #}
-                    <h4>Prestation(s) envisagée(s):</h4>
-                    {% for presta in project.prestations %}
-                        <p>{{presta}}</p>
-                    {% endfor %}
-            
-                    {# -----budget-----  #}
-                    <h4>Budget: </h4>
-                    <p>{{project.budget.minPrice |number_format(0, ',', ' ')}} - {{project.budget.maxPrice |number_format(0, ',', ' ')}} €</p>
-            
-                    {# -----prix fixé-----  #}
-                    {% if project.finalPrice %}
-                        <h4>Prix fixé: </h4>
-                        <p> {{project.finalPrice |number_format(0, ',', ' ') }} € </p>
-                    {% endif %}
-            
-                    {# -----description-----  #}
-                    <p> {{project.description}} </p>
             
                 </div>
             

@@ -481,7 +481,7 @@ class ProjectController extends AbstractController
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         }
         //----enregistre le devis (quotation) dans la bdd
-        $quotation = $this->createQuotationBdd($project, $this->entityManager);
+        $quotation = $this->createQuotationBdd($project);
 
         //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
         $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);

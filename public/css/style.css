@@ -746,6 +746,22 @@ footer p, footer a{
 
   }
 
+  /* ******************************************requete reinitilisation mdp****************************************** */
+
+  .request-password form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #check-email{
+    padding: 5rem;
+
+    p{
+        padding: 1rem 0;
+    }
+  }
+
 /* =================================================================================BOUTIQUE========================================================================= */
 
 .icon-shop{
@@ -1270,6 +1286,12 @@ small{
     display: flex;
     justify-content: space-between;
     padding: var(--main-padding) 0;
+}
+
+.projet-entete-flex, .projet-body{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 #projet-suivis{

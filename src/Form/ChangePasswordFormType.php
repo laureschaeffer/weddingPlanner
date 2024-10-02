@@ -24,6 +24,9 @@ class ChangePasswordFormType extends AbstractType
                     'attr' => [
                         'autocomplete' => 'nouveau-mot-de-passe',
                     ],
+                    'row_attr' => [
+                    'class' => 'form-col'
+                ]
                 ],
                 'first_options' => [
                     'constraints' => [
@@ -42,9 +45,9 @@ class ChangePasswordFormType extends AbstractType
                         ]),
                         // new PasswordStrength(),
                         // notcompromised: valide que le mot de passe donné n'a pas été compromis, en vérifiant qu'il n'est inclus dans aucune des violations de données publiques suivies par haveibeenpwned.com
-                        new NotCompromisedPassword([
-                            'message' => "Ce mot de passe a été divulgué lors d'une violation de données, il ne doit pas être utilisé. Veuillez utiliser un autre mot de passe"
-                        ]),
+                        // new NotCompromisedPassword([
+                        //     'message' => "Ce mot de passe a été divulgué lors d'une violation de données, il ne doit pas être utilisé. Veuillez utiliser un autre mot de passe"
+                        // ]),
                     ],
                     'label' => 'Nouveau mot de passe',
                 ],

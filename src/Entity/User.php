@@ -69,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Project>
      */
     #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'user')]
+    #[ORM\OrderBy(["dateReceipt" => "DESC"])]
     private Collection $projects;
 
     /**

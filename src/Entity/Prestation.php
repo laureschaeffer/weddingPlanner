@@ -19,8 +19,6 @@ class Prestation
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $subtitle = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -62,17 +60,6 @@ class Prestation
         return $this;
     }
 
-    public function getSubtitle(): ?string
-    {
-        return $this->subtitle;
-    }
-
-    public function setSubtitle(string $subtitle): static
-    {
-        $this->subtitle = $subtitle;
-
-        return $this;
-    }
 
     public function getDescription(): ?string
     {
