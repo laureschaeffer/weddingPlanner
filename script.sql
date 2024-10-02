@@ -31,18 +31,18 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.appointment : ~10 rows (environ)
+-- Listage des données de la table weddingplanner.appointment : ~9 rows (environ)
 DELETE FROM `appointment`;
 INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) VALUES
-	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'lorem ipsum'),
-	(3, 2, '2024-09-13 10:00:00', '2024-09-13 12:30:00', 'nouvel evenement'),
-	(11, 2, '2024-09-13 14:00:00', '2024-09-13 15:00:00', 'contact'),
-	(14, 1, '2024-09-10 15:00:00', '2024-09-10 16:00:00', 'nouvel evenement'),
-	(15, 1, '2024-09-12 12:30:00', '2024-09-12 13:30:00', 'nouvel evenement'),
-	(19, 2, '2024-09-12 08:30:00', '2024-09-12 10:00:00', 'test'),
-	(20, 2, '2024-09-12 11:00:00', '2024-09-12 12:00:00', 'test direct'),
-	(21, 2, '2024-09-14 12:30:00', '2024-09-14 14:00:00', 'pas dispo'),
-	(23, 2, '2024-09-14 11:00:00', '2024-09-14 12:00:00', 'teds');
+	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'Premier contact'),
+	(3, 2, '2024-09-13 10:00:00', '2024-09-13 12:30:00', 'Première prise de contact'),
+	(11, 2, '2024-09-13 14:00:00', '2024-09-13 15:00:00', 'Deuxième prise de contact, confirmation de projet'),
+	(14, 1, '2024-09-10 15:00:00', '2024-09-10 16:00:00', 'Premier contact'),
+	(15, 1, '2024-09-12 12:30:00', '2024-09-12 13:30:00', 'Confirmation de projet et modification du budget'),
+	(19, 2, '2024-09-12 08:30:00', '2024-09-12 10:00:00', 'Confirmation du thème et des exigences'),
+	(20, 2, '2024-09-12 11:00:00', '2024-09-12 12:00:00', 'Rendez-vous choix prestataire'),
+	(21, 2, '2024-09-14 12:30:00', '2024-09-14 14:00:00', 'Confirmation prestataire'),
+	(23, 2, '2024-09-14 11:00:00', '2024-09-14 12:00:00', 'modification du thème');
 
 -- Listage de la structure de table weddingplanner. batch
 CREATE TABLE IF NOT EXISTS `batch` (
@@ -69,13 +69,14 @@ CREATE TABLE IF NOT EXISTS `bill` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_7A2119E3B4EA4E60` (`quotation_id`),
   CONSTRAINT `FK_7A2119E3B4EA4E60` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.bill : ~2 rows (environ)
 DELETE FROM `bill`;
 INSERT INTO `bill` (`id`, `quotation_id`, `bill_number`, `date_creation`) VALUES
 	(1, 2, 'FACT_172355934655', '2024-08-13'),
-	(3, 4, 'FACT_172406086148', '2024-08-19');
+	(3, 4, 'FACT_172406086148', '2024-08-19'),
+	(7, 8, 'FACT_172787796285', '2024-10-02');
 
 -- Listage de la structure de table weddingplanner. booking
 CREATE TABLE IF NOT EXISTS `booking` (
@@ -142,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `IDX_9474526CA76ED395` (`user_id`),
   CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.comment : ~8 rows (environ)
 DELETE FROM `comment`;
@@ -150,11 +151,13 @@ INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VA
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
 	(2, 1, 2, 'Budget abordé: plutôt 10 000€ maximum!', '2024-06-05 12:17:03'),
 	(4, 1, 3, 'test', '2024-06-06 12:46:21'),
-	(5, 1, 2, 'test pour Kévin', '2024-07-29 11:41:10'),
+	(5, 1, 2, 'Commentaire ajouté', '2024-07-29 11:41:10'),
 	(6, 3, 2, 'En lien avec', '2024-07-31 13:50:51'),
 	(8, 4, 7, 'Commentaire ajouté en bdd', '2024-08-19 11:36:36'),
 	(9, 8, 2, 'personne à contacter le 20/09!', '2024-09-17 08:51:24'),
-	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52');
+	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52'),
+	(11, 9, 2, 'Thème abordé: plutôt minimaliste', '2024-10-02 14:21:47'),
+	(12, 9, 2, 'Rendez-vous le 03/10 pour confirmer le projet', '2024-10-02 15:34:28');
 
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
@@ -240,19 +243,19 @@ CREATE TABLE IF NOT EXISTS `note` (
   KEY `IDX_CFBDFA14166D1F9C` (`project_id`),
   CONSTRAINT `FK_CFBDFA14166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.note : ~0 rows (environ)
+-- Listage des données de la table weddingplanner.note : ~2 rows (environ)
 DELETE FROM `note`;
 INSERT INTO `note` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18'),
-	(2, 8, 2, 'msg ajouté', '2024-10-01 10:44:10');
+	(2, 8, 2, 'msg ajouté', '2024-10-01 10:44:10'),
+	(3, 9, 2, 'Thème pinterest minimaliste à explorer', '2024-10-02 14:22:05');
 
 -- Listage de la structure de table weddingplanner. prestation
 CREATE TABLE IF NOT EXISTS `prestation` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subtitle` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `url_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `alt_picture` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -262,10 +265,10 @@ CREATE TABLE IF NOT EXISTS `prestation` (
 
 -- Listage des données de la table weddingplanner.prestation : ~3 rows (environ)
 DELETE FROM `prestation`;
-INSERT INTO `prestation` (`id`, `title`, `subtitle`, `description`, `url_picture`, `alt_picture`, `price`) VALUES
-	(1, 'Emeraude expérience', 'sous-titre', 'Laissez-nous prendre en charge chaque détail de votre mariage avec notre service d\'organisation complète. De la conception initiale à l\'exécution finale, nous nous occupons de tout : gestion du budget, sélection des fournisseurs, planification de la cérémonie et de la réception, coordination le jour J, et bien plus encore. Vous pourrez vous détendre et profiter de chaque instant, sachant que votre mariage est entre les mains d\'experts passionnés.', 'img/prestation/pexels-solliefoto-313707.webp', 'formule emeraude expérience', 50000),
-	(2, 'Coordination du jour J', 'sous-titre', 'Pour les couples qui ont déjà tout planifié mais qui souhaitent une assistance professionnelle le jour de leur mariage, notre service de coordination du jour J est idéal. Nous nous assurerons que tout se déroule sans accroc, en gérant la logistique et en supervisant les fournisseurs. Vous pourrez vous concentrer sur vos moments de bonheur et laisser notre équipe s\'occuper du reste.', 'img/prestation/pexels-jeremy-wong-382920-1082024.webp', 'formule coordination du jour J', 2000),
-	(3, 'Un mariage intime', 'sous-titre', 'Pour ceux qui souhaitent une célébration plus petite et intime, notre service d\'organisation de mariages intimes est parfait. Nous nous spécialisons dans la création de mariages chaleureux et personnels, en mettant l\'accent sur des expériences significatives pour vous et vos proches. Que ce soit une cérémonie en petit comité dans un jardin ou un dîner élégant dans un lieu exclusif, nous ferons en sorte que chaque détail soit parfait.', 'img/prestation/pexels-photo-1161372.webp', 'formule un mariage intime', 5000);
+INSERT INTO `prestation` (`id`, `title`, `description`, `url_picture`, `alt_picture`, `price`) VALUES
+	(1, 'Emeraude expérience', 'Laissez-nous prendre en charge chaque détail de votre mariage avec notre service d\'organisation complète. De la conception initiale à l\'exécution finale, nous nous occupons de tout : gestion du budget, sélection des fournisseurs, planification de la cérémonie et de la réception, coordination le jour J, et bien plus encore. Vous pourrez vous détendre et profiter de chaque instant, sachant que votre mariage est entre les mains d\'experts passionnés.', 'img/prestation/pexels-solliefoto-313707.webp', 'formule emeraude expérience', 50000),
+	(2, 'Coordination du jour J', 'Pour les couples qui ont déjà tout planifié mais qui souhaitent une assistance professionnelle le jour de leur mariage, notre service de coordination du jour J est idéal. Nous nous assurerons que tout se déroule sans accroc, en gérant la logistique et en supervisant les fournisseurs. Vous pourrez vous concentrer sur vos moments de bonheur et laisser notre équipe s\'occuper du reste.', 'img/prestation/pexels-jeremy-wong-382920-1082024.webp', 'formule coordination du jour J', 2000),
+	(3, 'Un mariage intime', 'Pour ceux qui souhaitent une célébration plus petite et intime, notre service d\'organisation de mariages intimes est parfait. Nous nous spécialisons dans la création de mariages chaleureux et personnels, en mettant l\'accent sur des expériences significatives pour vous et vos proches. Que ce soit une cérémonie en petit comité dans un jardin ou un dîner élégant dans un lieu exclusif, nous ferons en sorte que chaque détail soit parfait.', 'img/prestation/pexels-photo-1161372.webp', 'formule un mariage intime', 5000);
 
 -- Listage de la structure de table weddingplanner. product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -315,9 +318,9 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE5D83CC1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`),
   CONSTRAINT `FK_2FB3D0EEA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~7 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~8 rows (environ)
 DELETE FROM `project`;
 INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, NULL, 1, 1, 4, '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '394d61e52f9d85d456d245c974dd8fa9dd494c485140f45862686934', '42834e1ca1bf978b8d2ffa346c8ecdcbac6566b43dc4cd5672205d8d', '0e3f86e3e69988b18983f88c524e614004dc92c45cf5b0173c88a594', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000),
@@ -326,7 +329,8 @@ INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id
 	(5, 7, 2, 3, 3, 'Maria', 'Nomdef', NULL, '0611223344', '2025-07-30 10:00:00', 200, 'projet', '2024-01-30 11:23:53', 1, 40000),
 	(6, 7, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 75000),
 	(7, 4, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 15000),
-	(8, 2, 1, 1, 1, 'Cynthia', 'Nomdef', NULL, '061122334455', '2024-09-11 11:00:00', 10, 'lorem ipsum', '2024-09-10 14:14:51', 0, NULL);
+	(8, 2, 1, 1, 1, 'Cynthia', 'Nomdef', NULL, '061122334455', '2024-09-11 11:00:00', 10, 'lorem ipsum', '2024-09-10 14:14:51', 0, NULL),
+	(9, 2, 1, 1, 3, 'Laure', 'Sc', NULL, '0611223344', '2026-01-01 11:00:00', 50, 'Bonjour j\'aimerai parler de mon projet de mariage!', '2024-10-02 13:33:31', 1, 12000);
 
 -- Listage de la structure de table weddingplanner. project_prestation
 CREATE TABLE IF NOT EXISTS `project_prestation` (
@@ -345,7 +349,8 @@ INSERT INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1),
 	(3, 1),
 	(4, 1),
-	(8, 2);
+	(8, 2),
+	(9, 1);
 
 -- Listage de la structure de table weddingplanner. quotation
 CREATE TABLE IF NOT EXISTS `quotation` (
@@ -357,13 +362,14 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   PRIMARY KEY (`id`),
   KEY `IDX_474A8DB9166D1F9C` (`project_id`),
   CONSTRAINT `FK_474A8DB9166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.quotation : ~2 rows (environ)
+-- Listage des données de la table weddingplanner.quotation : ~3 rows (environ)
 DELETE FROM `quotation`;
 INSERT INTO `quotation` (`id`, `project_id`, `quotation_number`, `date_creation`, `is_accepted`) VALUES
 	(2, 3, '10', '2024-08-02', 1),
-	(4, 4, 'DEV_172406008210', '2024-05-19', 1);
+	(4, 4, 'DEV_172406008210', '2024-05-19', 1),
+	(8, 9, 'DEV_172787778718', '2024-10-02', 1);
 
 -- Listage de la structure de table weddingplanner. reservation
 CREATE TABLE IF NOT EXISTS `reservation` (
@@ -402,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `reset_password_request` (
   PRIMARY KEY (`id`),
   KEY `IDX_7CE748AA76ED395` (`user_id`),
   CONSTRAINT `FK_7CE748AA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.reset_password_request : ~0 rows (environ)
 DELETE FROM `reset_password_request`;
@@ -430,7 +436,7 @@ CREATE TABLE IF NOT EXISTS `testimony` (
   `is_published` tinyint(1) DEFAULT NULL,
   `date_receipt` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.testimony : ~4 rows (environ)
 DELETE FROM `testimony`;
@@ -438,7 +444,8 @@ INSERT INTO `testimony` (`id`, `couple_name`, `description`, `is_published`, `da
 	(1, 'Mr & Mme Nom', 'Nous ne pouvons que chanter les louanges de Cérémonie Couture pour avoir fait de notre mariage un jour absolument parfait. Dès notre première rencontre avec Clara, notre wedding planner, nous avons su que nous étions entre de bonnes mains. Son professionnalisme, sa créativité et son attention aux moindres détails nous ont tout de suite mis en confiance. Clara a su écouter nos souhaits et nos préoccupations, tout en nous guidant avec des suggestions brillantes qui ont vraiment transformé notre vision en réalité. Chaque aspect du mariage, de la décoration florale aux choix musicaux, a été orchestré avec une telle précision que nous n\'avions rien à faire d\'autre que de profiter de notre journée spéciale. Le jour J, tout s\'est déroulé sans accroc. Clara et son équipe ont géré la logistique avec une telle fluidité que nous avons pu nous concentrer entièrement sur nos moments de bonheur, entourés de nos proches. Nous avons reçu d\'innombrables compliments de la part de nos invités sur la beauté et l\'organisation impeccable de notre mariage. Nous sommes immensément reconnaissants à Clara et à toute l\'équipe de Cérémonie Couture pour avoir créé des souvenirs que nous chérirons pour toujours. Nous recommandons vivement leurs services à tous ceux qui souhaitent un mariage parfait et sans stress. Merci infiniment pour tout !', 1, '2024-05-20'),
 	(2, 'Mr & Mme Nomdefamille', 'lorem ipsum', 0, '2024-06-15'),
 	(3, 'mr et mme', 'lorem ipsum', 0, '2024-07-15'),
-	(4, 'Laure et mr', 'nouveau témoignage', 0, '2024-07-31');
+	(4, 'Laure et mr', 'nouveau témoignage', 0, '2024-07-31'),
+	(5, 'Mr et Mme Jean', 'Merci  pour tout', 0, '2024-10-02');
 
 -- Listage de la structure de table weddingplanner. user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -457,7 +464,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 DELETE FROM `user`;
 INSERT INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`, `google_user`) VALUES
 	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0, 0),
-	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0, 0),
+	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$O5qYf44Wjr4gqYzGFceLN.6b0VYcB9VPxfZRKeoSbPIQrI5RHSK.C', 0, 0),
 	(3, 'test@exemple.fr', 'Test', '["ROLE_SUPERADMIN"]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0, 0),
 	(4, 'e5adc1c4d19f1e7508f1a7fa484575e1ffc6a0aa4428af', 'e5adc1c4d19f1e7508f1a7fa484575e1ffc6a0aa4428af9c03e2be48', '["ROLE_SUPPRIME"]', '$2y$13$A16IcbMl8dQ5caZGlGfK1eiciuQlkPBfsI62PBmCJh4hbdTTSrPa.', 0, 0),
 	(7, 'laure.15013@gmail.com', 'laure.15013', '["ROLE_ADMIN"]', 'b1a8919eece6d1c4228b50f72834ca74', 1, 1);
