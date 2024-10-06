@@ -7,11 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: 'user')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'Vous ne pouvez pas utiliser cet e-mail')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -26,6 +27,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(length: 60)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 60)]
     private ?string $pseudo = null;
 
     /**
@@ -225,7 +228,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoleStr(){
         //j'utilise le getter car il permet d'avoir au moins ROLE_USER
         foreach($this->getRoles() as $role){
-            $roleArray []= explode("_", $role); //recupere un tableau avec index 0 "role" et index 1 admin/user/formateur
+            $roleArray []= explode("_", $role); //recupere un tableau avec index 0 "role" et index 1 admin/user
         }
         $result = "";
         foreach($roleArray as $r){

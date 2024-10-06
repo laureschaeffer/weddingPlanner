@@ -1,33 +1,51 @@
 <?php
 
-// ./vendor/bin/phpunit pour tester
-// ./vendor/bin/phpunit --testdox pour avoir un meilleur rendu
+// self::bootKernel() comme on ne fait pas de requetes http, il faut le démarrer manuellement, pour accéder à des services, via un conteneur
+
 namespace App\Tests\Unit\Entity;
 
 use App\Entity\User;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class UserTest extends TestCase
+class UserTest extends KernelTestCase
 {
-    public function testCanGetAndSetData(): void
+    public function getEntity() : User
     {
-        $user = (new User())
+        return (new User)
+        ->setPseudo("pseudo")
         ->setEmail("testunit@test.fr")
-        ->setPseudo("testunit")
         ->setRoles(['ROLE_USER'])
         ->setPassword("...")
         ->setVerified(false)
-        ->setGoogleUser(false)
-        ;
+        ->setGoogleUser(false);
 
-        //assertSame correspond à "==="
-        self::assertSame("testunit@test.fr", $user->getEmail());
-        self::assertSame("testunit", $user->getPseudo());
-        self::assertSame(['ROLE_USER'], $user->getRoles());
-        self::assertSame("...", $user->getPassword());
-        self::assertSame(false, $user->isVerified());
-        self::assertSame(false, $user->getGoogleUser());
     }
 
-    
+    //récupère correctement?
+    public function testEntityIsValid() 
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+
+        $user = $this->getEntity();
+        $errors = $container->get('validator')->validate($user);
+
+        $this->assertCount(0, $errors);
+    }
+
+    //nous informe que le pseudo est invalide?
+    public function testInvalidPseudo(){
+        self::bootKernel();
+        $container = static::getContainer();
+
+        $user = $this->getEntity();
+        $user->setPseudo("");
+
+        $errors = $container->get('validator')->validate($user);
+
+        //on s'attend à 2 erreurs puisque le pseudo ne peut ni etre blanc ni < 2 caractères
+        $this->assertCount(2, $errors);
+    }
+
+
 }
