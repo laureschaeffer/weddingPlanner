@@ -32,11 +32,11 @@
 </div>
 
 {# nav pour retrouver la collection cherchée  #}
-<div id="nav-batch">
+<nav id="nav-batch" aria-label="second-nav">
     {% for col in collections %}
         <a href="#{{col.id}}">{{col}}</a>
     {% endfor %}
-</div>
+</nav>
 {# -------------------------differentes collections-------------------- #}
 {% for collection in collections %}
 

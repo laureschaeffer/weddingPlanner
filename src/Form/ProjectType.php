@@ -27,13 +27,15 @@ class ProjectType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-col'
                 ],
-                'label' => 'Prénom'
+                'label' => 'Prénom',
+                'data' => 'Jean'
             ])
             ->add('surname', TextType::class, [
                 'row_attr' => [
                     'class' => 'form-col'
                 ],
-                'label' => 'Nom'
+                'label' => 'Nom',
+                'data' => 'Muller'
             ])
             ->add('email', EmailType::class, [
                 'row_attr' => [
@@ -46,7 +48,8 @@ class ProjectType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-col'
                 ],
-                'label' => 'Téléphone'
+                'label' => 'Téléphone',
+                'data' => '0611223344'
             ])
             ->add('dateEvent', DateTimeType::class, [
                 'row_attr' => [
@@ -59,13 +62,15 @@ class ProjectType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-col'
                 ],
-                'label' => 'Nombre d\'invités'
+                'label' => 'Nombre d\'invités',
+                'data' => '50'
             ])
             ->add('description', TextareaType::class, [
                 'row_attr' => [
                     'class' => 'form-col'
                 ],
-                'label' => 'Commentaires'
+                'label' => 'Commentaires',
+                'data' => "J'aimerai vous parler de mon projet"
             ])
             ->add('Destination', EntityType::class, [
                 'class' => Destination::class,

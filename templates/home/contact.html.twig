@@ -33,27 +33,24 @@
             {{ form_row(form.Destination) }}
             {{ form_row(form.budget) }}
         </div>
-        {{ form_row(form.prestations) }}
+
+        {{ form_label(form.prestations) }}
+        <div class="form-prestation-content">
+            {# pour chaque enfant dans prestations, donc chaque objet + son input checkbox #}
+            {% for child in form.prestations %}
+                <div class="form-check">
+                    {{ form_widget(child) }}
+                    {{ form_label(child) }}
+                </div>
+            {% endfor %}
+        </div>
+        
         {{ form_row(form.description) }}
         {{ form_row(form.Envoyer) }}
     
         {{ form_end(form) }}
 
     </div>
-
-    
-    {# <p>La responsable de traitement Laure Schaeffer traite les données recueillies pour: rentrer en communication, afin d'effectuer une opération technique de prospection, et l'élaboration d'un potentiel devis et contrat.
-    Pour en savoir plus sur la gestion de vos données personnelles et pour exercer vos droits, reportez-vous à la notice ci-jointe.
-    </p>
-    <p>Les informations recueillies dans le questionnaire sont enregistrées dans un fichier informatisé par data-controller[at]ceremonie-couture.fr
-        La base légale du traitement est "le consentement". Les données collectées seribt communiqués aux seuls destinataires suivant: Laure Maria (nom emprunté).
-        Elles sont conservées pendant 1 an.
-        Vous pouvez accéder aux données vous concernant, les rectifier, demander leur effacement ou exercer votre droit à la limitation du traitement de vos données. Vous pouvez retirer à tout moment votre consentement au traitement de vos données. Vous pouvez également exercer votre droit à la portabilité de vos données.
-        Consultez le site cnil.fr pour plus d'informations sur vos droits.
-        Pour exercer ces droits ou pour toute question sur le traitement de vos données dans ce dispositif, vous pouvez contacter data-controller[at]ceremonie-couture.fr
-        Si vous estimez, après nous avoir contactés, que vos droits « Informatique et Libertés » ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL.
-    </p> #}
-    
 
 </section>
 

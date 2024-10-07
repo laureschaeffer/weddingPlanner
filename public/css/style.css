@@ -193,6 +193,7 @@ textarea{
 
     .form-flex{
         display: flex;
+        flex-wrap: wrap;
         gap: 30px;
     }
     
@@ -790,7 +791,7 @@ footer p, footer a{
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 0.5rem;
     padding: var(--main-padding) 0;
     background-color: var(--light-green);
     margin: var(--big-padding) 0;
@@ -1105,10 +1106,15 @@ small{
       }
       
 
-      /* *****checkbox  */
+}
 
-      
+/* *****checkbox  */
+.form-prestation-content{
+    margin: 1rem 0;
+}
 
+.form-check{
+    margin-bottom: 0.5rem;
 }
 
 /* ====================================================================CREATION portefolio=================================================================== */
@@ -1574,6 +1580,10 @@ small{
         width: 100%;
     }
 
+    #prestation-reverse{
+        flex-direction: column-reverse;
+    }
+
     .service-card img, .service-card svg{
         width: 70px;
         padding: 15px;
@@ -1642,6 +1652,12 @@ small{
 
     .prestation-card{
         width: 100%;
+    }
+    
+    /* =======================================================================COMMERCE======================================================================= */
+
+    #nav-batch a {
+        font-size: var(--p-mb);
     }
 
 }
