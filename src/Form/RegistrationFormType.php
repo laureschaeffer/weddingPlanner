@@ -59,18 +59,18 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'row_attr' => [
-                    'class' => 'agree-terms-row'
-                ],
-                'mapped' => false,
-                'label' => 'Conditions d\'utilisation',
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Veuillez accepter nos conditions d\'utilisation'
-                    ]),
-                ],
-            ])
+            // ->add('agreeTerms', CheckboxType::class, [
+            //     'row_attr' => [
+            //         'class' => 'agree-terms-row'
+            //     ],
+            //     'mapped' => false,
+            //     'label' => 'Conditions d\'utilisation',
+            //     'constraints' => [
+            //         new IsTrue([
+            //             'message' => 'Veuillez accepter nos conditions d\'utilisation'
+            //         ]),
+            //     ],
+            // ])
             ->add('Valider', SubmitType::class, [
                 'attr' => [
                     'class' => 'contact-btn'

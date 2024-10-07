@@ -411,11 +411,10 @@ class ProjectController extends AbstractController
     // ***************************************fonction create devis***************************************
 
     //enregistre le devis en base de donnée, factorisation de la fonction createDevis
-    public function createQuotationBdd(Project $project){
+    public function createQuotationBdd(Project $project, $quotationNumber){
 
         $quotation = new Quotation();
         $quotation->setProject($project);
-        $quotationNumber = "DEV_" . $this->uniqueIdService->generateUniqueId(); //crée un nom unique
         $quotation->setQuotationNumber($quotationNumber);
 
         $this->entityManager->persist($quotation); //prepare
@@ -423,7 +422,7 @@ class ProjectController extends AbstractController
     }
 
     //télécharge dans le dossier upload/devis le devis, factorisation de la fonction createDevis
-    public function downloadDevis($quotation, $project){
+    public function downloadDevis($quotation, $project, $quotationNumber){
         // gère l'image
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/cc.png';
         $imageData = base64_encode(file_get_contents($imagePath));
@@ -437,8 +436,7 @@ class ProjectController extends AbstractController
         
         $domPdf = $this->pdfService->showPdf($html);
         
-        $uniqueId = $this->uniqueIdService->generateUniqueId();
-        $filename = 'devis_' . $uniqueId . '.pdf'; // génère un nom de fichier unique
+        $filename = $quotationNumber . '.pdf'; // génère un nom de fichier unique
         
         // chemin complet
         $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/devis/' . $filename;
@@ -488,8 +486,11 @@ class ProjectController extends AbstractController
             $this->addFlash('error', 'Veuillez fixer un prix final !');
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         }
+
+        $quotationNumber = "DEV_" . $this->uniqueIdService->generateUniqueId(); //crée un nom unique
+
         //----enregistre le devis (quotation) dans la bdd
-        $quotation = $this->createQuotationBdd($project);
+        $quotation = $this->createQuotationBdd($project, $quotationNumber);
 
         //----change le statut du projet de "en cours" à "en attente" (d'une reponse du client)
         $stateEnAttente = $stateRepository->findOneBy(['id' => 2]);
@@ -501,7 +502,7 @@ class ProjectController extends AbstractController
         $this->sendMailToClient($emailContact, $project, $mailer);
 
         //----télécharge en local le devis pdf
-        $this->downloadDevis($quotation, $project);
+        $this->downloadDevis($quotation, $project, $quotationNumber);
 
         $this->entityManager->flush(); //execute
 
@@ -565,7 +566,7 @@ class ProjectController extends AbstractController
 
     //-----------------------------------------------------FACTURE--------------------------------------
     //télécharge dans le dossier upload/facture le facture, factorisation de la fonction accepteDevis (qui crée la facture)
-    public function downloadFacture($bill, $project){
+    public function downloadFacture($bill, $project, $billNumber){
         // gère l'image
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/img/logo/logo.png';
         $imageData = base64_encode(file_get_contents($imagePath));
@@ -580,11 +581,9 @@ class ProjectController extends AbstractController
         $domPdf = $this->pdfService->showPdf($html);
         
         $uniqueId = $this->uniqueIdService->generateUniqueId();
-        // génère un nom de fichier unique
-        $filename = 'facture_' . $uniqueId . '.pdf';
         
         // chemin complet
-        $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/facture/' . $filename;
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/upload/facture/' . $billNumber . ".pdf";
         
         // sauvegarde le pdf
         file_put_contents($filePath, $domPdf->output());
@@ -655,7 +654,7 @@ class ProjectController extends AbstractController
         $this->entityManager->flush(); //execute
 
         //télécharge la facture dans le dossier
-        $this->downloadFacture($bill, $project);
+        $this->downloadFacture($bill, $project, $billNumber);
 
         $this->addFlash('success', 'Devis accepté!');
         return $this->redirectToRoute('app_profil');
