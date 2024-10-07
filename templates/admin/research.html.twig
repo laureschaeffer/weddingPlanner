@@ -48,7 +48,21 @@
         </div>
     {% endif %}
     
-    {% if projects == null and reservations == null %}
+    {# -------------------devis-------------------  #}
+    {% if bills %}
+        <h2>Dans les devis</h2>
+        <div class="result-content">
+
+            {% for bill in bills %}
+                <p>Devis n°{{bill.quotationNumber}} du projet de {{bill.project}} </p>
+                <p><a href="{{path('download_file', {'fileName': bill.quotationNumber})}}">Télécharger le devis</a></p>
+            {% endfor %}
+
+        </div>
+        
+    {% endif %}
+
+    {% if projects == null and reservations == null and bills == null %}
         <p>Aucun résultat</p>
     {% endif %}
 

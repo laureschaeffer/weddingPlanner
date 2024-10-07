@@ -35,6 +35,27 @@ class QuotationRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    /*
+    SELECT * FROM quotation q
+    INNER JOIN project p
+    ON q.project_id = p.id
+    WHERE p.firstname LIKE '%...%'
+
+    trouve un devis en fonction du nom, prénom de la personne ou numéro de devis
+    */
+    public function findFileByName($word){
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('q')
+            ->from('App\Entity\Quotation', 'q')
+            ->join('q.project', 'p')
+            ->where('p.firstname LIKE :word OR p.surname LIKE :word OR q.quotationNumber LIKE :word')
+            ->setParameter('word', '%'.$word.'%') ;
+        $query = $qb->getQuery();
+        return $query->getResult();
+        
+    }
+
     //    /**
     //     * @return Quotation[] Returns an array of Quotation objects
     //     */
