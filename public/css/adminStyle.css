@@ -348,6 +348,17 @@ header{
     height: 1rem;
   }
 
+  /* ****************resultat barre de recherche***************** */
+#resultat-recherche{
+    padding: 1.5rem;
+}
+
+.result-content{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 /* ============================================================================BOUTIQUE=========================================================== */
 
 #reservations h2{

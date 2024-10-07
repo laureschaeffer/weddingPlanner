@@ -5,43 +5,53 @@
 
 {% block body %}
 
-<h1>Résultat de votre recherche "{{word}}" </h1>
+<section id="resultat-recherche">
 
-{# -------------------projets------------------- #}
-{% if projects %}
-
-    <h2>Dans les projets</h2>
-
-    {% for projet in projects %}
-        {% if projet.user %}
-            <p>{{projet}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
-        {% else %}
-            <p>Anonyme, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} </p>
-        {% endif %}
-
-        <p><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
-    {% endfor %}
+    <h1>Résultat de votre recherche "{{word}}" </h1>
     
-{% endif %}
+    {# -------------------projets------------------- #}
+    {% if projects %}
+    
+        <h2>Dans les projets</h2>
+    
+        <div class="result-content">
+            {% for projet in projects %}
+                {% if projet.user %}
+                    <p>{{projet}}, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} 
+                {% else %}
+                    <p>Anonyme, évènement le {{projet.dateEvent | date("d.m.Y")}}, reçu le {{projet.dateReceipt | date("d.m.Y")}} 
+                {% endif %}
+        
+                <br><a href="{{path('show_projet', {'id': projet.id})}}">Voir plus</a></p>
+            {% endfor %}
+        </div>
+        
+    {% endif %}
+    
+    {# -------------------reservations-------------------  #}
+    {% if reservations %}
+        <h2>Dans les réservations de la boutique</h2>
+    
+        <div class="result-content">
 
-{# -------------------reservations-------------------  #}
-{% if reservations %}
-    <h2>Dans les réservations de la boutique</h2>
+            {% for reservation in reservations %}
+        
+                {% if reservation.user %}
+                    <p>Réservation <b>n°{{reservation.referenceOrder}}</b> {{reservation.firstname}} {{reservation.surname}} (retire le {{reservation.datePicking |date("d/m/Y")}}), a passé commande le {{reservation.dateOrder |date("d/m/Y")}}
+                    {% else %}
+                    <p>Réservation <b>n°{{reservation.referenceOrder}}</b> anonyme (retire le {{reservation.datePicking |date("d/m/Y")}}), a passé commande le {{reservation.dateOrder |date("d/m/Y")}}
+                {% endif %}
+                <br><a href="{{path('show_commande', {'id': reservation.id})}}">Voir plus</a></p>
+        
+            {% endfor %}
 
-    {% for reservation in reservations %}
+        </div>
+    {% endif %}
+    
+    {% if projects == null and reservations == null %}
+        <p>Aucun résultat</p>
+    {% endif %}
 
-        {% if reservation.user %}
-            <p> {{reservation.firstname}} {{reservation.surname}} (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
-            {% else %}
-            <p> anonyme (retire le {{reservation.datePicking |date("d/m/Y")}}) </p>
-        {% endif %}
-        <p>A passé commande le {{reservation.dateOrder |date("d/m/Y")}} </p>
-
-    {% endfor %}
-{% endif %}
-
-{% if projects == null and reservations == null %}
-    <p>Aucun résultat</p>
-{% endif %}
+</section>
 
 {% endblock %}

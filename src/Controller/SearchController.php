@@ -24,7 +24,6 @@ class SearchController extends AbstractController
             return $this->redirectToRoute('app_home');
         } 
         
-        //utilise la methode get pour récupérer le mot tapé dans la barre de recherche
         //filtre
         $word = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
 
