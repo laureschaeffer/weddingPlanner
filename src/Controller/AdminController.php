@@ -40,7 +40,7 @@ class AdminController extends AbstractController
         //tableau du nb de projets par mois
         $projetMois = $projectRepository->findProjectByMonth();
 
-        //tableau de la moyenne du chiffre d'affaire par mois
+        //tableau du chiffre d'affaire par mois
         $caMois = $projectRepository->findMonthlyRevenue();
 
 

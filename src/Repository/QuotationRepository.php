@@ -16,8 +16,14 @@ class QuotationRepository extends ServiceEntityRepository
         parent::__construct($registry, Quotation::class);
     }
 
-    // SELECT * FROM quotation q WHERE q.is_accepted = 0 AND q.date_creation <= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
-    //trouve les devis qui ont été refusé et qui ont au moins 3 mois
+    /*
+    SELECT * FROM quotation q 
+    INNER JOIN project p ON q.project_id = p.id
+    WHERE q.is_accepted = 0 AND q.date_creation <= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+
+    -> trouve les devis qui ont été refusé et qui ont au moins 3 mois, avec leurs projets
+    je ne prends pas depuis la table projet directement puisque je compare avec la date de création d'un devis
+    */
     public function findOldQuotations(){
         $dateExp = new \DateTime();
         //enleve 3 mois à la date d'ajd
