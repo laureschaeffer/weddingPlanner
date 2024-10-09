@@ -1,4 +1,6 @@
 <?php
+// ./vendor/bin/phpunit pour tester
+// ./vendor/bin/phpunit --testdox pour avoir un meilleur rendu
 
 /*
  - self::bootKernel() comme on ne fait pas de requetes http, il faut le démarrer manuellement, pour accéder à des services, via un conteneur, pour charger les services de l'application pour les tests

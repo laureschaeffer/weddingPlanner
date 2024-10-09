@@ -536,6 +536,9 @@ header{
 }
 
 .actions{
+    p{
+        padding: 0.75rem 0;
+    }
     
     a{
         color: black;

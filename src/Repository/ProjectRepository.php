@@ -100,7 +100,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->orderBy('p.dateReceipt', 'DESC')
             ,
             $page,
-            20
+            6
         );
     }
 

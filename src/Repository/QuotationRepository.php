@@ -32,7 +32,8 @@ class QuotationRepository extends ServiceEntityRepository
             ->createQueryBuilder()
             ->select('q')
             ->from('App\Entity\Quotation', 'q')
-            ->where('q.dateCreation < :dateExp')
+            ->join('q.project', 'p')
+            ->where('q.dateCreation <= :dateExp')
             ->andWhere('q.isAccepted = 0')
             ->setParameter('dateExp', $dateExp)
             ;

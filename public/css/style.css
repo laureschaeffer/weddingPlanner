@@ -1003,6 +1003,10 @@ small{
     display: flex;
     justify-content: center;
     margin-bottom: var(--main-padding);
+
+    p{
+        font-size: var(--semi-bold);
+    }
 }
 
 .equipe-card-main{
@@ -1232,6 +1236,7 @@ small{
 .reservation-card{
     padding: var(--main-padding);
     margin-bottom: var(--big-padding);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .reservation-card img{
@@ -1321,17 +1326,17 @@ small{
     background: #b0203e;
     border: none;
     padding: var(--btn-padding);
-    border-radius: var(--border-radius);
     color: white;
     cursor: pointer;
     transition: var(--hover-transition);
-    max-width: 15rem;
+    max-width: 13rem;
     text-decoration: none;
-    font-size: var(--p-font-size);
     text-align: center;
 
     &:hover{
-        transform: translateY(-8px);
+        color: #b0203e;
+        background-color: transparent;
+        border: 2px solid ;
     }
 }
 
@@ -1340,33 +1345,33 @@ small{
     gap: 1rem;
 }
 
-#devis-action a{
-    padding: var(--btn-padding);
-    border-radius: var(--border-radius);
-
-    text-decoration: none;
-    cursor: pointer;
-    transition: var(--hover-transition);
-    
-    &:hover{
-        transform: translateY(-8px);
-    }
-}
 
 .refuse-devis{
     border: 2px solid;
     color: black;
+
+    &:hover{
+        background-color: #000;
+        color: white;
+    }
 }
 
 .accepte-devis{
     background-color: #000;
     color: white;
+
+    &:hover{
+        border: 2px solid;
+        background-color: transparent;
+        color: black;
+    }
 }
 
 .refuse-devis, .accepte-devis{
     cursor: pointer;
 
-    padding: var(--btn-padding)
+    padding: var(--btn-padding);
+    transition: var(--hover-transition);
 }
 
 .form-delete{
@@ -1375,14 +1380,14 @@ small{
 
 .btn-delete{
     padding: var(--btn-padding);
-    border-radius: var(--border-radius);
-    border: red 2px solid;
+    border: #ff0036 2px solid;
     color: #ff0036;
     cursor: pointer;
 
     transition: var(--hover-transition);
     &:hover{
-        opacity: var(--hover-opacity);
+        color: white;
+        background-color: #ff0036;
     }
 }
 
