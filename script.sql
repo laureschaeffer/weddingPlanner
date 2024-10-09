@@ -29,24 +29,24 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   PRIMARY KEY (`id`),
   KEY `IDX_FE38F844A76ED395` (`user_id`),
   CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.appointment : ~12 rows (environ)
+-- Listage des données de la table weddingplanner.appointment : ~13 rows (environ)
 DELETE FROM `appointment`;
 INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) VALUES
-	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'lorem ipsum'),
+	(1, 4, '2024-09-24 15:00:00', '2024-09-24 16:00:00', 'conversation projet'),
 	(3, 2, '2024-09-13 10:00:00', '2024-09-13 12:30:00', 'nouvel evenement'),
 	(11, 2, '2024-09-13 14:00:00', '2024-09-13 15:00:00', 'contact'),
 	(14, 1, '2024-09-10 15:00:00', '2024-09-10 16:00:00', 'nouvel evenement'),
 	(15, 1, '2024-09-12 12:30:00', '2024-09-12 13:30:00', 'nouvel evenement'),
 	(19, 2, '2024-09-12 08:30:00', '2024-09-12 10:00:00', 'test'),
 	(20, 2, '2024-09-12 11:00:00', '2024-09-12 12:00:00', 'test direct'),
-	(21, 2, '2024-09-14 12:30:00', '2024-09-14 14:00:00', 'pas dispo'),
-	(23, 2, '2024-09-14 11:00:00', '2024-09-14 12:00:00', 'teds'),
-	(27, 1, '2024-09-28 10:30:00', '2024-09-28 13:00:00', 'nouvel evenement'),
-	(28, 1, '2024-09-27 09:30:00', '2024-09-27 11:00:00', 'nouvel evenement'),
-	(29, 1, '2024-09-27 16:30:00', '2024-09-27 17:30:00', 'nouvel evenement'),
-	(33, 2, '2024-09-27 12:30:00', '2024-09-27 13:30:00', 'nouvel evenement');
+	(21, 2, '2024-10-11 14:30:00', '2024-10-11 15:30:00', 'nouvel évènement'),
+	(23, 2, '2024-10-11 11:00:00', '2024-09-14 12:00:00', 'confirmation projet'),
+	(27, 1, '2024-10-10 10:30:00', '2024-09-28 13:00:00', 'discussion prestataires'),
+	(28, 1, '2024-10-09 09:30:00', '2024-09-27 11:00:00', 'confirmation projet'),
+	(29, 1, '2024-10-10 16:00:00', '2024-10-10 17:30:00', 'établissement code couleur'),
+	(33, 2, '2024-10-11 12:30:00', '2024-09-27 13:30:00', 'conversation projet');
 
 -- Listage de la structure de table weddingplanner. batch
 CREATE TABLE IF NOT EXISTS `batch` (
@@ -73,13 +73,14 @@ CREATE TABLE IF NOT EXISTS `bill` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_7A2119E3B4EA4E60` (`quotation_id`),
   CONSTRAINT `FK_7A2119E3B4EA4E60` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.bill : ~2 rows (environ)
+-- Listage des données de la table weddingplanner.bill : ~3 rows (environ)
 DELETE FROM `bill`;
 INSERT INTO `bill` (`id`, `quotation_id`, `bill_number`, `date_creation`) VALUES
 	(1, 2, 'FACT_172355934655', '2024-08-13'),
-	(3, 4, 'FACT_172406086148', '2024-08-19');
+	(3, 4, 'FACT_172406086148', '2024-08-19'),
+	(7, 9, 'FACT_172847507728', '2024-10-09');
 
 -- Listage de la structure de table weddingplanner. booking
 CREATE TABLE IF NOT EXISTS `booking` (
@@ -146,9 +147,9 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `IDX_9474526CA76ED395` (`user_id`),
   CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.comment : ~8 rows (environ)
+-- Listage des données de la table weddingplanner.comment : ~9 rows (environ)
 DELETE FROM `comment`;
 INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
@@ -158,7 +159,8 @@ INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VA
 	(6, 3, 2, 'En lien avec', '2024-07-31 13:50:51'),
 	(8, 4, 7, 'Commentaire ajouté en bdd', '2024-08-19 11:36:36'),
 	(9, 8, 2, 'personne à contacter le 20/09!', '2024-09-17 08:51:24'),
-	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52');
+	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52'),
+	(15, 11, 3, 'commentaire commun', '2024-10-09 14:46:20');
 
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
@@ -244,12 +246,13 @@ CREATE TABLE IF NOT EXISTS `note` (
   KEY `IDX_CFBDFA14166D1F9C` (`project_id`),
   CONSTRAINT `FK_CFBDFA14166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.note : ~1 rows (environ)
+-- Listage des données de la table weddingplanner.note : ~2 rows (environ)
 DELETE FROM `note`;
 INSERT INTO `note` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
-	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18');
+	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18'),
+	(4, 11, 3, 'ajout d\'une note', '2024-10-09 14:46:10');
 
 -- Listage de la structure de table weddingplanner. prestation
 CREATE TABLE IF NOT EXISTS `prestation` (
@@ -318,9 +321,9 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE5D83CC1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`),
   CONSTRAINT `FK_2FB3D0EEA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~7 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~10 rows (environ)
 DELETE FROM `project`;
 INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, NULL, 1, 1, 4, '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '394d61e52f9d85d456d245c974dd8fa9dd494c485140f45862686934', '42834e1ca1bf978b8d2ffa346c8ecdcbac6566b43dc4cd5672205d8d', '0e3f86e3e69988b18983f88c524e614004dc92c45cf5b0173c88a594', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000),
@@ -329,7 +332,10 @@ INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id
 	(5, 7, 2, 3, 3, 'Maria', 'Nomdef', NULL, '0611223344', '2025-07-30 10:00:00', 200, 'projet', '2024-01-30 11:23:53', 1, 40000),
 	(6, 7, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 75000),
 	(7, 4, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 15000),
-	(8, 2, 1, 1, 2, 'Cynthia', 'Xxx', NULL, '0611223344', '2024-09-11 11:00:00', 10, 'J\'aimerai discuter de mon projet', '2024-09-10 14:14:51', 0, 5000);
+	(8, 2, 1, 1, 2, 'Cynthia', 'Xxx', NULL, '0611223344', '2024-09-11 11:00:00', 10, 'J\'aimerai discuter de mon projet', '2024-09-10 14:14:51', 0, 5000),
+	(9, 7, 4, 1, 1, 'Léa', 'Muller', NULL, '0611223344', '2024-12-09 09:14:39', 200, 'Bonjour, j\'aimerai discuter de mon projet en décembre', '2024-10-09 09:14:48', 1, 200),
+	(10, 9, 1, 1, 3, 'Jean', 'Muller', NULL, '0611223344', '2025-01-01 10:00:00', 50, 'J\'aimerai vous parler de mon projet', '2024-10-09 13:43:51', 1, 2000),
+	(11, 9, 1, 1, 1, 'Jean', 'Muller', NULL, '0611223344', '2024-12-31 09:00:00', 50, 'J\'aimerai vous parler de mon projet', '2024-10-09 14:44:11', 1, 5000);
 
 -- Listage de la structure de table weddingplanner. project_prestation
 CREATE TABLE IF NOT EXISTS `project_prestation` (
@@ -342,13 +348,15 @@ CREATE TABLE IF NOT EXISTS `project_prestation` (
   CONSTRAINT `FK_496EF49F9E45C554` FOREIGN KEY (`prestation_id`) REFERENCES `prestation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project_prestation : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.project_prestation : ~6 rows (environ)
 DELETE FROM `project_prestation`;
 INSERT INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1),
 	(3, 1),
 	(4, 1),
-	(8, 2);
+	(8, 2),
+	(10, 2),
+	(11, 2);
 
 -- Listage de la structure de table weddingplanner. quotation
 CREATE TABLE IF NOT EXISTS `quotation` (
@@ -359,15 +367,17 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   `is_accepted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_474A8DB9166D1F9C` (`project_id`),
-  CONSTRAINT `FK_474A8DB9166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `FK_474A8DB9166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.quotation : ~3 rows (environ)
+-- Listage des données de la table weddingplanner.quotation : ~5 rows (environ)
 DELETE FROM `quotation`;
 INSERT INTO `quotation` (`id`, `project_id`, `quotation_number`, `date_creation`, `is_accepted`) VALUES
 	(2, 3, '10', '2024-08-02', 1),
 	(4, 4, 'DEV_172406008210', '2024-05-19', 1),
-	(7, 8, 'DEV_172830560696', '2024-10-07', NULL);
+	(7, 8, 'DEV_172830560696', '2024-10-07', NULL),
+	(8, 9, 'fsd5', '2024-07-09', 0),
+	(9, 10, 'DEV_172847495499', '2024-10-09', 1);
 
 -- Listage de la structure de table weddingplanner. reservation
 CREATE TABLE IF NOT EXISTS `reservation` (
@@ -455,17 +465,18 @@ CREATE TABLE IF NOT EXISTS `user` (
   `google_user` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.user : ~6 rows (environ)
+-- Listage des données de la table weddingplanner.user : ~7 rows (environ)
 DELETE FROM `user`;
 INSERT INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`, `google_user`) VALUES
 	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0, 0),
-	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0, 0),
-	(3, 'test@exemple.fr', 'Test', '["ROLE_SUPERADMIN"]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0, 0),
+	(2, 'person@test.fr', 'Person', '["ROLE_ADMIN", "ROLE_SUPERADMIN"]', '$2y$13$g4WWLnAUJ1MkCfGH1vETU.ct00JFSxbrSkFb7sRvY.npMGTfhAboW', 0, 0),
+	(3, 'test@exemple.fr', 'Test', '["ROLE_ADMIN", "ROLE_SUPERADMIN"]', '$2y$13$hVqd4r/XZDXckZpXR7HICuRx57OI5/5D4nBT6NczRkFCm6IobmZWm', 0, 0),
 	(4, 'e5adc1c4d19f1e7508f1a7fa484575e1ffc6a0aa4428af', 'e5adc1c4d19f1e7508f1a7fa484575e1ffc6a0aa4428af9c03e2be48', '["ROLE_SUPPRIME"]', '$2y$13$A16IcbMl8dQ5caZGlGfK1eiciuQlkPBfsI62PBmCJh4hbdTTSrPa.', 0, 0),
 	(7, 'laure.15013@gmail.com', 'laure.15013', '["ROLE_ADMIN"]', 'b1a8919eece6d1c4228b50f72834ca74', 1, 1),
-	(8, '35e3798e138dabed065e41388237f277', '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '["ROLE_SUPPRIME"]', '$2y$13$B/mKoDcxur5eeDCSN5nRXu3qajQmcEfPb5c7/fpiGMKgP1OoVT0EK', 0, 0);
+	(8, '35e3798e138dabed065e41388237f277', '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '["ROLE_SUPPRIME"]', '$2y$13$B/mKoDcxur5eeDCSN5nRXu3qajQmcEfPb5c7/fpiGMKgP1OoVT0EK', 0, 0),
+	(9, 'cynthia@exemple.fr', 'Cynthia', '[]', '$2y$13$BufM7BMP5c03m/umk/HRwua/KSm4p5SkHoU1WMO.sMK7psmGIbrHi', 1, 0);
 
 -- Listage de la structure de table weddingplanner. worker
 CREATE TABLE IF NOT EXISTS `worker` (
