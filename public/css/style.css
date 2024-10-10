@@ -81,8 +81,8 @@
 
     /* padding ou margin */
     --escape-padding: 80px;
-    --big-padding: 50px;
-    --main-padding: 20px;
+    --big-padding: 3.5rem;
+    --main-padding: 2rem;
     --small-padding: 5px;
 
     --btn-padding: 0.5rem 1.5rem;
@@ -330,6 +330,7 @@ header{
 #burgerIcon {
     width: 25px;
     margin: 35px;
+    fill: white;
 }
 
 #nav-icon, header label{
@@ -361,7 +362,7 @@ header{
 /* ----------------footer */
 footer{
     background-color: var(--footer-color);
-    padding: 15px 5px;
+    padding: 2.5rem 1rem;
 
     li{
         list-style: none;
@@ -1005,7 +1006,7 @@ small{
     margin-bottom: var(--main-padding);
 
     p{
-        font-size: var(--semi-bold);
+        font-weight: var(--semi-bold);
     }
 }
 

@@ -250,6 +250,7 @@ header{
 #burgerIcon {
     width: 25px;
     margin: 35px;
+    fill: white;
 }
 
 #admin-nav>div{
