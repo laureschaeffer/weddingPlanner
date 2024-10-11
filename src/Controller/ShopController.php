@@ -239,34 +239,27 @@ class ShopController extends AbstractController
                 //récupère les données du formulaire 
                 $reservation = $form->getData();
 
-                //si la date est valide
-                if($reservation->getValidDate()){
+                //traite la création de reservation
+                $this->createReservation($uniqueIdService, $user, $reservation);
+    
+                $this->entityManager->persist($reservation); //prepare
+                $this->entityManager->flush(); //execute
 
-                    //traite la création de reservation
-                    $this->createReservation($uniqueIdService, $user, $reservation);
-        
-                    $this->entityManager->persist($reservation); //prepare
-                    $this->entityManager->flush(); //execute
-    
-                    //---------------------------------------------------entité booking------------------------------
-    
-                    $panier = $this->basketService->getBasket();
-                    //traite la création de booking
-                    $this->createBooking($panier, $reservation);
-    
-                    
-                    //-----------------------------------------envoie d'un email de confirmation
-                    $this->sendConfirmationMail($user, $reservation, $mailer);
+                //---------------------------------------------------entité booking------------------------------
 
-                    $this->basketService->deleteBasket(); //supprime le panier en session
-        
-                    $this->addFlash('success', 'Réservation effectuée');
-                    return $this->redirectToRoute('app_home');
-                    // return $this->redirectToRoute('app_profil');
-                } else {
-                    $this->addFlash('error', 'Date invalide');
-                    return $this->redirectToRoute('make_reservation');
-                }
+                $panier = $this->basketService->getBasket();
+                //traite la création de booking
+                $this->createBooking($panier, $reservation);
+
+                
+                //-----------------------------------------envoie d'un email de confirmation
+                $this->sendConfirmationMail($user, $reservation, $mailer);
+
+                $this->basketService->deleteBasket(); //supprime le panier en session
+    
+                $this->addFlash('success', 'Réservation effectuée');
+                return $this->redirectToRoute('app_home');
+
             }
 
         }

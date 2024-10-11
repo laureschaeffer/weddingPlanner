@@ -37,9 +37,9 @@
             {% for reservation in reservations %}
         
                 {% if reservation.user %}
-                    <p>Réservation <b>n°{{reservation.referenceOrder}}</b> {{reservation.firstname}} {{reservation.surname}} (retire le {{reservation.datePicking |date("d/m/Y")}}), a passé commande le {{reservation.dateOrder |date("d/m/Y")}}
+                    <p>Réservation <b>n°{{reservation.referenceOrder}}</b> {{reservation.firstname}} {{reservation.surname}} a passé commande le {{reservation.dateOrder |date("d/m/Y")}}
                     {% else %}
-                    <p>Réservation <b>n°{{reservation.referenceOrder}}</b> anonyme (retire le {{reservation.datePicking |date("d/m/Y")}}), a passé commande le {{reservation.dateOrder |date("d/m/Y")}}
+                    <p>Réservation <b>n°{{reservation.referenceOrder}}</b> anonyme a passé commande le {{reservation.dateOrder |date("d/m/Y")}}
                 {% endif %}
                 <br><a href="{{path('show_commande', {'id': reservation.id})}}">Voir plus</a></p>
         

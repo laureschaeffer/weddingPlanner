@@ -8,8 +8,7 @@
 <section id="reservation-commande">
 
     <h1>Réserver</h1>
-    <p><b>La date pour récupérer la commande ne doit pas dépasser 3 mois.</b></p>
-    
+  
     
     <div class="form reservation">
         {{ form_start(form) }}
@@ -17,9 +16,6 @@
         <div class="form-flex">
             {{ form_row(form.firstname) }}
             {{ form_row(form.surname) }}
-        </div>
-        <div class="form-flex">
-            {{ form_row(form.datePicking) }}
             {{ form_row(form.telephone) }}
         </div>
 

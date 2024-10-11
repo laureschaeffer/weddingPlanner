@@ -26,8 +26,6 @@ class Reservation
     #[ORM\Column]
     private ?float $totalPrice = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $datePicking = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isPrepared = null;
@@ -108,17 +106,6 @@ class Reservation
         return $this;
     }
 
-    public function getDatePicking(): ?\DateTimeInterface
-    {
-        return $this->datePicking;
-    }
-
-    public function setDatePicking(\DateTimeInterface $datePicking): static
-    {
-        $this->datePicking = $datePicking;
-
-        return $this;
-    }
 
     public function isPrepared(): ?bool
     {
@@ -227,19 +214,4 @@ class Reservation
         return $this->referenceOrder;
     }
     
-    //----------------------------------------------------methodes-----------------------------------------
-    //verifie si la date pour récupérer est valide: pas passée et pas plus de 3 mois
-    public function getValidDate() : bool
-    {
-        $timezone = new \DateTimeZone('Europe/Paris');
-        $ajd = new \DateTime('now', $timezone);
-        $dateMax = clone $ajd; //crée une version indépendante
-        $dateMax->modify('+3 months');
-
-        if($this->datePicking < $ajd || $this->datePicking > $dateMax){
-            return false; 
-        } else {
-            return true ;
-        }
-    }
 }
