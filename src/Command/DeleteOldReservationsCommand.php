@@ -27,6 +27,7 @@ class DeleteOldReservationsCommand extends Command
 
     protected function configure()
     {
+        // va également supprimer en cascade "booking" là où il y a la clé étrangère reservation_id
         $this->setDescription('Supprime les réservations dont la date de retrait est passée de plus de 2 ans.');
     }
 

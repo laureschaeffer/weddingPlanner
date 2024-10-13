@@ -27,7 +27,7 @@ class DeleteOldQuotationsCommand extends Command
 
     protected function configure()
     {
-        $this->setDescription('Supprime les devis refusés de plus de 3 mois, avec leur projet.');
+        $this->setDescription('Supprime les devis refusés de plus de 3 mois.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -40,7 +40,7 @@ class DeleteOldQuotationsCommand extends Command
 
         $this->entityManager->flush();
 
-        $output->writeln('Les devis refusés de plus de 3 mois ont été supprimés, avec leur projet.');
+        $output->writeln('Les devis refusés de plus de 3 mois ont été supprimés.');
 
         return Command::SUCCESS;
     }

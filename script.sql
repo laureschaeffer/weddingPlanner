@@ -71,10 +71,10 @@ CREATE TABLE IF NOT EXISTS `bill` (
   `date_creation` date NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_7A2119E3B4EA4E60` (`quotation_id`),
-  CONSTRAINT `FK_7A2119E3B4EA4E60` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`id`)
+  CONSTRAINT `FK_7A2119E3B4EA4E60` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.bill : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.bill : ~2 rows (environ)
 DELETE FROM `bill`;
 INSERT INTO `bill` (`id`, `quotation_id`, `bill_number`, `date_creation`) VALUES
 	(1, 2, 'FACT_172355934655', '2024-08-13'),
@@ -83,14 +83,14 @@ INSERT INTO `bill` (`id`, `quotation_id`, `bill_number`, `date_creation`) VALUES
 -- Listage de la structure de table weddingplanner. booking
 CREATE TABLE IF NOT EXISTS `booking` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
+  `product_id` int DEFAULT NULL,
   `reservation_id` int NOT NULL,
   `quantite` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_E00CEDDE4584665A` (`product_id`),
   KEY `IDX_E00CEDDEB83297E7` (`reservation_id`),
-  CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
+  CONSTRAINT `FK_E00CEDDE4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.booking : ~7 rows (environ)
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.comment : ~8 rows (environ)
+-- Listage des données de la table weddingplanner.comment : ~10 rows (environ)
 DELETE FROM `comment`;
 INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 1, 2, 'Inspiration: film année 80', '2024-06-05 12:16:36'),
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `note` (
   CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.note : ~1 rows (environ)
+-- Listage des données de la table weddingplanner.note : ~3 rows (environ)
 DELETE FROM `note`;
 INSERT INTO `note` (`id`, `project_id`, `user_id`, `content`, `date_post`) VALUES
 	(1, 8, 2, 'nouvelle note', '2024-09-17 15:36:18');
@@ -362,13 +362,12 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   CONSTRAINT `FK_474A8DB9166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.quotation : ~6 rows (environ)
+-- Listage des données de la table weddingplanner.quotation : ~4 rows (environ)
 DELETE FROM `quotation`;
 INSERT INTO `quotation` (`id`, `project_id`, `quotation_number`, `date_creation`, `is_accepted`) VALUES
 	(2, 3, '10', '2024-08-02', 1),
 	(4, 4, 'DEV_172406008210', '2024-05-19', 1),
-	(7, 8, 'DEV_172830560696', '2024-10-07', NULL),
-	(8, 9, 'fsd5', '2024-07-09', 0);
+	(7, 8, 'DEV_172830560696', '2024-10-07', NULL);
 
 -- Listage de la structure de table weddingplanner. reservation
 CREATE TABLE IF NOT EXISTS `reservation` (
@@ -387,7 +386,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   CONSTRAINT `FK_42C84955A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.reservation : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.reservation : ~5 rows (environ)
 DELETE FROM `reservation`;
 INSERT INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
