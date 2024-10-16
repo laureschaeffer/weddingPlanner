@@ -11,6 +11,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -120,7 +121,7 @@ class SecurityController extends AbstractController
 
     //anonymisation des données du profil avec l'algorithme sha256
     #[Route('/delete', name: 'delete_profil')]
-    public function delete(StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager){
+    public function delete(StateRepository $stateRepository, CsrfTokenManagerInterface $csrfTokenManager, Security $security, Request $request){
         //-----securité honeypot et faille csrf-----
         //honey pot field
         $honeypot= filter_input(INPUT_POST, "firstname", FILTER_SANITIZE_SPECIAL_CHARS);
@@ -140,14 +141,6 @@ class SecurityController extends AbstractController
         }
         
         $user = $this->getUser();
-
-        //----------------entité USER----------------
-        $user->setPseudo(hash('sha224', $user->getPseudo()));
-        $user->setEmail(hash('sha224', $user->getEmail()));
-        $user->setRoles(["ROLE_SUPPRIME"]);
-        $user->setGoogleUser(false);
-
-        $this->entityManager->persist($user);
 
         //----------------entité PROJECT----------------
         $userProjects = $user->getProjects();
@@ -188,9 +181,17 @@ class SecurityController extends AbstractController
                 $this->entityManager->persist($reservation);
             }
         }
-        
+
+        //----------------entité USER----------------
+        $this->entityManager->remove($user);
 
         $this->entityManager->flush(); //execute
+
+        //déconnecte si ça n'est pas déjà fait
+        $token = $security->getToken();
+        if($token) {
+            $security->logout();
+        }
 
         $this->addFlash('success', 'Profil supprimé');
         return $this->redirectToRoute('app_home');

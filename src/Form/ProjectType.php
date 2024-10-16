@@ -28,7 +28,7 @@ class ProjectType extends AbstractType
                     'class' => 'form-col'
                 ],
                 'label' => 'Prénom',
-                'data' => 'Jean'
+                'data' => 'Cynthia'
             ])
             ->add('surname', TextType::class, [
                 'row_attr' => [
