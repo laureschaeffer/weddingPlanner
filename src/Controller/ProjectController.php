@@ -319,7 +319,7 @@ class ProjectController extends AbstractController
         }
         
         //il faut absolument avoir établi un prix final
-        if($project->getFinalPrice() == NULL){
+        if($project->getFinalPrice() == NULL || $project->getFinalPrice() <= 0){
             $this->addFlash('error', 'Veuillez fixer un prix final !');
             return $this->redirectToRoute('show_projet', ['id' => $project->getId()]);
         }

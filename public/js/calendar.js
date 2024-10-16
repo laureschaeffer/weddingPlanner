@@ -91,8 +91,8 @@ window.onload = () => {
         let selectedEvent = infos.event
         modalShow.style.display = "block"
         // ajoute dynamiquement les infos 
-        titleModal.insertAdjacentHTML("beforeend", infos.event.title)             
-        userModal.insertAdjacentHTML("beforeend", infos.event.extendedProps.user) 
+        titleModal.innerHTML = "<b>Titre: </b> " + infos.event.title         
+        userModal.innerHTML = "<b>Utilisateur: </b>" + infos.event.extendedProps.user
         let htmlDate = startFormatDate + " - " + endFormatDate
         // dateModal.insertAdjacentHTML("beforeend",  htmlDate) 
 

@@ -41,9 +41,11 @@ security:
     access_control:
     # /coiffe est le pannel administrateur 
     # /super-coiffe est visible pour le superadmin
-        - { path: ^/coiffe, roles: [ROLE_ADMIN, ROLE_SUPERADMIN] } 
+        - { path: ^/coiffe, roles: [ROLE_ADMIN] } 
         - { path: ^/super-coiffe, roles: ROLE_SUPERADMIN } 
         - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_SUPERADMIN: ROLE_ADMIN
 
 when@test:
     security:

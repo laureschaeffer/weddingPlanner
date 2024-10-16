@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   PRIMARY KEY (`id`),
   KEY `IDX_FE38F844A76ED395` (`user_id`),
   CONSTRAINT `FK_FE38F844A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.appointment : ~12 rows (environ)
 DELETE FROM `appointment`;
@@ -45,7 +45,8 @@ INSERT INTO `appointment` (`id`, `user_id`, `date_start`, `date_end`, `title`) V
 	(27, 1, '2024-10-10 10:30:00', '2024-09-28 13:00:00', 'discussion prestataires'),
 	(28, 1, '2024-10-09 09:30:00', '2024-09-27 11:00:00', 'confirmation projet'),
 	(29, 1, '2024-10-10 16:00:00', '2024-10-10 17:30:00', 'établissement code couleur'),
-	(33, 2, '2024-10-11 12:30:00', '2024-09-27 13:30:00', 'conversation projet');
+	(33, 2, '2024-10-11 12:30:00', '2024-09-27 13:30:00', 'conversation projet'),
+	(35, 1, '2024-10-16 11:30:00', '2024-10-16 15:00:00', 'nouvel evenement');
 
 -- Listage de la structure de table weddingplanner. batch
 CREATE TABLE IF NOT EXISTS `batch` (
@@ -72,13 +73,14 @@ CREATE TABLE IF NOT EXISTS `bill` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_7A2119E3B4EA4E60` (`quotation_id`),
   CONSTRAINT `FK_7A2119E3B4EA4E60` FOREIGN KEY (`quotation_id`) REFERENCES `quotation` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.bill : ~2 rows (environ)
 DELETE FROM `bill`;
 INSERT INTO `bill` (`id`, `quotation_id`, `bill_number`, `date_creation`) VALUES
 	(1, 2, 'FACT_172355934655', '2024-08-13'),
-	(3, 4, 'FACT_172406086148', '2024-08-19');
+	(3, 4, 'FACT_172406086148', '2024-08-19'),
+	(10, 12, 'FACT_172891507050', '2024-10-14');
 
 -- Listage de la structure de table weddingplanner. booking
 CREATE TABLE IF NOT EXISTS `booking` (
@@ -93,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `booking` (
   CONSTRAINT `FK_E00CEDDEB83297E7` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.booking : ~7 rows (environ)
+-- Listage des données de la table weddingplanner.booking : ~8 rows (environ)
 DELETE FROM `booking`;
 INSERT INTO `booking` (`id`, `product_id`, `reservation_id`, `quantite`) VALUES
 	(18, 2, 20, 1),
@@ -146,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `IDX_9474526CA76ED395` (`user_id`),
   CONSTRAINT `FK_9474526C166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_9474526CA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table weddingplanner.comment : ~10 rows (environ)
 DELETE FROM `comment`;
@@ -158,7 +160,8 @@ INSERT INTO `comment` (`id`, `project_id`, `user_id`, `content`, `date_post`) VA
 	(6, 3, 2, 'En lien avec', '2024-07-31 13:50:51'),
 	(8, 4, 7, 'Commentaire ajouté en bdd', '2024-08-19 11:36:36'),
 	(9, 8, 2, 'personne à contacter le 20/09!', '2024-09-17 08:51:24'),
-	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52');
+	(10, 8, 2, 'nouveau commentaire', '2024-09-17 15:37:52'),
+	(17, 13, 3, 'commentaire projet', '2024-10-14 16:09:32');
 
 -- Listage de la structure de table weddingplanner. creation
 CREATE TABLE IF NOT EXISTS `creation` (
@@ -317,9 +320,9 @@ CREATE TABLE IF NOT EXISTS `project` (
   CONSTRAINT `FK_2FB3D0EE5D83CC1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`),
   CONSTRAINT `FK_2FB3D0EE816C6140` FOREIGN KEY (`destination_id`) REFERENCES `destination` (`id`),
   CONSTRAINT `FK_2FB3D0EEA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.project : ~8 rows (environ)
+-- Listage des données de la table weddingplanner.project : ~9 rows (environ)
 DELETE FROM `project`;
 INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id`, `firstname`, `surname`, `email`, `telephone`, `date_event`, `nb_guest`, `description`, `date_receipt`, `is_contacted`, `final_price`) VALUES
 	(1, NULL, 1, 1, 4, '9c04bf3942bfa9aaea6bfdfa35e3798e138dabed065e41388237f277', '394d61e52f9d85d456d245c974dd8fa9dd494c485140f45862686934', '42834e1ca1bf978b8d2ffa346c8ecdcbac6566b43dc4cd5672205d8d', '0e3f86e3e69988b18983f88c524e614004dc92c45cf5b0173c88a594', '2026-05-22 15:58:43', 100, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sunt, maiores ex magnam incidunt reiciendis explicabo vero laudantium, officia quae itaque laborum fugit rerum dicta quasi ', '2024-05-22 15:59:20', 1, 7000),
@@ -328,8 +331,9 @@ INSERT INTO `project` (`id`, `user_id`, `destination_id`, `budget_id`, `state_id
 	(5, 7, 2, 3, 3, 'Maria', 'Nomdef', NULL, '0611223344', '2025-07-30 10:00:00', 200, 'projet', '2024-01-30 11:23:53', 1, 40000),
 	(6, 7, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 75000),
 	(7, 4, 1, 4, 3, 'Dylan', 'JRC', NULL, '0611223344', '2025-09-14 11:00:00', 1000, 'J\'aimerai discuter de mon projet', '2024-02-13 16:52:05', 1, 15000),
-	(8, 2, 1, 1, 2, 'Cynthia', 'Xxx', NULL, '0611223344', '2024-09-11 11:00:00', 10, 'J\'aimerai discuter de mon projet', '2024-09-10 14:14:51', 0, 5000),
-	(9, 7, 4, 1, 1, 'Léa', 'Muller', NULL, '0611223344', '2024-12-09 09:14:39', 200, 'Bonjour, j\'aimerai discuter de mon projet en décembre', '2024-10-09 09:14:48', 1, 200);
+	(8, 2, 1, 1, 2, 'Cynthia', 'Xxx', NULL, '0611223344', '2024-09-11 11:00:00', 10, 'J\'aimerai discuter de mon projet', '2024-09-10 14:14:51', 1, 5000),
+	(9, 7, 4, 1, 1, 'Léa', 'Muller', NULL, '0611223344', '2024-12-09 09:14:39', 200, 'Bonjour, j\'aimerai discuter de mon projet en décembre', '2024-10-09 09:14:48', 1, 200),
+	(13, 3, 1, 1, 3, 'Jean', 'Muller', NULL, '0611223344', '2024-12-31 08:00:00', 50, 'J\'aimerai vous parler de mon projet', '2024-10-14 16:06:19', 1, 3000);
 
 -- Listage de la structure de table weddingplanner. project_prestation
 CREATE TABLE IF NOT EXISTS `project_prestation` (
@@ -348,7 +352,8 @@ INSERT INTO `project_prestation` (`project_id`, `prestation_id`) VALUES
 	(1, 1),
 	(3, 1),
 	(4, 1),
-	(8, 2);
+	(8, 2),
+	(13, 2);
 
 -- Listage de la structure de table weddingplanner. quotation
 CREATE TABLE IF NOT EXISTS `quotation` (
@@ -360,14 +365,15 @@ CREATE TABLE IF NOT EXISTS `quotation` (
   PRIMARY KEY (`id`),
   KEY `IDX_474A8DB9166D1F9C` (`project_id`),
   CONSTRAINT `FK_474A8DB9166D1F9C` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.quotation : ~4 rows (environ)
+-- Listage des données de la table weddingplanner.quotation : ~3 rows (environ)
 DELETE FROM `quotation`;
 INSERT INTO `quotation` (`id`, `project_id`, `quotation_number`, `date_creation`, `is_accepted`) VALUES
 	(2, 3, '10', '2024-08-02', 1),
 	(4, 4, 'DEV_172406008210', '2024-05-19', 1),
-	(7, 8, 'DEV_172830560696', '2024-10-07', NULL);
+	(7, 8, 'DEV_172830560696', '2024-10-07', NULL),
+	(12, 13, 'DEV_172891503114', '2024-10-14', 1);
 
 -- Listage de la structure de table weddingplanner. reservation
 CREATE TABLE IF NOT EXISTS `reservation` (
@@ -390,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 DELETE FROM `reservation`;
 INSERT INTO `reservation` (`id`, `user_id`, `reference_order`, `date_order`, `total_price`, `is_prepared`, `is_picked`, `firstname`, `surname`, `telephone`) VALUES
 	(19, 3, '66616880b4d72', '2024-06-06 07:42:56', 50, 1, 0, 'Laure', 'Nomdefamille', '0611223344'),
-	(20, 3, '6661689eec632', '2024-06-06 07:43:26', 50, 0, 0, 'Laure', 'Xxx', '0611223344'),
+	(20, 3, '6661689eec632', '2024-06-06 07:43:26', 50, 1, 0, 'Laure', 'Xxx', '0611223344'),
 	(22, 1, '172467680532', '2024-08-26 12:53:25', 100, 0, 0, 'Thibault', 'Jaeger', '0611223344'),
 	(24, 2, '172657952320', '2024-09-17 13:25:22', 15, 1, 1, 'Didier', 'Muller', '0611223344'),
 	(25, 3, '172854631018', '2024-10-10 07:45:10', 40, 0, 0, 'Laure', 'Sch', '0611223344');
@@ -457,7 +463,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table weddingplanner.user : ~6 rows (environ)
+-- Listage des données de la table weddingplanner.user : ~7 rows (environ)
 DELETE FROM `user`;
 INSERT INTO `user` (`id`, `email`, `pseudo`, `roles`, `password`, `is_verified`, `google_user`) VALUES
 	(1, 'laure@exemple.fr', 'Laure', '[]', '.', 0, 0),
@@ -486,7 +492,7 @@ DELETE FROM `worker`;
 INSERT INTO `worker` (`id`, `job_id`, `name`, `description`, `url_picture`, `alt_picture`) VALUES
 	(1, 1, 'Jeanne', 'Directrice de Création, passionnée par l\'univers du mariage et l\'esthétique. Avec plus de 10 ans d\'expérience dans le design et la planification d\'événements, elle apporte une touche unique et sophistiquée à chacune de nos collections. Jeanne est diplômée de l\'École des Beaux-Arts et a travaillé avec des marques prestigieuses avant de rejoindre notre équipe. Son talent et son souci du détail font d\'elle une force créative incontournable pour notre entreprise.', 'img/equipe/equipe1.jpg', 'photo de notre organisatrice'),
 	(2, 2, 'Sophie', 'Sophie est chargée de la gestion de notre présence en ligne et de l\'interaction avec notre communauté. Diplômée en communication digitale et avec 5 ans d\'expérience dans les réseaux sociaux, Sophie crée du contenu engageant et gère nos campagnes publicitaires avec brio. Elle est passionnée par les relations humaines et adore partager l\'enthousiasme de nos clients pour nos produits.', 'img/equipe/pexels-vinicius-wiesehofer-289347-1130626.jpg', 'photo de notre chargée de communication'),
-	(3, 3, 'Clara', 'Clara est dédiée à transformer les rêves de mariage en réalité. Avec plus de 12 ans d\'expérience dans l\'organisation de mariages, Clara a orchestré plus de 200 célébrations uniques, chacune imprégnée de sa passion pour le détail et de son amour pour l\'excellence.\r\nElle a obtenu son diplôme en gestion d\'événements à l\'Institut Supérieur de Gestion à Paris, où elle a développé ses compétences en planification et coordination. Dotée d\'un œil artistique et d\'une grande capacité d\'écoute, elle excelle à comprendre les désirs et les besoins de ses clients. Elle est experte en design de mariage, gestion de budget, coordination avec les fournisseurs, et gestion de la logistique, garantissant que chaque aspect du jour J se déroule sans accroc. Son réseau étendu de contacts dans l\'industrie lui permet de recommander les meilleurs prestataires, des photographes talentueux aux fleuristes créatifs, assurant ainsi une qualité supérieure pour chaque événement.', 'img/equipe/connor-wilkins-u68jZr7ky0I-unsplash.jpg', 'photo de notre wedding planner'),
+	(3, 3, 'Clara', 'Clara est dédiée à transformer les rêves de mariage en réalité. Avec plus de 12 ans d\'expérience dans l\'organisation de mariages, Clara a orchestré plus de 200 célébrations uniques, chacune imprégnée de sa passion pour le détail et de son amour pour l\'excellence. Elle est experte en design de mariage, gestion de budget, coordination avec les fournisseurs, et gestion de la logistique, garantissant que chaque aspect du jour J se déroule sans accroc. Son réseau étendu de contacts dans l\'industrie lui permet de recommander les meilleurs prestataires, des photographes talentueux aux fleuristes créatifs, assurant ainsi une qualité supérieure pour chaque événement.', 'img/equipe/connor-wilkins-u68jZr7ky0I-unsplash.jpg', 'photo de notre wedding planner'),
 	(4, 4, 'Florian', 'Lucas est notre Conseiller Clientèle dévoué, toujours prêt à aider nos clients à trouver les articles parfaits pour leur mariage. Fort de 7 ans d\'expérience dans le service client, Lucas excelle dans l\'écoute et la résolution des problèmes. Il est diplômé en relations publiques et s\'assure que chaque client bénéficie d\'une expérience d\'achat exceptionnelle et personnalisée. Sa gentillesse et son professionnalisme sont grandement appréciés par tous ceux qui font appel à lui.', 'img/equipe/vince-fleming-j3lf-Jn6deo-unsplash.jpg', 'photo de notre conseiller clientèle');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
