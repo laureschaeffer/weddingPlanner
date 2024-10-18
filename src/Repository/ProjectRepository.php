@@ -35,10 +35,11 @@ class ProjectRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    //SELECT DATE_FORMAT(p.date_receipt, "%c") AS month, COUNT(*) AS count
-    // FROM project p
-    // GROUP BY p.dateReceipt
-    // ORDER BY p.dateReceipt
+    /*
+    SELECT DATE_FORMAT(p.date_receipt, "%c") AS month, COUNT(*) AS count
+    FROM project p
+    GROUP BY DATE_FORMAT(p.date_receipt, "%c")
+    */
 
     //trouve les projets groupés par date de reception en mois
     public function findProjectByMonth(){
@@ -47,8 +48,7 @@ class ProjectRepository extends ServiceEntityRepository
 
         ->select("DATE_FORMAT(p.dateReceipt, '%M') AS month, COUNT(p) AS count")
         ->from('App\Entity\Project', 'p')
-        ->groupBy('p.dateReceipt')
-        ->orderBy('p.dateReceipt', 'ASC');
+        ->groupBy("month");
         
 
         $query = $qb->getQuery();

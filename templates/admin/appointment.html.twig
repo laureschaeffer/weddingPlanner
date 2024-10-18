@@ -18,19 +18,19 @@
 
       <div>
         <label for="start">Date de début</label>
-        <input type="datetime-local" name="start" class="start" value="2024-09-12T12:30:00" required>
+        <input type="datetime-local" name="start" class="start" value="2024-10-18T12:30:00" required>
       </div>
 
       <div>
         <label for="end">Date de fin</label>
-        <input type="datetime-local" name="end" class="end" value="2024-09-12T13:30:00" required>
+        <input type="datetime-local" name="end" class="end" value="2024-10-18T13:30:00" required>
       </div>
 
       <div>
         <label for="user-select"></label>
         <select name="users" id="user-select" class="users">
           <option value="">------------user------------</option>
-          {% for user in activeUsers %}
+          {% for user in users %}
             <option value="{{user.email}}">{{user.email}}</option>
           {% endfor %}
         </select>

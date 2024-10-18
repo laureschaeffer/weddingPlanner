@@ -10,7 +10,7 @@
 {% for user in utilisateurs %}
 
     {# affiche tous les utilisateurs de la bdd, sauf son profil et ceux supprimés  #}
-    {% if user != app.user and "ROLE_SUPPRIME" not in user.roles %}
+    {% if user != app.user %}
         <p>{{user}}</p>
         <p>{{user.email}}</p>
 

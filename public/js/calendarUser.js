@@ -84,10 +84,27 @@ window.onload = () => {
                     start: info.startStr,
                     end: info.endStr
                 }
-                let xhr = new XMLHttpRequest();
-                xhr.open("POST", "/rendez-vous/new")
+                // let xhr = new XMLHttpRequest();
+                // xhr.open("POST", "/rendez-vous/new")
                 
-                xhr.send(JSON.stringify(newEventDonnees))
+                // xhr.send(JSON.stringify(newEventDonnees))
+
+                // ****************
+
+                fetch("/rendez-vous/new", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"  
+                    },
+                    body: JSON.stringify(newEventDonnees) 
+                }) 
+                .then(response => { 
+                    // console.log(response);
+                    if (!response.ok) {      
+                        throw new Error('Network response was not ok');    
+                    }    
+                })  
+                
             } else {
                 alert("La date est dépassée!")
             }

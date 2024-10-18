@@ -19,11 +19,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AppointmentRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\MailerInterface;
 
 class HomeController extends AbstractController
 {
@@ -235,50 +236,62 @@ class HomeController extends AbstractController
     }
     
     //ajoute un nouveau rdv dans la bdd
-    #[Route('/rendez-vous/new', name: 'new_appointment')]
-    public function createAppointment(Request $request, MailerInterface $mailer, ValidatorInterface $validator){
-        //si la personne n'est pas connectée
-        if(!$this->getUser()){
-            $this->addFlash('error', 'Veuillez vous connecter');
-            return $this->redirectToRoute('app_login');
+    #[Route('/rendez-vous/new', name: 'new_appointment', methods: ['POST'])]
+    public function createAppointment(Request $request, MailerInterface $mailer, ValidatorInterface $validator)
+    {
+        if (!$this->getUser()) {
+            return new JsonResponse(['message' => 'Veuillez vous connecter'], 401);
         }
+
         $donnees = json_decode($request->getContent());
-        if(
+        if ($donnees === null) {
+            return new JsonResponse(['message' => 'Invalid JSON'], 400);
+        }
+
+        if (
             isset($donnees->title) && !empty($donnees->title) &&
             isset($donnees->start) && !empty($donnees->start) &&
             isset($donnees->end) && !empty($donnees->end)
-            ){
-                $appointment = new Appointment;
-                $appointment->setUser($this->getUser());
-                $appointment->setTitle($donnees->title);
-                $appointment->setDateStart(new \DateTime($donnees->start));
-                $appointment->setDateEnd(new \DateTime($donnees->end));
+        ) {
+            $appointment = new Appointment();
+            $appointment->setUser($this->getUser());
+            $appointment->setTitle($donnees->title);
+            $appointment->setDateStart(new \DateTime($donnees->start));
+            $appointment->setDateEnd(new \DateTime($donnees->end));
 
-                // //envoie email confirmation
-                $email = (new TemplatedEmail())
+            // Envoi de l'email
+            $email = (new TemplatedEmail())
                 ->from(new Address('admin-ceremonie-couture@exemple.fr', 'Ceremonie Couture Bot'))
                 ->to($this->getUser()->getEmail())
                 ->subject('Prise de rendez-vous')
-
                 ->context([
                     'title' => $donnees->title,
                     'start' => $donnees->start,
                     'end' => $donnees->end,
                 ])
-                ->htmlTemplate('email/confirmationRdv.html.twig')
-                ;
+                ->htmlTemplate('email/confirmationRdv.html.twig');
 
+            try {
                 $mailer->send($email);
+            } catch (\Exception $e) {
+                return new JsonResponse(['message' => 'Error sending email: ' . $e->getMessage()], 500);
+            }
 
+            try {
                 $this->entityManager->persist($appointment);
                 $this->entityManager->flush();
-
-                $this->addFlash('success', 'Rendez-vous ajouté');
-                return $this->redirectToRoute('app_appointment');
-            } else {
-                return new Response('Données incomplètes', 404);
+            } catch (\Exception $e) {
+                return new JsonResponse(['message' => 'Error saving appointment: ' . $e->getMessage()], 500);
             }
-            
+
+            return new JsonResponse([
+                'message' => 'Enregistrement réussi',
+                'status' => 'success',
+                'data' => $donnees
+            ], 200);
+        } else {
+            return new JsonResponse(['message' => 'Données incomplètes'], 400);
+        }
     }
 
     

@@ -268,7 +268,7 @@ class AdminController extends AbstractController
     #[Route('/rendez-vous', name: 'app_rendezvous')]
     public function showAppointment(AppointmentRepository $appointmentRepository, UserRepository $userRepository){
         $appointments = $appointmentRepository->findAll();
-        $activeUsers = $userRepository->findAllExceptRoleSupprime();
+        $users = $userRepository->findAll();
 
         foreach($appointments as $appointment){
             $rdvs[] = [
@@ -287,7 +287,7 @@ class AdminController extends AbstractController
         $data = json_encode($rdvs);
         return $this->render('admin/appointment.html.twig', [
             'data' => $data,
-            'activeUsers' => $activeUsers
+            'users' => $users
         ]);
     }
 
