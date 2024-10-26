@@ -25,7 +25,7 @@ class DeleteOldReservationsCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         // va également supprimer en cascade "booking" là où il y a la clé étrangère reservation_id
         $this->setDescription('Supprime les réservations dont la date de retrait est passée de plus de 2 ans.');

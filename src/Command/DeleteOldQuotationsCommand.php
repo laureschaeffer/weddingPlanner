@@ -25,7 +25,7 @@ class DeleteOldQuotationsCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Supprime les devis refusés de plus de 3 mois.');
     }

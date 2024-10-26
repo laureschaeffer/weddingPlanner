@@ -25,7 +25,7 @@ class DeleteOldProjectsCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Supprime les projets plus anciens que 2 ans.');
     }
