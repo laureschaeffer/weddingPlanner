@@ -46,9 +46,12 @@
         {# l'objet collection possède un tableau d'objets Produit  #}
         <div class="shop-collection-product">
             {% for product in collection.products %}
-                <figure><img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}"></figure>
-                {# <p>{{product}}</p> #}
-    
+                <figure>
+                    <img src="{{asset(product.urlPicture)}}" alt="{{product.altPicture}}">
+                    <figcaption>
+                        <a href="{{path('show_product', {'id': product.id})}}">{{product}}</a>
+                    </figcaption>
+                </figure>
             {% endfor %}
         </div>
     </div>

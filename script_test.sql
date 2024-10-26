@@ -138,17 +138,6 @@ CREATE TABLE IF NOT EXISTS `destination` (
 -- Listage des données de la table weddingplanner_test.destination : ~0 rows (environ)
 DELETE FROM `destination`;
 
--- Listage de la structure de table weddingplanner_test. doctrine_migration_versions
-CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
-  `version` varchar(191) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `executed_at` datetime DEFAULT NULL,
-  `execution_time` int DEFAULT NULL,
-  PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
--- Listage des données de la table weddingplanner_test.doctrine_migration_versions : ~0 rows (environ)
-DELETE FROM `doctrine_migration_versions`;
-
 -- Listage de la structure de table weddingplanner_test. job
 CREATE TABLE IF NOT EXISTS `job` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -292,7 +281,6 @@ CREATE TABLE IF NOT EXISTS `reservation` (
   `reference_order` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_order` datetime DEFAULT NULL,
   `total_price` double NOT NULL,
-  `date_picking` date NOT NULL,
   `is_prepared` tinyint(1) DEFAULT NULL,
   `is_picked` tinyint(1) DEFAULT NULL,
   `firstname` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
